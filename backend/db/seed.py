@@ -90,10 +90,10 @@ def reset_database() -> None:
 
     migration_sql = MIGRATION_PATH.read_text(encoding="utf-8")
 
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("PRAGMA foreign_keys = ON;")
-
+    conn: sqlite3.Connection | None = None
     try:
+        conn = sqlite3.connect(DB_PATH)
+        conn.execute("PRAGMA foreign_keys = ON;")
         conn.executescript(migration_sql)
 
         for table_name, file_name in TABLE_LOAD_ORDER:
@@ -103,11 +103,13 @@ def reset_database() -> None:
         conn.commit()
 
     except Exception:
-        conn.rollback()
+        if conn is not None:
+            conn.rollback()
         raise
 
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
 
     print(f"\nDatabase created at: {DB_PATH}")
 
