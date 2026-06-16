@@ -1,6 +1,7 @@
-def main():
-    print("Hello from backend!")
+from fastapi import FastAPI
 
+from app.api.routes import router
 
-if __name__ == "__main__":
-    main()
+app = FastAPI(title="Rework Autopsy API")
+
+app.include_router(router)
