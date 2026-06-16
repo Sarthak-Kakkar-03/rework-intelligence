@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS pull_requests (
   id INTEGER PRIMARY KEY,
   number INTEGER NOT NULL,
   repo_id TEXT NOT NULL,
-
+  UNIQUE (repo_id, number),
   title TEXT NOT NULL,
   body TEXT,
   state TEXT NOT NULL,
