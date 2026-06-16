@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": "team-data-integrations",
+    "name": "Data Integrations"
+  },
+  {
+    "id": "team-platform",
+    "name": "Platform Engineering"
+  },
+  {
+    "id": "team-devex",
+    "name": "Developer Experience"
+  }
+]

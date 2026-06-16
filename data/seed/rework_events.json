@@ -1,1 +1,41 @@
-[]
+[
+  {
+    "id": "RW-501",
+    "source_pr_id": 1042,
+    "followup_pr_id": 1048,
+    "issue_key": "ENG-231",
+    "detected_from": "followup_pr",
+    "rework_type": "fix_forward",
+    "severity": "medium",
+    "days_after_merge": 3,
+    "human_hours_spent": 5.5,
+    "root_cause_label": "missing_domain_constraint",
+    "summary": "AI-assisted retry logic reprocessed successful Jira sync jobs because the idempotency contract was not included in the working context."
+  },
+  {
+    "id": "RW-502",
+    "source_pr_id": 1051,
+    "followup_pr_id": 1054,
+    "issue_key": "ENG-251",
+    "detected_from": "dashboard_bug",
+    "rework_type": "downstream_fix",
+    "severity": "medium",
+    "days_after_merge": 1,
+    "human_hours_spent": 4.0,
+    "root_cause_label": "schema_contract_drift",
+    "summary": "AI-assisted schema rename changed the deployment risk API payload without updating the dashboard contract that depended on the previous field name."
+  },
+  {
+    "id": "RW-503",
+    "source_pr_id": 1058,
+    "followup_pr_id": 1062,
+    "issue_key": "ENG-267",
+    "detected_from": "staging_failure",
+    "rework_type": "environment_fix",
+    "severity": "high",
+    "days_after_merge": 1,
+    "human_hours_spent": 6.5,
+    "root_cause_label": "missing_test_context",
+    "summary": "AI-generated tests covered local token validation but missed staging-only GitHub App auth behavior, causing a staging failure after merge."
+  }
+]

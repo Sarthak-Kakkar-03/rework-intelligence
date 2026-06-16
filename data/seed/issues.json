@@ -1,1 +1,82 @@
-[]
+[
+  {
+    "issue_key": "ENG-219",
+    "title": "Add retry handling for Jira issue sync failures",
+    "team_id": "team-data-integrations",
+    "status": "Reopened",
+    "created_at": "2026-05-27T09:15:00Z",
+    "resolved_at": "2026-05-29T18:20:00Z",
+    "reopened_at": "2026-06-01T10:05:00Z",
+    "reopened_count": 1
+  },
+  {
+    "issue_key": "ENG-231",
+    "title": "Fix duplicate Jira links created by retry worker",
+    "team_id": "team-data-integrations",
+    "status": "Done",
+    "created_at": "2026-06-01T10:10:00Z",
+    "resolved_at": "2026-06-01T17:45:00Z",
+    "reopened_at": null,
+    "reopened_count": 0
+  },
+  {
+    "issue_key": "ENG-244",
+    "title": "Rename deployment status field in warehouse payload",
+    "team_id": "team-platform",
+    "status": "Done",
+    "created_at": "2026-05-30T11:00:00Z",
+    "resolved_at": "2026-06-02T15:30:00Z",
+    "reopened_at": null,
+    "reopened_count": 0
+  },
+  {
+    "issue_key": "ENG-251",
+    "title": "Dashboard cards fail after deployment status rename",
+    "team_id": "team-devex",
+    "status": "Done",
+    "created_at": "2026-06-03T08:20:00Z",
+    "resolved_at": "2026-06-03T14:40:00Z",
+    "reopened_at": null,
+    "reopened_count": 0
+  },
+  {
+    "issue_key": "ENG-260",
+    "title": "Add tests for GitHub ingest auth behavior",
+    "team_id": "team-data-integrations",
+    "status": "Done",
+    "created_at": "2026-06-02T09:30:00Z",
+    "resolved_at": "2026-06-04T12:10:00Z",
+    "reopened_at": null,
+    "reopened_count": 0
+  },
+  {
+    "issue_key": "ENG-267",
+    "title": "Staging auth failure in GitHub ingest service",
+    "team_id": "team-data-integrations",
+    "status": "Done",
+    "created_at": "2026-06-05T10:50:00Z",
+    "resolved_at": "2026-06-05T16:25:00Z",
+    "reopened_at": null,
+    "reopened_count": 0
+  },
+  {
+    "issue_key": "ENG-272",
+    "title": "Add context pack freshness scoring",
+    "team_id": "team-devex",
+    "status": "Done",
+    "created_at": "2026-06-04T13:00:00Z",
+    "resolved_at": "2026-06-06T11:10:00Z",
+    "reopened_at": null,
+    "reopened_count": 0
+  },
+  {
+    "issue_key": "ENG-280",
+    "title": "Improve deployment risk API error handling",
+    "team_id": "team-platform",
+    "status": "Done",
+    "created_at": "2026-06-06T09:10:00Z",
+    "resolved_at": "2026-06-07T18:00:00Z",
+    "reopened_at": null,
+    "reopened_count": 0
+  }
+]

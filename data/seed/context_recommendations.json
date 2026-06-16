@@ -1,0 +1,29 @@
+[
+  {
+    "id": "REC-88",
+    "rework_event_id": "RW-501",
+    "recommended_artifact_id": "CTX-12",
+    "missing_context_type": "domain_constraint",
+    "priority": "high",
+    "recommendation": "Add the Jira Sync Idempotency Contract to the Data Integrations agent context pack before allowing agents to modify retry behavior.",
+    "reason": "The original AI-assisted PR changed retry semantics without access to the deduplication rules that would have prevented duplicate Jira links."
+  },
+  {
+    "id": "REC-89",
+    "rework_event_id": "RW-502",
+    "recommended_artifact_id": "CTX-18",
+    "missing_context_type": "schema_contract",
+    "priority": "high",
+    "recommendation": "Update the Deployment Risk Warehouse Schema Contract and include it in context packs for both deployment-risk-api and metrics-dashboard.",
+    "reason": "The AI-assisted schema rename looked safe inside one repo but broke a downstream dashboard that depended on the old field name."
+  },
+  {
+    "id": "REC-90",
+    "rework_event_id": "RW-503",
+    "recommended_artifact_id": "CTX-21",
+    "missing_context_type": "test_context",
+    "priority": "high",
+    "recommendation": "Create and attach a GitHub Ingest Staging Auth Test Matrix to the agent context pack for test-generation tasks.",
+    "reason": "The generated tests passed locally but missed staging-only auth behavior, so the agent needed environment-specific testing context."
+  }
+]

@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "id": "repo-jira-sync-worker",
+    "name": "jira-sync-worker",
+    "team_id": "team-data-integrations"
+  },
+  {
+    "id": "repo-github-ingest-service",
+    "name": "github-ingest-service",
+    "team_id": "team-data-integrations"
+  },
+  {
+    "id": "repo-deployment-risk-api",
+    "name": "deployment-risk-api",
+    "team_id": "team-platform"
+  },
+  {
+    "id": "repo-agent-context-builder",
+    "name": "agent-context-builder",
+    "team_id": "team-devex"
+  },
+  {
+    "id": "repo-metrics-dashboard",
+    "name": "metrics-dashboard",
+    "team_id": "team-devex"
+  }
+]
