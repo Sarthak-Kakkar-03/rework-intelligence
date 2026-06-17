@@ -43,22 +43,23 @@ def get_rework_events() -> list[ReworkEvent]:
 def get_context_recommendations() -> list[ContextRecommendation]:
     """
     Retrieve context recommendations.
-
-    Returns:
-        A list of context recommendations.
     """
     return query_context_recommendations()
 
 
 @router.get("/rework-events/{rework_id}", response_model=ReworkEventDetail)
 def get_rework_event_detail(rework_id: str) -> ReworkEventDetail:
-    """Retrieve details about a rework event
-
-    Args:
-        rework_id (str): rework event id to retrieve the details about
-
+    """
+    Retrieve details about a rework event.
+    
+    Parameters:
+    	rework_id (str): The identifier of the rework event to retrieve
+    
     Returns:
-        ReworkEventDetail
+    	detail (ReworkEventDetail): The requested rework event's details
+    
+    Raises:
+    	HTTPException: With status code 404 if the rework event is not found
     """
     detail = query_rework_event_detail(rework_event_id=rework_id)
 

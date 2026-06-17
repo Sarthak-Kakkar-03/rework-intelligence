@@ -51,6 +51,12 @@ function getPriorityBadgeClass(priority: string): string {
   return "badge-neutral";
 }
 
+/**
+ * Renders the main rework autopsy dashboard.
+ *
+ * Displays summary data, rework event statistics and table, root cause
+ * breakdown, and context recommendations.
+ */
 export default function Home() {
   const [summary, setSummary] = useState<AutopsySummary | null>(null);
   const [reworkEvents, setReworkEvents] = useState<ReworkEvent[]>([]);

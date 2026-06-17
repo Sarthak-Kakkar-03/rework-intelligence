@@ -7,6 +7,11 @@ import { useEffect, useState } from "react";
 import { API_BASE_URL, apiGet } from "@/lib/api";
 import type { ReworkEventDetail } from "@/types";
 
+/**
+ * Converts an underscore-delimited label into a space-separated, title-cased string.
+ *
+ * @returns The label formatted as space-separated, title-cased words, or `"Unknown"` if the input is falsy.
+ */
 function formatLabel(label: string | undefined): string {
   if (!label) {
     return "Unknown";
@@ -18,6 +23,12 @@ function formatLabel(label: string | undefined): string {
     .join(" ");
 }
 
+/**
+ * Maps a priority level to its corresponding badge class name.
+ *
+ * @param priority - The priority value to map
+ * @returns `badge-error` for `high`, `badge-warning` for `medium`, `badge-info` for `low`, or `badge-neutral` for any other value
+ */
 function getPriorityBadgeClass(priority: string): string {
   if (priority === "high") {
     return "badge-error";
@@ -34,6 +45,12 @@ function getPriorityBadgeClass(priority: string): string {
   return "badge-neutral";
 }
 
+/**
+ * Renders detailed information about a rework event identified by the `reworkId` URL parameter.
+ * 
+ * Displays the event summary, severity and root cause, core statistics, source PR details,
+ * and optional follow-up PR, recommendations, and context artifacts.
+ */
 export default function ReworkEventDetailPage() {
   const params = useParams<{ reworkId: string }>();
   const reworkId = params.reworkId;

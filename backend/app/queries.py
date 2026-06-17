@@ -171,10 +171,10 @@ def get_rework_events() -> list[ReworkEvent]:
 
 def get_context_recommendations() -> list[ContextRecommendation]:
     """
-    Retrieve all context recommendations, ordered by priority.
-
+    Fetch all context recommendations.
+    
     Returns:
-        list[ContextRecommendation]: Context recommendations ordered by priority (high, medium, low) and then by ID.
+        list[ContextRecommendation]: Context recommendations sorted by priority (high, medium, low) and then by ID.
     """
     sql = """
         SELECT
@@ -213,6 +213,12 @@ def get_context_recommendations() -> list[ContextRecommendation]:
 
 
 def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
+    """
+    Retrieves comprehensive details for a rework event, including its source pull request.
+    
+    Returns:
+    	ReworkEventDetail | None: A `ReworkEventDetail` object containing the rework event and source pull request details, with optional followup PR, recommendation, and context artifact information; `None` if the rework event is not found.
+    """
     sql = """
         SELECT
           re.id AS rework_event_id,
