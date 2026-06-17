@@ -32,7 +32,9 @@ export type PullRequest = {
 export type ReworkEvent = {
   id: string;
   source_pr_id: number;
+  source_pr_title?: string;
   followup_pr_id: number | null;
+  followup_pr_title?: string;
   issue_key: string | null;
   detected_from: string;
   rework_type: string;
@@ -47,6 +49,7 @@ export type ContextRecommendation = {
   id: string;
   rework_event_id: string;
   recommended_artifact_id: string | null;
+  recommended_artifact_name?: string | null;
   missing_context_type: string;
   priority: string;
   recommendation: string;
@@ -54,6 +57,7 @@ export type ContextRecommendation = {
 };
 
 export type AutopsySummary = {
+  headline?: string;
   team_count: number;
   repo_count: number;
   issue_count: number;
@@ -64,6 +68,10 @@ export type AutopsySummary = {
   ai_assisted_pr_count: number;
   total_rework_hours: number;
   avg_days_after_merge: number;
+  top_root_causes?: {
+    root_cause_label: string;
+    count: number;
+  }[];
 };
 
 export type ApiResponses = {
