@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, Field
 
 
@@ -9,10 +11,10 @@ class PullRequest(BaseModel):
     body: str | None = None
     state: str
     draft: bool = False
-    created_at: str
-    updated_at: str
-    closed_at: str | None = None
-    merged_at: str | None = None
+    created_at: datetime
+    updated_at: datetime
+    closed_at: datetime | None = None
+    merged_at: datetime | None = None
     merged: bool = False
     author_login: str
     merged_by_login: str | None = None
