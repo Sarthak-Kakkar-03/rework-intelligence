@@ -67,3 +67,44 @@ class AutopsySummary(BaseModel):
     ai_assisted_pr_count: int = Field(ge=0)
     total_rework_hours: float = Field(ge=0)
     avg_days_after_merge: float = Field(ge=0)
+
+
+class ReworkEventDetailEvent(BaseModel):
+    id: str
+    severity: str
+    root_cause_label: str
+    days_after_merge: int = Field(ge=0)
+    human_hours_spent: float = Field(ge=0)
+    summary: str
+
+
+class ReworkEventDetailPullRequest(BaseModel):
+    id: int
+    number: int
+    title: str
+    repo_name: str
+    ai_assisted: bool | None = None
+    ai_tool: str | None = None
+
+
+class ReworkEventDetailRecommendation(BaseModel):
+    id: str
+    priority: str
+    missing_context_type: str
+    recommendation: str
+    reason: str
+
+
+class ReworkEventDetailContextArtifact(BaseModel):
+    id: str
+    name: str
+    artifact_type: str
+    freshness: str
+
+
+class ReworkEventDetail(BaseModel):
+    rework_event: ReworkEventDetailEvent
+    source_pr: ReworkEventDetailPullRequest
+    followup_pr: ReworkEventDetailPullRequest | None = None
+    recommendation: ReworkEventDetailRecommendation | None = None
+    context_artifact: ReworkEventDetailContextArtifact | None = None
