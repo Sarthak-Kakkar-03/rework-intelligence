@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { apiGet } from "@/lib/api";
+import { API_BASE_URL, apiGet } from "@/lib/api";
 import type {
   AutopsySummary,
   ContextRecommendation,
@@ -77,7 +77,7 @@ export default function Home() {
         setRecommendations(recommendationsData);
       } catch {
         setError(
-          "Unable to load dashboard data. Make sure the backend is running on http://localhost:8000.",
+          `Unable to load dashboard data. Make sure the backend is running on ${API_BASE_URL}.`,
         );
       } finally {
         setLoading(false);
