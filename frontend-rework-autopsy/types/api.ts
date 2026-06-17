@@ -74,9 +74,51 @@ export type AutopsySummary = {
   }[];
 };
 
+export type ReworkEventDetailEvent = {
+  id: string;
+  severity: string;
+  root_cause_label: string;
+  days_after_merge: number;
+  human_hours_spent: number;
+  summary: string;
+};
+
+export type ReworkEventDetailPullRequest = {
+  id: number;
+  number: number;
+  title: string;
+  repo_name: string;
+  ai_assisted: boolean | null;
+  ai_tool: string | null;
+};
+
+export type ReworkEventDetailRecommendation = {
+  id: string;
+  priority: string;
+  missing_context_type: string;
+  recommendation: string;
+  reason: string;
+};
+
+export type ReworkEventDetailContextArtifact = {
+  id: string;
+  name: string;
+  artifact_type: string;
+  freshness: string;
+};
+
+export type ReworkEventDetail = {
+  rework_event: ReworkEventDetailEvent;
+  source_pr: ReworkEventDetailPullRequest;
+  followup_pr: ReworkEventDetailPullRequest | null;
+  recommendation: ReworkEventDetailRecommendation | null;
+  context_artifact: ReworkEventDetailContextArtifact | null;
+};
+
 export type ApiResponses = {
   "/api/autopsy/summary": AutopsySummary;
   "/api/pull-requests": PullRequest[];
   "/api/rework-events": ReworkEvent[];
+  [path: `/api/rework-events/${string}`]: ReworkEventDetail;
   "/api/context-recommendations": ContextRecommendation[];
 };
