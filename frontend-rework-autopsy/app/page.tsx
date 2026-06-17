@@ -173,9 +173,7 @@ export default function Home() {
             <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
               <div className="card bg-base-100 shadow-sm">
                 <div className="card-body">
-                  <h2 className="card-title text-lg">
-                    Rework Events
-                  </h2>
+                  <h2 className="card-title text-lg">Rework Events</h2>
                   <div className="overflow-x-auto">
                     <table className="table table-zebra">
                       <thead>
@@ -221,9 +219,7 @@ export default function Home() {
 
               <aside className="card bg-base-100 shadow-sm">
                 <div className="card-body">
-                  <h2 className="card-title text-lg">
-                    Root Cause Breakdown
-                  </h2>
+                  <h2 className="card-title text-lg">Root Cause Breakdown</h2>
                   <div className="flex flex-col gap-3">
                     {rootCauseCounts.map((item) => (
                       <div

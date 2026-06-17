@@ -12,9 +12,9 @@ from app.db import get_connection
 def get_autopsy_summary() -> AutopsySummary:
     """
     Fetch aggregate metrics and entity counts from the database.
-    
+
     Returns:
-    	An AutopsySummary containing counts of teams, repos, issues, pull requests, rework events, context artifacts, context recommendations, AI-assisted pull requests, total rework hours, and average days after merge.
+        An AutopsySummary containing counts of teams, repos, issues, pull requests, rework events, context artifacts, context recommendations, AI-assisted pull requests, total rework hours, and average days after merge.
     """
     sql = """
         SELECT
@@ -49,7 +49,7 @@ def get_autopsy_summary() -> AutopsySummary:
 def get_pull_requests() -> list[PullRequest]:
     """
     Retrieves all pull request records from the database.
-    
+
     Returns:
         A list of PullRequest objects, ordered by creation date (most recent first), then by ID.
     """
@@ -123,7 +123,7 @@ def get_pull_requests() -> list[PullRequest]:
 def get_rework_events() -> list[ReworkEvent]:
     """
     Retrieve all rework event records from the database, ordered by recency and ID.
-    
+
     Returns:
         list[ReworkEvent]: A list of ReworkEvent objects ordered by days_after_merge in descending order, then by ID.
     """
@@ -167,9 +167,9 @@ def get_rework_events() -> list[ReworkEvent]:
 def get_context_recommendations() -> list[ContextRecommendation]:
     """
     Retrieve all context recommendations, ordered by priority.
-    
+
     Returns:
-    	list[ContextRecommendation]: Context recommendations ordered by priority (high, medium, low) and then by ID.
+        list[ContextRecommendation]: Context recommendations ordered by priority (high, medium, low) and then by ID.
     """
     sql = """
         SELECT

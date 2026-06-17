@@ -15,9 +15,9 @@ router = APIRouter(prefix="/api", tags=["Engineering Data"])
 def get_pull_requests() -> list[PullRequest]:
     """
     Retrieve all pull requests.
-    
+
     Returns:
-    	list[PullRequest]: A list of all pull requests.
+        list[PullRequest]: A list of all pull requests.
     """
     return query_pull_requests()
 
@@ -26,7 +26,7 @@ def get_pull_requests() -> list[PullRequest]:
 def get_rework_events() -> list[ReworkEvent]:
     """
     Retrieve all rework events.
-    
+
     Returns:
         list[ReworkEvent]: A list of ReworkEvent objects.
     """
@@ -37,8 +37,8 @@ def get_rework_events() -> list[ReworkEvent]:
 def get_context_recommendations() -> list[ContextRecommendation]:
     """
     Retrieve context recommendations.
-    
+
     Returns:
-    	A list of context recommendations.
+        A list of context recommendations.
     """
     return query_context_recommendations()
