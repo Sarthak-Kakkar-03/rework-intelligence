@@ -7,8 +7,8 @@ router = APIRouter(tags=["health"])
 def health() -> dict[str, str]:
     """
     Verify the API is running.
-    
+
     Returns:
-    	dict[str, str]: A status dictionary with "status" set to "ok".
+        dict[str, str]: A status dictionary with "status" set to "ok".
     """
     return {"status": "ok"}

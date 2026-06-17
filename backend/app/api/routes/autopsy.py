@@ -10,8 +10,8 @@ router = APIRouter(prefix="/api/autopsy", tags=["Autopsy"])
 def get_autopsy_summary() -> AutopsySummary:
     """
     Retrieve the autopsy summary.
-    
+
     Returns:
-    	AutopsySummary: The autopsy summary data.
+        AutopsySummary: The autopsy summary data.
     """
     return queries.get_autopsy_summary()

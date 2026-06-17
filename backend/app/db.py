@@ -9,9 +9,9 @@ DB_PATH = REPO_ROOT / "backend" / "var" / "rework_autopsy.db"
 def get_connection() -> sqlite3.Connection:
     """
     Create a SQLite connection to the autopsy database.
-    
+
     Returns:
-    	A sqlite3.Connection object for the autopsy database.
+        A sqlite3.Connection object for the autopsy database.
     """
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
