@@ -194,7 +194,7 @@ export default function Home() {
                             <td className="font-medium">
                               <Link
                                 className="link link-primary"
-                                href={`/rework-events/${event.id}`}
+                                href={`/rework-events/${encodeURIComponent(event.id)}`}
                               >
                                 {event.id}
                               </Link>
