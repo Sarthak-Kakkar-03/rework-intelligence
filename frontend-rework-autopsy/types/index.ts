@@ -5,4 +5,9 @@ export type {
   IsoDateTime,
   PullRequest,
   ReworkEvent,
+  ReworkEventDetail,
+  ReworkEventDetailContextArtifact,
+  ReworkEventDetailEvent,
+  ReworkEventDetailPullRequest,
+  ReworkEventDetailRecommendation,
 } from "./api";

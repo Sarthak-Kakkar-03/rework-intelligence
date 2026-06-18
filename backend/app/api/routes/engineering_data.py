@@ -1,12 +1,18 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.queries import (
     get_context_recommendations as query_context_recommendations,
     get_pull_requests as query_pull_requests,
     get_rework_events as query_rework_events,
+    get_rework_event_detail as query_rework_event_detail,
 )
 
-from app.api.models import ContextRecommendation, PullRequest, ReworkEvent
+from app.api.models import (
+    ContextRecommendation,
+    PullRequest,
+    ReworkEvent,
+    ReworkEventDetail,
+)
 
 router = APIRouter(prefix="/api", tags=["Engineering Data"])
 
@@ -37,8 +43,27 @@ def get_rework_events() -> list[ReworkEvent]:
 def get_context_recommendations() -> list[ContextRecommendation]:
     """
     Retrieve context recommendations.
-
-    Returns:
-        A list of context recommendations.
     """
     return query_context_recommendations()
+
+
+@router.get("/rework-events/{rework_id}", response_model=ReworkEventDetail)
+def get_rework_event_detail(rework_id: str) -> ReworkEventDetail:
+    """
+    Retrieve details about a rework event.
+    
+    Parameters:
+    	rework_id (str): The identifier of the rework event to retrieve
+    
+    Returns:
+    	detail (ReworkEventDetail): The requested rework event's details
+    
+    Raises:
+    	HTTPException: With status code 404 if the rework event is not found
+    """
+    detail = query_rework_event_detail(rework_event_id=rework_id)
+
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Rework event not found")
+
+    return detail

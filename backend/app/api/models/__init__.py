@@ -3,6 +3,11 @@ from app.api.models.schemas import (
     ContextRecommendation,
     PullRequest,
     ReworkEvent,
+    ReworkEventDetail,
+    ReworkEventDetailContextArtifact,
+    ReworkEventDetailEvent,
+    ReworkEventDetailPullRequest,
+    ReworkEventDetailRecommendation,
 )
 
 
@@ -11,4 +16,9 @@ __all__ = [
     "ContextRecommendation",
     "PullRequest",
     "ReworkEvent",
+    "ReworkEventDetail",
+    "ReworkEventDetailContextArtifact",
+    "ReworkEventDetailEvent",
+    "ReworkEventDetailPullRequest",
+    "ReworkEventDetailRecommendation",
 ]

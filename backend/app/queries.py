@@ -5,6 +5,11 @@ from app.api.models import (
     ContextRecommendation,
     PullRequest,
     ReworkEvent,
+    ReworkEventDetail,
+    ReworkEventDetailContextArtifact,
+    ReworkEventDetailEvent,
+    ReworkEventDetailPullRequest,
+    ReworkEventDetailRecommendation,
 )
 from app.db import get_connection
 
@@ -166,10 +171,10 @@ def get_rework_events() -> list[ReworkEvent]:
 
 def get_context_recommendations() -> list[ContextRecommendation]:
     """
-    Retrieve all context recommendations, ordered by priority.
-
+    Fetch all context recommendations.
+    
     Returns:
-        list[ContextRecommendation]: Context recommendations ordered by priority (high, medium, low) and then by ID.
+        list[ContextRecommendation]: Context recommendations sorted by priority (high, medium, low) and then by ID.
     """
     sql = """
         SELECT
@@ -205,3 +210,123 @@ def get_context_recommendations() -> list[ContextRecommendation]:
             )
             for row in rows
         ]
+
+
+def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
+    """
+    Retrieves comprehensive details for a rework event, including its source pull request.
+    
+    Returns:
+    	ReworkEventDetail | None: A `ReworkEventDetail` object containing the rework event and source pull request details, with optional followup PR, recommendation, and context artifact information; `None` if the rework event is not found.
+    """
+    sql = """
+        SELECT
+          re.id AS rework_event_id,
+          re.severity,
+          re.root_cause_label,
+          re.days_after_merge,
+          re.human_hours_spent,
+          re.summary,
+
+          source_pr.id AS source_pr_id,
+          source_pr.number AS source_pr_number,
+          source_pr.title AS source_pr_title,
+          source_repo.name AS source_repo_name,
+          source_pr.ai_assisted AS source_pr_ai_assisted,
+          source_pr.ai_tool AS source_pr_ai_tool,
+
+          followup_pr.id AS followup_pr_id,
+          followup_pr.number AS followup_pr_number,
+          followup_pr.title AS followup_pr_title,
+          followup_repo.name AS followup_repo_name,
+
+          rec.id AS recommendation_id,
+          rec.priority,
+          rec.missing_context_type,
+          rec.recommendation,
+          rec.reason,
+
+          artifact.id AS context_artifact_id,
+          artifact.name AS context_artifact_name,
+          artifact.artifact_type,
+          artifact.freshness
+        FROM rework_events re
+        JOIN pull_requests source_pr
+          ON re.source_pr_id = source_pr.id
+        JOIN repos source_repo
+          ON source_pr.repo_id = source_repo.id
+        LEFT JOIN pull_requests followup_pr
+          ON re.followup_pr_id = followup_pr.id
+        LEFT JOIN repos followup_repo
+          ON followup_pr.repo_id = followup_repo.id
+        LEFT JOIN context_recommendations rec
+          ON re.id = rec.rework_event_id
+        LEFT JOIN context_artifacts artifact
+          ON rec.recommended_artifact_id = artifact.id
+        WHERE re.id = ?
+        ORDER BY
+          CASE rec.priority
+            WHEN 'high' THEN 1
+            WHEN 'medium' THEN 2
+            WHEN 'low' THEN 3
+            ELSE 4
+          END,
+          rec.id
+        LIMIT 1
+    """
+
+    with closing(get_connection()) as conn:
+        row = conn.execute(sql, (rework_event_id,)).fetchone()
+
+    if row is None:
+        return None
+
+    followup_pr = None
+    if row["followup_pr_id"] is not None:
+        followup_pr = ReworkEventDetailPullRequest(
+            id=row["followup_pr_id"],
+            number=row["followup_pr_number"],
+            title=row["followup_pr_title"],
+            repo_name=row["followup_repo_name"],
+        )
+
+    recommendation = None
+    if row["recommendation_id"] is not None:
+        recommendation = ReworkEventDetailRecommendation(
+            id=row["recommendation_id"],
+            priority=row["priority"],
+            missing_context_type=row["missing_context_type"],
+            recommendation=row["recommendation"],
+            reason=row["reason"],
+        )
+
+    context_artifact = None
+    if row["context_artifact_id"] is not None:
+        context_artifact = ReworkEventDetailContextArtifact(
+            id=row["context_artifact_id"],
+            name=row["context_artifact_name"],
+            artifact_type=row["artifact_type"],
+            freshness=row["freshness"],
+        )
+
+    return ReworkEventDetail(
+        rework_event=ReworkEventDetailEvent(
+            id=row["rework_event_id"],
+            severity=row["severity"],
+            root_cause_label=row["root_cause_label"],
+            days_after_merge=row["days_after_merge"],
+            human_hours_spent=row["human_hours_spent"],
+            summary=row["summary"],
+        ),
+        source_pr=ReworkEventDetailPullRequest(
+            id=row["source_pr_id"],
+            number=row["source_pr_number"],
+            title=row["source_pr_title"],
+            repo_name=row["source_repo_name"],
+            ai_assisted=bool(row["source_pr_ai_assisted"]),
+            ai_tool=row["source_pr_ai_tool"],
+        ),
+        followup_pr=followup_pr,
+        recommendation=recommendation,
+        context_artifact=context_artifact,
+    )

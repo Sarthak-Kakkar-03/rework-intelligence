@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 import { API_BASE_URL, apiGet } from "@/lib/api";
 import type {
@@ -50,6 +51,12 @@ function getPriorityBadgeClass(priority: string): string {
   return "badge-neutral";
 }
 
+/**
+ * Renders the main rework autopsy dashboard.
+ *
+ * Displays summary data, rework event statistics and table, root cause
+ * breakdown, and context recommendations.
+ */
 export default function Home() {
   const [summary, setSummary] = useState<AutopsySummary | null>(null);
   const [reworkEvents, setReworkEvents] = useState<ReworkEvent[]>([]);
@@ -190,7 +197,14 @@ export default function Home() {
                       <tbody>
                         {reworkEvents.map((event) => (
                           <tr key={event.id}>
-                            <td className="font-medium">{event.id}</td>
+                            <td className="font-medium">
+                              <Link
+                                className="link link-primary"
+                                href={`/rework-events/${encodeURIComponent(event.id)}`}
+                              >
+                                {event.id}
+                              </Link>
+                            </td>
                             <td>
                               {event.source_pr_title ||
                                 `PR ${event.source_pr_id}`}
