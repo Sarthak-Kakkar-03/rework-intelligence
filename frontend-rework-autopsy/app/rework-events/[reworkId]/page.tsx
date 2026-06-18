@@ -47,7 +47,7 @@ function getPriorityBadgeClass(priority: string): string {
 
 /**
  * Renders detailed information about a rework event identified by the `reworkId` URL parameter.
- * 
+ *
  * Displays the event summary, severity and root cause, core statistics, source PR details,
  * and optional follow-up PR, recommendations, and context artifacts.
  */
@@ -87,7 +87,7 @@ export default function ReworkEventDetailPage() {
     <main className="min-h-screen bg-base-200 px-4 py-8 text-base-content">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
         <header className="flex flex-col gap-3">
-          <Link className="link link-primary w-fit text-sm" href="/">
+          <Link className="btn btn-primary w-fit btn-ghost" href="/">
             Back to dashboard
           </Link>
           <div>
