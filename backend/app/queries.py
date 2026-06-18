@@ -249,14 +249,15 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
           ON re.id = artifact.rework_event_id
         WHERE re.id = ?
         ORDER BY artifact.id
-        LIMIT 1
     """
 
     with closing(get_connection()) as conn:
-        row = conn.execute(sql, (rework_event_id,)).fetchone()
+        rows = conn.execute(sql, (rework_event_id,)).fetchall()
 
-    if row is None:
+    if not rows:
         return None
+
+    row = rows[0]
 
     followup_pr = None
     if row["followup_pr_id"] is not None:
@@ -267,14 +268,16 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
             repo_name=row["followup_repo_name"],
         )
 
-    context_artifact = None
-    if row["context_artifact_id"] is not None:
-        context_artifact = ReworkEventDetailContextArtifact(
-            id=row["context_artifact_id"],
-            name=row["context_artifact_name"],
-            artifact_type=row["artifact_type"],
-            summary=row["context_artifact_summary"],
+    context_artifacts = [
+        ReworkEventDetailContextArtifact(
+            id=artifact_row["context_artifact_id"],
+            name=artifact_row["context_artifact_name"],
+            artifact_type=artifact_row["artifact_type"],
+            summary=artifact_row["context_artifact_summary"],
         )
+        for artifact_row in rows
+        if artifact_row["context_artifact_id"] is not None
+    ]
 
     return ReworkEventDetail(
         rework_event=ReworkEventDetailEvent(
@@ -294,5 +297,5 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
             ai_tool=row["source_pr_ai_tool"],
         ),
         followup_pr=followup_pr,
-        context_artifact=context_artifact,
+        context_artifacts=context_artifacts,
     )

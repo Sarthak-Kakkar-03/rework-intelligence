@@ -102,7 +102,7 @@ export type ReworkEventDetail = {
   rework_event: ReworkEventDetailEvent;
   source_pr: ReworkEventDetailPullRequest;
   followup_pr: ReworkEventDetailPullRequest | null;
-  context_artifact: ReworkEventDetailContextArtifact | null;
+  context_artifacts: ReworkEventDetailContextArtifact[] | null;
 };
 
 export type ApiResponses = {

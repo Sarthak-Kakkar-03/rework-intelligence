@@ -98,4 +98,4 @@ class ReworkEventDetail(BaseModel):
     rework_event: ReworkEventDetailEvent
     source_pr: ReworkEventDetailPullRequest
     followup_pr: ReworkEventDetailPullRequest | None = None
-    context_artifact: ReworkEventDetailContextArtifact | None = None
+    context_artifacts: list[ReworkEventDetailContextArtifact] | None = None

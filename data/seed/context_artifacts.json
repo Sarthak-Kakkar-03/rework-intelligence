@@ -28,5 +28,15 @@
     "team_id": "team-devex",
     "last_updated_at": "2026-04-12T10:00:00Z",
     "summary": "Documents naming conventions for dashboard cards, filters, and metric labels."
+  },
+  {
+    "id": "CTX-35",
+    "name": "Conventions test",
+    "rework_event_id": "RW-502",
+    "artifact_type": "runbook",
+    "repo_id": "repo-metrics-dashboard",
+    "team_id": "team-devex",
+    "last_updated_at": "2026-04-12T10:00:00Z",
+    "summary": "Documents naming conventions for dashboard cards, filters, and metric labels."
   }
 ]

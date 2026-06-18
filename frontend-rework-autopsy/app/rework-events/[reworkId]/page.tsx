@@ -169,24 +169,30 @@ export default function ReworkEventDetailPage() {
             <section className="grid gap-6 lg:grid-cols-2">
               <article className="card bg-base-100 shadow-sm lg:col-span-2">
                 <div className="card-body">
-                  <h2 className="card-title text-lg">Context Artifact</h2>
-                  {detail.context_artifact ? (
-                    <>
-                      <p className="font-semibold">
-                        {detail.context_artifact.name}
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="badge badge-outline">
-                          {formatLabel(detail.context_artifact.artifact_type)}
-                        </span>
-                      </div>
-                      <p className="text-sm text-base-content/70">
-                        {detail.context_artifact.summary}
-                      </p>
-                    </>
+                  <h2 className="card-title text-lg">Context Artifacts</h2>
+                  {detail.context_artifacts &&
+                  detail.context_artifacts.length > 0 ? (
+                    <div className="grid gap-4 md:grid-cols-2">
+                      {detail.context_artifacts.map((artifact) => (
+                        <div
+                          className="rounded-box border border-base-300 p-4"
+                          key={artifact.id}
+                        >
+                          <p className="font-semibold">{artifact.name}</p>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            <span className="badge badge-outline">
+                              {formatLabel(artifact.artifact_type)}
+                            </span>
+                          </div>
+                          <p className="mt-3 text-sm text-base-content/70">
+                            {artifact.summary}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   ) : (
                     <p className="text-sm text-base-content/70">
-                      No context artifact is linked to this rework event.
+                      No context artifacts are linked to this rework event.
                     </p>
                   )}
                 </div>
