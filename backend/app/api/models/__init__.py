@@ -1,24 +1,22 @@
 from app.api.models.schemas import (
     AutopsySummary,
-    ContextRecommendation,
+    ContextArtifact,
     PullRequest,
     ReworkEvent,
     ReworkEventDetail,
     ReworkEventDetailContextArtifact,
     ReworkEventDetailEvent,
     ReworkEventDetailPullRequest,
-    ReworkEventDetailRecommendation,
 )
 
 
 __all__ = [
     "AutopsySummary",
-    "ContextRecommendation",
+    "ContextArtifact",
     "PullRequest",
     "ReworkEvent",
     "ReworkEventDetail",
     "ReworkEventDetailContextArtifact",
     "ReworkEventDetailEvent",
     "ReworkEventDetailPullRequest",
-    "ReworkEventDetailRecommendation",
 ]

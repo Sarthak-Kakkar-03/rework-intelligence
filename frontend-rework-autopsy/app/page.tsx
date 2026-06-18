@@ -4,11 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import { API_BASE_URL, apiGet } from "@/lib/api";
-import type {
-  AutopsySummary,
-  ContextRecommendation,
-  ReworkEvent,
-} from "@/types";
+import type { AutopsySummary, ContextArtifact, ReworkEvent } from "@/types";
 
 function formatLabel(label: string | undefined): string {
   if (!label) {
@@ -35,34 +31,18 @@ function getRootCauseCounts(reworkEvents: ReworkEvent[]) {
   }));
 }
 
-function getPriorityBadgeClass(priority: string): string {
-  if (priority === "high") {
-    return "badge-error";
-  }
-
-  if (priority === "medium") {
-    return "badge-warning";
-  }
-
-  if (priority === "low") {
-    return "badge-info";
-  }
-
-  return "badge-neutral";
-}
-
 /**
  * Renders the main rework autopsy dashboard.
  *
  * Displays summary data, rework event statistics and table, root cause
- * breakdown, and context recommendations.
+ * breakdown, and context artifacts.
  */
 export default function Home() {
   const [summary, setSummary] = useState<AutopsySummary | null>(null);
   const [reworkEvents, setReworkEvents] = useState<ReworkEvent[]>([]);
-  const [recommendations, setRecommendations] = useState<
-    ContextRecommendation[]
-  >([]);
+  const [contextArtifacts, setContextArtifacts] = useState<ContextArtifact[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -72,16 +52,15 @@ export default function Home() {
         setLoading(true);
         setError(null);
 
-        const [summaryData, eventsData, recommendationsData] =
-          await Promise.all([
-            apiGet("/api/autopsy/summary"),
-            apiGet("/api/rework-events"),
-            apiGet("/api/context-recommendations"),
-          ]);
+        const [summaryData, eventsData, artifactsData] = await Promise.all([
+          apiGet("/api/autopsy/summary"),
+          apiGet("/api/rework-events"),
+          apiGet("/api/context-artifacts"),
+        ]);
 
         setSummary(summaryData);
         setReworkEvents(eventsData);
-        setRecommendations(recommendationsData);
+        setContextArtifacts(artifactsData);
       } catch {
         setError(
           `Unable to load dashboard data. Make sure the backend is running on ${API_BASE_URL}.`,
@@ -99,7 +78,7 @@ export default function Home() {
       ? summary.top_root_causes
       : getRootCauseCounts(reworkEvents);
 
-  const fallbackHeadline = `Found ${summary?.rework_event_count ?? reworkEvents.length} rework events across ${summary?.pull_request_count ?? 0} pull requests, with ${summary?.context_recommendation_count ?? recommendations.length} context recommendations.`;
+  const fallbackHeadline = `Found ${summary?.rework_event_count ?? reworkEvents.length} rework events across ${summary?.pull_request_count ?? 0} pull requests, with ${summary?.context_artifact_count ?? contextArtifacts.length} context artifacts.`;
 
   return (
     <main className="min-h-screen bg-base-200 px-4 py-8 text-base-content">
@@ -169,10 +148,9 @@ export default function Home() {
               </div>
 
               <div className="stat">
-                <div className="stat-title">Context Recommendations</div>
+                <div className="stat-title">Context Artifacts</div>
                 <div className="stat-value text-2xl">
-                  {summary?.context_recommendation_count ??
-                    recommendations.length}
+                  {summary?.context_artifact_count ?? contextArtifacts.length}
                 </div>
               </div>
             </section>
@@ -252,32 +230,24 @@ export default function Home() {
             </section>
 
             <section>
-              <h2 className="mb-3 text-lg font-semibold">
-                Context Recommendations
-              </h2>
+              <h2 className="mb-3 text-lg font-semibold">Latest Context Artifacts</h2>
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {recommendations.map((item) => (
+                {contextArtifacts.slice(0,3).map((item) => (
                   <article className="card bg-base-100 shadow-sm" key={item.id}>
                     <div className="card-body gap-3">
                       <div className="flex items-center justify-between gap-3">
-                        <span
-                          className={`badge ${getPriorityBadgeClass(item.priority)}`}
-                        >
-                          {formatLabel(item.priority)}
+                        <span className="badge badge-outline">
+                          {formatLabel(item.artifact_type)}
                         </span>
                         <span className="text-xs text-base-content/60">
-                          {formatLabel(item.missing_context_type)}
+                          {item.rework_event_id}
                         </span>
                       </div>
-                      <h3 className="font-semibold">{item.recommendation}</h3>
+                      <h3 className="font-semibold">{item.name}</h3>
                       <p className="text-sm text-base-content/70">
-                        {item.reason}
+                        {item.summary}
                       </p>
-                      {item.recommended_artifact_name && (
-                        <p className="text-sm">
-                          Artifact: {item.recommended_artifact_name}
-                        </p>
-                      )}
+                      <p className="text-sm">Repo: {item.repo_id}</p>
                     </div>
                   </article>
                 ))}

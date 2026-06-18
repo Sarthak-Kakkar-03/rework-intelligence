@@ -24,32 +24,10 @@ function formatLabel(label: string | undefined): string {
 }
 
 /**
- * Maps a priority level to its corresponding badge class name.
- *
- * @param priority - The priority value to map
- * @returns `badge-error` for `high`, `badge-warning` for `medium`, `badge-info` for `low`, or `badge-neutral` for any other value
- */
-function getPriorityBadgeClass(priority: string): string {
-  if (priority === "high") {
-    return "badge-error";
-  }
-
-  if (priority === "medium") {
-    return "badge-warning";
-  }
-
-  if (priority === "low") {
-    return "badge-info";
-  }
-
-  return "badge-neutral";
-}
-
-/**
  * Renders detailed information about a rework event identified by the `reworkId` URL parameter.
  *
  * Displays the event summary, severity and root cause, core statistics, source PR details,
- * and optional follow-up PR, recommendations, and context artifacts.
+ * and optional follow-up PR and context artifact.
  */
 export default function ReworkEventDetailPage() {
   const params = useParams<{ reworkId: string }>();
@@ -189,44 +167,7 @@ export default function ReworkEventDetailPage() {
             </section>
 
             <section className="grid gap-6 lg:grid-cols-2">
-              <article className="card bg-base-100 shadow-sm">
-                <div className="card-body">
-                  <div className="flex items-center justify-between gap-3">
-                    <h2 className="card-title text-lg">Recommendation</h2>
-                    {detail.recommendation && (
-                      <span
-                        className={`badge ${getPriorityBadgeClass(
-                          detail.recommendation.priority,
-                        )}`}
-                      >
-                        {formatLabel(detail.recommendation.priority)}
-                      </span>
-                    )}
-                  </div>
-                  {detail.recommendation ? (
-                    <>
-                      <p className="font-semibold">
-                        {detail.recommendation.recommendation}
-                      </p>
-                      <p className="text-sm text-base-content/70">
-                        {detail.recommendation.reason}
-                      </p>
-                      <p className="text-sm">
-                        Missing context:{" "}
-                        {formatLabel(
-                          detail.recommendation.missing_context_type,
-                        )}
-                      </p>
-                    </>
-                  ) : (
-                    <p className="text-sm text-base-content/70">
-                      No recommendation is linked to this rework event.
-                    </p>
-                  )}
-                </div>
-              </article>
-
-              <article className="card bg-base-100 shadow-sm">
+              <article className="card bg-base-100 shadow-sm lg:col-span-2">
                 <div className="card-body">
                   <h2 className="card-title text-lg">Context Artifact</h2>
                   {detail.context_artifact ? (
@@ -238,14 +179,14 @@ export default function ReworkEventDetailPage() {
                         <span className="badge badge-outline">
                           {formatLabel(detail.context_artifact.artifact_type)}
                         </span>
-                        <span className="badge badge-neutral">
-                          {formatLabel(detail.context_artifact.freshness)}
-                        </span>
                       </div>
+                      <p className="text-sm text-base-content/70">
+                        {detail.context_artifact.summary}
+                      </p>
                     </>
                   ) : (
                     <p className="text-sm text-base-content/70">
-                      No context artifact is linked to this recommendation.
+                      No context artifact is linked to this rework event.
                     </p>
                   )}
                 </div>

@@ -1,7 +1,7 @@
 export type {
   ApiResponses,
   AutopsySummary,
-  ContextRecommendation,
+  ContextArtifact,
   IsoDateTime,
   PullRequest,
   ReworkEvent,
@@ -9,5 +9,4 @@ export type {
   ReworkEventDetailContextArtifact,
   ReworkEventDetailEvent,
   ReworkEventDetailPullRequest,
-  ReworkEventDetailRecommendation,
 } from "./api";

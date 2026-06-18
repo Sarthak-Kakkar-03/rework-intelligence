@@ -45,15 +45,15 @@ export type ReworkEvent = {
   summary: string;
 };
 
-export type ContextRecommendation = {
+export type ContextArtifact = {
   id: string;
   rework_event_id: string;
-  recommended_artifact_id: string | null;
-  recommended_artifact_name?: string | null;
-  missing_context_type: string;
-  priority: string;
-  recommendation: string;
-  reason: string;
+  name: string;
+  artifact_type: string;
+  repo_id: string;
+  team_id: string;
+  last_updated_at: IsoDateTime | null;
+  summary: string;
 };
 
 export type AutopsySummary = {
@@ -64,7 +64,6 @@ export type AutopsySummary = {
   pull_request_count: number;
   rework_event_count: number;
   context_artifact_count: number;
-  context_recommendation_count: number;
   ai_assisted_pr_count: number;
   total_rework_hours: number;
   avg_days_after_merge: number;
@@ -92,26 +91,17 @@ export type ReworkEventDetailPullRequest = {
   ai_tool: string | null;
 };
 
-export type ReworkEventDetailRecommendation = {
-  id: string;
-  priority: string;
-  missing_context_type: string;
-  recommendation: string;
-  reason: string;
-};
-
 export type ReworkEventDetailContextArtifact = {
   id: string;
   name: string;
   artifact_type: string;
-  freshness: string;
+  summary: string;
 };
 
 export type ReworkEventDetail = {
   rework_event: ReworkEventDetailEvent;
   source_pr: ReworkEventDetailPullRequest;
   followup_pr: ReworkEventDetailPullRequest | null;
-  recommendation: ReworkEventDetailRecommendation | null;
   context_artifact: ReworkEventDetailContextArtifact | null;
 };
 
@@ -120,5 +110,5 @@ export type ApiResponses = {
   "/api/pull-requests": PullRequest[];
   "/api/rework-events": ReworkEvent[];
   [path: `/api/rework-events/${string}`]: ReworkEventDetail;
-  "/api/context-recommendations": ContextRecommendation[];
+  "/api/context-artifacts": ContextArtifact[];
 };
