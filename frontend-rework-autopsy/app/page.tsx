@@ -231,27 +231,36 @@ export default function Home() {
               <h2 className="mb-3 text-lg font-semibold">
                 Latest Context Artifacts
               </h2>
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {contextArtifacts.slice(0, 3).map((item) => (
-                  <article className="card bg-base-100 shadow-sm" key={item.id}>
-                    <div className="card-body gap-3">
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="badge badge-outline">
-                          {formatLabel(item.artifact_type)}
-                        </span>
-                        <span className="text-xs text-base-content/60">
-                          {item.rework_event_id}
-                        </span>
+              {contextArtifacts.length > 0 ? (
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  {contextArtifacts.slice(0, 3).map((item) => (
+                    <article
+                      className="card bg-base-100 shadow-sm"
+                      key={item.id}
+                    >
+                      <div className="card-body gap-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="badge badge-outline">
+                            {formatLabel(item.artifact_type)}
+                          </span>
+                          <span className="text-xs text-base-content/60">
+                            {item.rework_event_id}
+                          </span>
+                        </div>
+                        <h3 className="font-semibold">{item.name}</h3>
+                        <p className="text-sm text-base-content/70">
+                          {item.summary}
+                        </p>
+                        <p className="text-sm">Repo: {item.repo_id}</p>
                       </div>
-                      <h3 className="font-semibold">{item.name}</h3>
-                      <p className="text-sm text-base-content/70">
-                        {item.summary}
-                      </p>
-                      <p className="text-sm">Repo: {item.repo_id}</p>
-                    </div>
-                  </article>
-                ))}
-              </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-base-content/70">
+                  No context artifacts are available.
+                </p>
+              )}
             </section>
           </>
         )}

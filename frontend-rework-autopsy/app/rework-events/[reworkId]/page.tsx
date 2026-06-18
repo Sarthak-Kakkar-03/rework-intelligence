@@ -27,7 +27,7 @@ function formatLabel(label: string | undefined): string {
  * Renders detailed information about a rework event identified by the `reworkId` URL parameter.
  *
  * Displays the event summary, severity and root cause, core statistics, source PR details,
- * and optional follow-up PR and context artifact.
+ * follow-up PR, and context artifact.
  */
 export default function ReworkEventDetailPage() {
   const params = useParams<{ reworkId: string }>();

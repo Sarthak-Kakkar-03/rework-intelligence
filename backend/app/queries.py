@@ -209,7 +209,7 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
     Retrieves comprehensive details for a rework event, including its source pull request.
 
     Returns:
-        ReworkEventDetail | None: A `ReworkEventDetail` object containing the rework event and source pull request details, with optional followup PR and context artifact information; `None` if the rework event is not found.
+        ReworkEventDetail | None: A `ReworkEventDetail` object containing the rework event, source pull request, followup pull request, and context artifact information; `None` if the rework event is not found.
     """
     sql = """
         SELECT
