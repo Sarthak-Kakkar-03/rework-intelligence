@@ -147,21 +147,11 @@ export default function ReworkEventDetailPage() {
               <article className="card bg-base-100 shadow-sm">
                 <div className="card-body">
                   <h2 className="card-title text-lg">Follow-up PR</h2>
-                  {detail.followup_pr ? (
-                    <>
-                      <p className="font-semibold">
-                        {detail.followup_pr.title}
-                      </p>
-                      <div className="text-sm text-base-content/70">
-                        PR {detail.followup_pr.number} in{" "}
-                        {detail.followup_pr.repo_name}
-                      </div>
-                    </>
-                  ) : (
-                    <p className="text-sm text-base-content/70">
-                      No follow-up PR is linked to this rework event.
-                    </p>
-                  )}
+                  <p className="font-semibold">{detail.followup_pr.title}</p>
+                  <div className="text-sm text-base-content/70">
+                    PR {detail.followup_pr.number} in{" "}
+                    {detail.followup_pr.repo_name}
+                  </div>
                 </div>
               </article>
             </section>

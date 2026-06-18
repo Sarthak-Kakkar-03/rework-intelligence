@@ -241,9 +241,9 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
           ON re.source_pr_id = source_pr.id
         JOIN repos source_repo
           ON source_pr.repo_id = source_repo.id
-        LEFT JOIN pull_requests followup_pr
+        JOIN pull_requests followup_pr
           ON re.followup_pr_id = followup_pr.id
-        LEFT JOIN repos followup_repo
+        JOIN repos followup_repo
           ON followup_pr.repo_id = followup_repo.id
         LEFT JOIN context_artifacts artifact
           ON re.id = artifact.rework_event_id
@@ -258,15 +258,6 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
         return None
 
     row = rows[0]
-
-    followup_pr = None
-    if row["followup_pr_id"] is not None:
-        followup_pr = ReworkEventDetailPullRequest(
-            id=row["followup_pr_id"],
-            number=row["followup_pr_number"],
-            title=row["followup_pr_title"],
-            repo_name=row["followup_repo_name"],
-        )
 
     context_artifacts = [
         ReworkEventDetailContextArtifact(
@@ -296,6 +287,11 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
             ai_assisted=bool(row["source_pr_ai_assisted"]),
             ai_tool=row["source_pr_ai_tool"],
         ),
-        followup_pr=followup_pr,
+        followup_pr=ReworkEventDetailPullRequest(
+            id=row["followup_pr_id"],
+            number=row["followup_pr_number"],
+            title=row["followup_pr_title"],
+            repo_name=row["followup_repo_name"],
+        ),
         context_artifacts=context_artifacts,
     )

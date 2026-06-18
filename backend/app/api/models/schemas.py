@@ -35,7 +35,7 @@ class PullRequest(BaseModel):
 class ReworkEvent(BaseModel):
     id: str
     source_pr_id: int
-    followup_pr_id: int | None = None
+    followup_pr_id: int
     issue_key: str | None = None
     detected_from: str
     rework_type: str
@@ -97,5 +97,5 @@ class ReworkEventDetailContextArtifact(BaseModel):
 class ReworkEventDetail(BaseModel):
     rework_event: ReworkEventDetailEvent
     source_pr: ReworkEventDetailPullRequest
-    followup_pr: ReworkEventDetailPullRequest | None = None
-    context_artifacts: list[ReworkEventDetailContextArtifact] | None = None
+    followup_pr: ReworkEventDetailPullRequest
+    context_artifacts: list[ReworkEventDetailContextArtifact] = []

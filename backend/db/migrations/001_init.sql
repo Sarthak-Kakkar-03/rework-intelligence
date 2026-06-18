@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS rework_events (
   id TEXT PRIMARY KEY,
 
   source_pr_id INTEGER NOT NULL,
-  followup_pr_id INTEGER,
+  followup_pr_id INTEGER NOT NULL,
   issue_key TEXT,
 
   detected_from TEXT NOT NULL,

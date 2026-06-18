@@ -33,7 +33,7 @@ export type ReworkEvent = {
   id: string;
   source_pr_id: number;
   source_pr_title?: string;
-  followup_pr_id: number | null;
+  followup_pr_id: number;
   followup_pr_title?: string;
   issue_key: string | null;
   detected_from: string;
@@ -101,8 +101,8 @@ export type ReworkEventDetailContextArtifact = {
 export type ReworkEventDetail = {
   rework_event: ReworkEventDetailEvent;
   source_pr: ReworkEventDetailPullRequest;
-  followup_pr: ReworkEventDetailPullRequest | null;
-  context_artifacts: ReworkEventDetailContextArtifact[] | null;
+  followup_pr: ReworkEventDetailPullRequest;
+  context_artifacts: ReworkEventDetailContextArtifact[];
 };
 
 export type ApiResponses = {

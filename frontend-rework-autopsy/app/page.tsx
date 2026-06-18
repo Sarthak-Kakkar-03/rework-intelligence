@@ -189,9 +189,7 @@ export default function Home() {
                             </td>
                             <td>
                               {event.followup_pr_title ||
-                                (event.followup_pr_id
-                                  ? `PR ${event.followup_pr_id}`
-                                  : "None")}
+                                `PR ${event.followup_pr_id}`}
                             </td>
                             <td>{formatLabel(event.root_cause_label)}</td>
                             <td>
@@ -230,9 +228,11 @@ export default function Home() {
             </section>
 
             <section>
-              <h2 className="mb-3 text-lg font-semibold">Latest Context Artifacts</h2>
+              <h2 className="mb-3 text-lg font-semibold">
+                Latest Context Artifacts
+              </h2>
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {contextArtifacts.slice(0,3).map((item) => (
+                {contextArtifacts.slice(0, 3).map((item) => (
                   <article className="card bg-base-100 shadow-sm" key={item.id}>
                     <div className="card-body gap-3">
                       <div className="flex items-center justify-between gap-3">
