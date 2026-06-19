@@ -10,7 +10,7 @@ export type PullRequest = {
   draft: boolean;
   created_at: IsoDateTime;
   updated_at: IsoDateTime;
-  closed_at: IsoDateTime | null;
+  closed_at: IsoDateTime;
   merged_at: IsoDateTime | null;
   merged: boolean;
   author_login: string;
@@ -66,6 +66,11 @@ export type AutopsySummary = {
     root_cause_label: string;
     count: number;
   }[];
+};
+
+export type ReworkRecomputeResult = {
+  rework_event_count: number;
+  message: string;
 };
 
 export type ReworkEventDetailEvent = {

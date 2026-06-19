@@ -4,6 +4,7 @@ from app.api.models import (
     AutopsySummary,
     ContextArtifact,
     PullRequest,
+    PullRequestFile,
     ReworkEvent,
     ReworkEventDetail,
     ReworkEventDetailContextArtifact,
@@ -11,6 +12,7 @@ from app.api.models import (
     ReworkEventDetailPullRequest,
 )
 from app.db import get_connection
+from app.services.rework_detection.models import ReworkCandidate
 
 
 def get_autopsy_summary() -> AutopsySummary:
@@ -114,6 +116,139 @@ def get_pull_requests() -> list[PullRequest]:
         ]
 
 
+def get_pull_requests_ordered_by_closed_at() -> list[PullRequest]:
+    """
+    Retrieves pull request records ordered by closure time for rework detection.
+
+    Returns:
+        A list of PullRequest objects, ordered by closed_at ascending, then by ID.
+    """
+    sql = """
+        SELECT
+          id,
+          number,
+          repo_id,
+          title,
+          body,
+          state,
+          draft,
+          created_at,
+          updated_at,
+          closed_at,
+          merged_at,
+          merged,
+          author_login,
+          merged_by_login,
+          base_branch,
+          head_branch,
+          additions,
+          deletions,
+          changed_files,
+          commits,
+          comments,
+          review_comments,
+          ai_generated
+        FROM pull_requests
+        ORDER BY datetime(closed_at) ASC, id ASC
+    """
+
+    with closing(get_connection()) as conn:
+        rows = conn.execute(sql).fetchall()
+        return [
+            PullRequest(
+                id=row["id"],
+                number=row["number"],
+                repo_id=row["repo_id"],
+                title=row["title"],
+                body=row["body"],
+                state=row["state"],
+                draft=bool(row["draft"]),
+                created_at=row["created_at"],
+                updated_at=row["updated_at"],
+                closed_at=row["closed_at"],
+                merged_at=row["merged_at"],
+                merged=bool(row["merged"]),
+                author_login=row["author_login"],
+                merged_by_login=row["merged_by_login"],
+                base_branch=row["base_branch"],
+                head_branch=row["head_branch"],
+                additions=row["additions"],
+                deletions=row["deletions"],
+                changed_files=row["changed_files"],
+                commits=row["commits"],
+                comments=row["comments"],
+                review_comments=row["review_comments"],
+                ai_generated=bool(row["ai_generated"]),
+            )
+            for row in rows
+        ]
+
+
+def get_pull_request_files() -> list[PullRequestFile]:
+    """
+    Retrieves all changed-file records for pull requests.
+
+    Returns:
+        A list of PullRequestFile objects ordered by pull request and file path.
+    """
+    sql = """
+        SELECT
+          id,
+          pull_request_id,
+          file_path,
+          additions,
+          deletions
+        FROM pull_request_files
+        ORDER BY pull_request_id, file_path
+    """
+
+    with closing(get_connection()) as conn:
+        rows = conn.execute(sql).fetchall()
+        return [
+            PullRequestFile(
+                id=row["id"],
+                pull_request_id=row["pull_request_id"],
+                file_path=row["file_path"],
+                additions=row["additions"],
+                deletions=row["deletions"],
+            )
+            for row in rows
+        ]
+
+
+def get_pull_request_files_by_pr_id(pull_request_id: int) -> list[PullRequestFile]:
+    """
+    Retrieves changed-file records for one pull request.
+
+    Returns:
+        A list of PullRequestFile objects ordered by file path.
+    """
+    sql = """
+        SELECT
+          id,
+          pull_request_id,
+          file_path,
+          additions,
+          deletions
+        FROM pull_request_files
+        WHERE pull_request_id = ?
+        ORDER BY file_path
+    """
+
+    with closing(get_connection()) as conn:
+        rows = conn.execute(sql, (pull_request_id,)).fetchall()
+        return [
+            PullRequestFile(
+                id=row["id"],
+                pull_request_id=row["pull_request_id"],
+                file_path=row["file_path"],
+                additions=row["additions"],
+                deletions=row["deletions"],
+            )
+            for row in rows
+        ]
+
+
 def get_rework_events() -> list[ReworkEvent]:
     """
     Retrieve all rework event records from the database, ordered by recency and ID.
@@ -154,6 +289,104 @@ def get_rework_events() -> list[ReworkEvent]:
             )
             for row in rows
         ]
+
+
+def clear_rework_events() -> None:
+    """
+    Deletes all computed rework events and their dependent context artifacts.
+    """
+    with closing(get_connection()) as conn:
+        conn.execute("DELETE FROM context_artifacts")
+        conn.execute("DELETE FROM rework_events")
+        conn.commit()
+
+
+def insert_rework_candidates(rework_candidates: list[ReworkCandidate]) -> None:
+    """
+    Inserts detected rework candidates into the rework_events table.
+    """
+    sql = """
+        INSERT INTO rework_events (
+          id,
+          source_pr_id,
+          followup_pr_id,
+          detected_from,
+          rework_type,
+          severity,
+          days_after_merge,
+          human_hours_spent,
+          root_cause_label,
+          summary
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+
+    values = [
+        (
+            f"RW-{index + 1:03d}",
+            candidate.source_pr_id,
+            candidate.followup_pr_id,
+            "detector",
+            "computed_rework",
+            candidate.severity,
+            candidate.days_after_merge,
+            candidate.human_hours_spent,
+            candidate.root_cause_label,
+            candidate.summary,
+        )
+        for index, candidate in enumerate(rework_candidates)
+    ]
+
+    with closing(get_connection()) as conn:
+        conn.executemany(sql, values)
+        conn.commit()
+
+
+def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
+    """
+    Replaces rework events with detected candidates in one transaction.
+    """
+    sql = """
+        INSERT INTO rework_events (
+          id,
+          source_pr_id,
+          followup_pr_id,
+          detected_from,
+          rework_type,
+          severity,
+          days_after_merge,
+          human_hours_spent,
+          root_cause_label,
+          summary
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+
+    values = [
+        (
+            f"RW-{index + 1:03d}",
+            candidate.source_pr_id,
+            candidate.followup_pr_id,
+            "detector",
+            "computed_rework",
+            candidate.severity,
+            candidate.days_after_merge,
+            candidate.human_hours_spent,
+            candidate.root_cause_label,
+            candidate.summary,
+        )
+        for index, candidate in enumerate(rework_candidates)
+    ]
+
+    with closing(get_connection()) as conn:
+        try:
+            conn.execute("DELETE FROM context_artifacts")
+            conn.execute("DELETE FROM rework_events")
+            conn.executemany(sql, values)
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
 
 
 def get_context_artifacts() -> list[ContextArtifact]:
@@ -295,7 +528,7 @@ def insert_pull_request(pull_request: PullRequest) -> PullRequest:
                 int(pull_request.draft),
                 pull_request.created_at.isoformat(),
                 pull_request.updated_at.isoformat(),
-                pull_request.closed_at.isoformat() if pull_request.closed_at else None,
+                pull_request.closed_at.isoformat(),
                 pull_request.merged_at.isoformat() if pull_request.merged_at else None,
                 int(pull_request.merged),
                 pull_request.author_login,
@@ -405,3 +638,23 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
         ),
         context_artifacts=context_artifacts,
     )
+
+
+def change_rework_root_cause_by_id(
+    rework_id: str,
+    root_cause: str,
+) -> ReworkEventDetail | None:
+    sql = """
+        UPDATE rework_events
+        SET root_cause_label = ?
+        WHERE id = ?
+    """
+
+    with closing(get_connection()) as conn:
+        cursor = conn.execute(sql, (root_cause, rework_id))
+        conn.commit()
+
+    if cursor.rowcount == 0:
+        return None
+
+    return get_rework_event_detail(rework_event_id=rework_id)

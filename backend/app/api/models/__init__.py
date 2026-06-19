@@ -3,12 +3,15 @@ from app.api.models.schemas import (
     ContextArtifact,
     ContextArtifactCreate,
     PullRequest,
+    PullRequestFile,
     ReworkEvent,
     ReworkEventDetail,
     ReworkEventDetailContextArtifact,
     ReworkEventDetailEvent,
     ReworkEventDetailPullRequest,
+    ReworkRecomputeResult,
     PullRequestCreate,
+    ReworkRootCause,
 )
 
 
@@ -17,10 +20,13 @@ __all__ = [
     "ContextArtifact",
     "ContextArtifactCreate",
     "PullRequest",
+    "PullRequestFile",
     "ReworkEvent",
     "ReworkEventDetail",
     "ReworkEventDetailContextArtifact",
     "ReworkEventDetailEvent",
     "ReworkEventDetailPullRequest",
+    "ReworkRecomputeResult",
     "PullRequestCreate",
+    "ReworkRootCause",
 ]

@@ -1,0 +1,121 @@
+[
+  {
+    "id": "PRF-1001-001",
+    "pull_request_id": 1001,
+    "file_path": "src/jira_sync/retry_worker.py",
+    "additions": 72,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-1001-002",
+    "pull_request_id": 1001,
+    "file_path": "src/jira_sync/idempotency.py",
+    "additions": 31,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-1001-003",
+    "pull_request_id": 1001,
+    "file_path": "tests/test_retry_worker.py",
+    "additions": 43,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-1002-001",
+    "pull_request_id": 1002,
+    "file_path": "src/jira_sync/retry_worker.py",
+    "additions": 36,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-1002-002",
+    "pull_request_id": 1002,
+    "file_path": "src/jira_sync/idempotency.py",
+    "additions": 28,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-1002-003",
+    "pull_request_id": 1002,
+    "file_path": "tests/test_retry_worker.py",
+    "additions": 22,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-1003-001",
+    "pull_request_id": 1003,
+    "file_path": "src/github_ingest/auth.py",
+    "additions": 45,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-1003-002",
+    "pull_request_id": 1003,
+    "file_path": "tests/test_github_auth.py",
+    "additions": 92,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-1005-001",
+    "pull_request_id": 1005,
+    "file_path": "src/deployment_risk/api.py",
+    "additions": 24,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-1005-002",
+    "pull_request_id": 1005,
+    "file_path": "src/deployment_risk/schema.py",
+    "additions": 18,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-1006-001",
+    "pull_request_id": 1006,
+    "file_path": "src/deployment_risk/schema.py",
+    "additions": 20,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-1006-002",
+    "pull_request_id": 1006,
+    "file_path": "tests/test_deployment_risk_schema.py",
+    "additions": 18,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-1007-001",
+    "pull_request_id": 1007,
+    "file_path": "src/shared/filter_status.ts",
+    "additions": 51,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-1007-002",
+    "pull_request_id": 1007,
+    "file_path": "src/dashboard/ai_generated_filter.tsx",
+    "additions": 70,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-1008-001",
+    "pull_request_id": 1008,
+    "file_path": "src/shared/filter_status.ts",
+    "additions": 24,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-1009-001",
+    "pull_request_id": 1009,
+    "file_path": "src/jira_sync/payload_parser.py",
+    "additions": 77,
+    "deletions": 93
+  },
+  {
+    "id": "PRF-1010-001",
+    "pull_request_id": 1010,
+    "file_path": "docs/jira-parser-naming.md",
+    "additions": 21,
+    "deletions": 13
+  }
+]

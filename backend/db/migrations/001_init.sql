@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS pull_requests (
 
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
-  closed_at TEXT,
+  closed_at TEXT NOT NULL,
   merged_at TEXT,
   merged INTEGER NOT NULL DEFAULT 0,
 
@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS pull_requests (
   base_branch TEXT NOT NULL,
   head_branch TEXT NOT NULL,
 
-  additions INTEGER NOT NULL DEFAULT 0,
-  deletions INTEGER NOT NULL DEFAULT 0,
+  additions INTEGER NOT NULL DEFAULT 0 CHECK (additions >= 0),
+  deletions INTEGER NOT NULL DEFAULT 0 CHECK (deletions >= 0),
   changed_files INTEGER NOT NULL DEFAULT 0,
   commits INTEGER NOT NULL DEFAULT 0,
   comments INTEGER NOT NULL DEFAULT 0,
@@ -45,6 +45,17 @@ CREATE TABLE IF NOT EXISTS pull_requests (
 
   UNIQUE (repo_id, number),
   FOREIGN KEY (repo_id) REFERENCES repos(id)
+);
+
+CREATE TABLE IF NOT EXISTS pull_request_files (
+  id TEXT PRIMARY KEY,
+  pull_request_id INTEGER NOT NULL,
+  file_path TEXT NOT NULL,
+  additions INTEGER NOT NULL DEFAULT 0 CHECK (additions >= 0),
+  deletions INTEGER NOT NULL DEFAULT 0 CHECK (deletions >= 0),
+
+  UNIQUE (pull_request_id, file_path),
+  FOREIGN KEY (pull_request_id) REFERENCES pull_requests(id)
 );
 
 CREATE TABLE IF NOT EXISTS rework_events (

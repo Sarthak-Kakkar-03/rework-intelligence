@@ -9,13 +9,19 @@ from app.api.models import (
     ContextArtifactCreate,
     PullRequest,
     PullRequestCreate,
+    ReworkRecomputeResult,
+    ReworkEventDetail,
+    ReworkRootCause,
 )
 
 from app.queries import (
     get_rework_event_repo_team_ids,
     insert_context_artifact,
     insert_pull_request,
+    replace_rework_events,
+    change_rework_root_cause_by_id,
 )
+from app.services.rework_detection.rework_detector import generate_rework_candidates
 
 from random import randint
 
@@ -82,3 +88,30 @@ def ingest_pull_request(pull_request: PullRequestCreate) -> PullRequest:
             status_code=400,
             detail=f"Pull request could not be created: {exc}",
         ) from exc
+
+
+@router.post("/ingest/rework-events/recompute", response_model=ReworkRecomputeResult)
+def recompute_rework_events() -> ReworkRecomputeResult:
+    rework_candidates = generate_rework_candidates()
+    replace_rework_events(rework_candidates)
+
+    return ReworkRecomputeResult(
+        rework_event_count=len(rework_candidates),
+        message=f"Recomputed and inserted {len(rework_candidates)} rework events.",
+    )
+
+
+@router.post("/ingest/{rework_id}/root-cause", response_model=ReworkEventDetail)
+def add_root_cause(
+    rework_id: str,
+    root_cause: ReworkRootCause,
+) -> ReworkEventDetail:
+    updated_rework = change_rework_root_cause_by_id(
+        rework_id=rework_id,
+        root_cause=root_cause.root_cause,
+    )
+
+    if updated_rework is None:
+        raise HTTPException(status_code=404, detail="Rework event not found")
+
+    return updated_rework

@@ -21,6 +21,7 @@ TABLE_LOAD_ORDER = [
     ("teams", "teams.json"),
     ("repos", "repos.json"),
     ("pull_requests", "pull_requests.json"),
+    ("pull_request_files", "pull_request_files.json"),
     ("rework_events", "rework_events.json"),
     ("context_artifacts", "context_artifacts.json"),
 ]

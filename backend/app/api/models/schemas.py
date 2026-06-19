@@ -13,7 +13,7 @@ class PullRequest(BaseModel):
     draft: bool = False
     created_at: datetime
     updated_at: datetime
-    closed_at: datetime | None = None
+    closed_at: datetime
     merged_at: datetime | None = None
     merged: bool = False
     author_login: str
@@ -27,6 +27,14 @@ class PullRequest(BaseModel):
     comments: int = Field(default=0, ge=0)
     review_comments: int = Field(default=0, ge=0)
     ai_generated: bool = False
+
+
+class PullRequestFile(BaseModel):
+    id: str
+    pull_request_id: int
+    file_path: str
+    additions: int = Field(default=0, ge=0)
+    deletions: int = Field(default=0, ge=0)
 
 
 class ReworkEvent(BaseModel):
@@ -110,3 +118,12 @@ class PullRequestCreate(BaseModel):
     ai_generated: bool
     number: int
     repo_id: str
+
+
+class ReworkRecomputeResult(BaseModel):
+    rework_event_count: int = Field(ge=0)
+    message: str
+
+
+class ReworkRootCause(BaseModel):
+    root_cause: str

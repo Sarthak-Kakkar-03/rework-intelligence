@@ -8,4 +8,5 @@ export type {
   ReworkEventDetailContextArtifact,
   ReworkEventDetailEvent,
   ReworkEventDetailPullRequest,
+  ReworkRecomputeResult,
 } from "./api";
