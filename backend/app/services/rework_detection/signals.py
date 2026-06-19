@@ -12,9 +12,13 @@ def is_followup_after_source(source_pr: PullRequest, followup_pr: PullRequest) -
 
 def is_ai_to_non_ai_within_14_days(source_pr: PullRequest, followup_pr: PullRequest) -> bool:
     if (source_pr.ai_generated and not followup_pr.ai_generated):
-        return (followup_pr.closed_at - source_pr. closed_at) < timedelta(days=14)
+        return (followup_pr.closed_at - source_pr.closed_at) < timedelta(days=14)
+    return False
     
 def validate_files_belong_to_same_pr(files_list: list[PullRequestFile]) -> bool:
+    if not files_list:
+        return True
+
     target_pr_id = files_list[0].pull_request_id
     for file in files_list:
         if (target_pr_id != file.pull_request_id):
@@ -44,3 +48,4 @@ def has_followup_rework_language(followup_pr: PullRequest) -> bool:
 def has_rework_override(followup_pr: PullRequest) -> bool:
     text = followup_pr.title + " \n" + (followup_pr.body or "")
     return re.search("#rework", text, re.IGNORECASE) is not None
+
