@@ -342,6 +342,54 @@ def insert_rework_candidates(rework_candidates: list[ReworkCandidate]) -> None:
         conn.commit()
 
 
+def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
+    """
+    Replaces rework events with detected candidates in one transaction.
+    """
+    sql = """
+        INSERT INTO rework_events (
+          id,
+          source_pr_id,
+          followup_pr_id,
+          detected_from,
+          rework_type,
+          severity,
+          days_after_merge,
+          human_hours_spent,
+          root_cause_label,
+          summary
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+
+    values = [
+        (
+            f"RW-{index + 1:03d}",
+            candidate.source_pr_id,
+            candidate.followup_pr_id,
+            "detector",
+            "computed_rework",
+            candidate.severity,
+            candidate.days_after_merge,
+            candidate.human_hours_spent,
+            candidate.root_cause_label,
+            candidate.summary,
+        )
+        for index, candidate in enumerate(rework_candidates)
+    ]
+
+    with closing(get_connection()) as conn:
+        try:
+            conn.execute("BEGIN")
+            conn.execute("DELETE FROM context_artifacts")
+            conn.execute("DELETE FROM rework_events")
+            conn.executemany(sql, values)
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+
+
 def get_context_artifacts() -> list[ContextArtifact]:
     """
     Fetch all context artifacts.

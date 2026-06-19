@@ -56,13 +56,6 @@
     "deletions": 4
   },
   {
-    "id": "PRF-1004-001",
-    "pull_request_id": 1004,
-    "file_path": "docs/staging-auth-runbook.md",
-    "additions": 28,
-    "deletions": 4
-  },
-  {
     "id": "PRF-1005-001",
     "pull_request_id": 1005,
     "file_path": "src/deployment_risk/api.py",

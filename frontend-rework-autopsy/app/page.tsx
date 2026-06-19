@@ -57,6 +57,9 @@ export default function Home() {
   const [computeReworkMessage, setComputeReworkMessage] = useState<
     string | null
   >(null);
+  const [computeReworkError, setComputeReworkError] = useState<string | null>(
+    null,
+  );
 
   const [addPrModalOpen, setAddPrModalOpen] = useState(false);
   const [addPrError, setAddPrError] = useState<string | null>(null);
@@ -185,7 +188,7 @@ export default function Home() {
     try {
       setIsComputingRework(true);
       setComputeReworkMessage(null);
-      setError(null);
+      setComputeReworkError(null);
 
       const response = await fetch(
         `${API_BASE_URL}/api/ingest/rework-events/recompute`,
@@ -202,7 +205,7 @@ export default function Home() {
       setComputeReworkMessage(result.message);
       await loadDashboardData();
     } catch {
-      setError(
+      setComputeReworkError(
         `Unable to compute rework events. Make sure the backend is running on ${API_BASE_URL}.`,
       );
     } finally {
@@ -238,6 +241,12 @@ export default function Home() {
         {computeReworkMessage && (
           <div className="alert alert-success">
             <span>{computeReworkMessage}</span>
+          </div>
+        )}
+
+        {computeReworkError && (
+          <div className="alert alert-error">
+            <span>{computeReworkError}</span>
           </div>
         )}
 

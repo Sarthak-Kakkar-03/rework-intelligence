@@ -3,7 +3,7 @@ from datetime import timedelta
 import re
 
 REWORK_LANGUAGE_PATTERN = re.compile(
-    r"(#rework|\bfix(?:es|ed)?\b|\bpatch(?:es|ed)?\b|\brestore(?:s|d)?\b)",
+    r"(#rework\b|\bfix(?:es|ed)?\b|\bpatch(?:es|ed)?\b|\brestore(?:s|d)?\b)",
     re.IGNORECASE,
 )
 
@@ -20,7 +20,7 @@ def is_ai_to_non_ai_within_14_days(
     source_pr: PullRequest, followup_pr: PullRequest
 ) -> bool:
     if source_pr.ai_generated and not followup_pr.ai_generated:
-        return (followup_pr.closed_at - source_pr.closed_at) < timedelta(days=14)
+        return (followup_pr.closed_at - source_pr.closed_at) <= timedelta(days=14)
     return False
 
 
@@ -64,4 +64,4 @@ def has_followup_rework_language(followup_pr: PullRequest) -> bool:
 
 def has_rework_override(followup_pr: PullRequest) -> bool:
     text = followup_pr.title + " \n" + (followup_pr.body or "")
-    return re.search("#rework", text, re.IGNORECASE) is not None
+    return re.search(r"#rework\b", text, re.IGNORECASE) is not None

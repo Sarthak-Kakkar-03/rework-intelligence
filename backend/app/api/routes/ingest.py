@@ -15,11 +15,10 @@ from app.api.models import (
 )
 
 from app.queries import (
-    clear_rework_events,
     get_rework_event_repo_team_ids,
     insert_context_artifact,
     insert_pull_request,
-    insert_rework_candidates,
+    replace_rework_events,
     change_rework_root_cause_by_id,
 )
 from app.services.rework_detection.rework_detector import generate_rework_candidates
@@ -94,8 +93,7 @@ def ingest_pull_request(pull_request: PullRequestCreate) -> PullRequest:
 @router.post("/ingest/rework-events/recompute", response_model=ReworkRecomputeResult)
 def recompute_rework_events() -> ReworkRecomputeResult:
     rework_candidates = generate_rework_candidates()
-    clear_rework_events()
-    insert_rework_candidates(rework_candidates)
+    replace_rework_events(rework_candidates)
 
     return ReworkRecomputeResult(
         rework_event_count=len(rework_candidates),

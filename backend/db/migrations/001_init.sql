@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS pull_requests (
   base_branch TEXT NOT NULL,
   head_branch TEXT NOT NULL,
 
-  additions INTEGER NOT NULL DEFAULT 0,
-  deletions INTEGER NOT NULL DEFAULT 0,
+  additions INTEGER NOT NULL DEFAULT 0 CHECK (additions >= 0),
+  deletions INTEGER NOT NULL DEFAULT 0 CHECK (deletions >= 0),
   changed_files INTEGER NOT NULL DEFAULT 0,
   commits INTEGER NOT NULL DEFAULT 0,
   comments INTEGER NOT NULL DEFAULT 0,
@@ -51,8 +51,8 @@ CREATE TABLE IF NOT EXISTS pull_request_files (
   id TEXT PRIMARY KEY,
   pull_request_id INTEGER NOT NULL,
   file_path TEXT NOT NULL,
-  additions INTEGER NOT NULL DEFAULT 0,
-  deletions INTEGER NOT NULL DEFAULT 0,
+  additions INTEGER NOT NULL DEFAULT 0 CHECK (additions >= 0),
+  deletions INTEGER NOT NULL DEFAULT 0 CHECK (deletions >= 0),
 
   UNIQUE (pull_request_id, file_path),
   FOREIGN KEY (pull_request_id) REFERENCES pull_requests(id)

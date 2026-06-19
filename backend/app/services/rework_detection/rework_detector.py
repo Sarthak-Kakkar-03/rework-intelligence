@@ -1,4 +1,3 @@
-from app.services.rework_detection.signals import *
 from app.api.models import PullRequest, PullRequestFile
 from app.services.rework_detection.models import ReworkCandidate
 from app.services.rework_detection.estimates import (
@@ -7,6 +6,14 @@ from app.services.rework_detection.estimates import (
     estimate_days_after_merge,
     estimate_human_hours_spent,
     estimate_severity,
+)
+from app.services.rework_detection.signals import (
+    get_overlapping_files,
+    has_followup_rework_language,
+    has_rework_override,
+    has_same_repo,
+    is_ai_to_non_ai_within_14_days,
+    is_followup_after_source,
 )
 from app.queries import (
     get_pull_requests_ordered_by_closed_at,
@@ -73,6 +80,7 @@ def get_rework_signals(
 
 def generate_rework_candidates() -> list[ReworkCandidate]:
     pr_list: list[PullRequest] = get_pull_requests_ordered_by_closed_at()
+    files_by_pr_id: dict[int, list[PullRequestFile]] = {}
     result: list[ReworkCandidate] = []
     for source_idx, source_pr in enumerate(pr_list):
         for followup_idx in range(source_idx + 1, len(pr_list)):
@@ -80,8 +88,17 @@ def generate_rework_candidates() -> list[ReworkCandidate]:
             if is_possible_rework_candidate(
                 source_pr=source_pr, followup_pr=followup_pr
             ):
-                source_files = get_pull_request_files_by_pr_id(source_pr.id)
-                followup_files = get_pull_request_files_by_pr_id(followup_pr.id)
+                if source_pr.id not in files_by_pr_id:
+                    files_by_pr_id[source_pr.id] = get_pull_request_files_by_pr_id(
+                        source_pr.id
+                    )
+                if followup_pr.id not in files_by_pr_id:
+                    files_by_pr_id[followup_pr.id] = get_pull_request_files_by_pr_id(
+                        followup_pr.id
+                    )
+
+                source_files = files_by_pr_id[source_pr.id]
+                followup_files = files_by_pr_id[followup_pr.id]
                 rework_candidate_bool = is_rework_candidate(
                     source_pr=source_pr,
                     followup_pr=followup_pr,
