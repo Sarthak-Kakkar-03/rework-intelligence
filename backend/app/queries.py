@@ -98,6 +98,21 @@ def get_repos() -> list[Repo]:
         ]
 
 
+def get_next_pull_request_number(repo_id: str) -> int:
+    """
+    Returns the next pull request number for a repository.
+    """
+    sql = """
+        SELECT COALESCE(MAX(number), 0) + 1 AS next_number
+        FROM pull_requests
+        WHERE repo_id = ?
+    """
+
+    with closing(get_connection()) as conn:
+        row = conn.execute(sql, (repo_id,)).fetchone()
+        return row["next_number"]
+
+
 def get_pull_requests() -> list[PullRequest]:
     """
     Retrieves all pull request records from the database.

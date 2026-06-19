@@ -19,6 +19,7 @@ from app.api.models import (
 )
 
 from app.queries import (
+    get_next_pull_request_number,
     get_rework_event_repo_team_ids,
     insert_context_artifact,
     insert_pull_request,
@@ -39,7 +40,7 @@ def _build_pull_request(pull_request: PullRequestCreate) -> PullRequest:
     now = datetime.now(timezone.utc)
     return PullRequest(
         id=randint(1_000_000, 9_999_999),
-        number=pull_request.number,
+        number=get_next_pull_request_number(repo_id=pull_request.repo_id),
         repo_id=pull_request.repo_id,
         title=pull_request.title,
         body=pull_request.body,

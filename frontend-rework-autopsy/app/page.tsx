@@ -75,7 +75,6 @@ export default function Home() {
   const [isAddingPrPair, setIsAddingPrPair] = useState(false);
   const [sourcePrTitle, setSourcePrTitle] = useState("");
   const [sourcePrBody, setSourcePrBody] = useState("");
-  const [sourcePrNumber, setSourcePrNumber] = useState("");
   const [sourcePrRepoId, setSourcePrRepoId] = useState("");
   const [sourcePrAuthorLogin, setSourcePrAuthorLogin] = useState("");
   const [sourcePrMergedByLogin, setSourcePrMergedByLogin] = useState("");
@@ -84,7 +83,6 @@ export default function Home() {
   const [sourcePrFiles, setSourcePrFiles] = useState("");
   const [followupPrTitle, setFollowupPrTitle] = useState("");
   const [followupPrBody, setFollowupPrBody] = useState("");
-  const [followupPrNumber, setFollowupPrNumber] = useState("");
   const [followupPrRepoId, setFollowupPrRepoId] = useState("");
   const [followupPrAuthorLogin, setFollowupPrAuthorLogin] = useState("");
   const [followupPrMergedByLogin, setFollowupPrMergedByLogin] = useState("");
@@ -159,7 +157,6 @@ export default function Home() {
     setSourcePrBody(
       "Adds AI-generated retry behavior for transient billing sync failures.",
     );
-    setSourcePrNumber("90");
     setSourcePrRepoId("repo-jira-sync-worker");
     setSourcePrAuthorLogin("maya-chen");
     setSourcePrMergedByLogin("alex-rivera");
@@ -172,7 +169,6 @@ export default function Home() {
     setFollowupPrBody(
       "Fixes duplicate writes from retry replay after the AI-generated retry change.",
     );
-    setFollowupPrNumber("91");
     setFollowupPrRepoId("repo-jira-sync-worker");
     setFollowupPrAuthorLogin("alex-rivera");
     setFollowupPrMergedByLogin("maya-chen");
@@ -193,7 +189,6 @@ export default function Home() {
       merged_by_login: string;
       head_branch: string;
       ai_generated: boolean;
-      number: number;
       repo_id: string;
     },
     filePaths: string[],
@@ -226,19 +221,6 @@ export default function Home() {
       setAddPrError(null);
       setIsAddingPrPair(true);
 
-      const sourceNumber = Number(sourcePrNumber);
-      const followupNumber = Number(followupPrNumber);
-
-      if (!Number.isInteger(sourceNumber) || sourceNumber <= 0) {
-        setAddPrError("Source PR number must be a positive whole number.");
-        return;
-      }
-
-      if (!Number.isInteger(followupNumber) || followupNumber <= 0) {
-        setAddPrError("Follow-up PR number must be a positive whole number.");
-        return;
-      }
-
       if (!sourcePrRepoId.trim() || !followupPrRepoId.trim()) {
         setAddPrError("Both PRs need a repo.");
         return;
@@ -264,7 +246,6 @@ export default function Home() {
           merged_by_login: sourcePrMergedByLogin,
           head_branch: sourcePrHeadBranch,
           ai_generated: sourcePrAIGenerated,
-          number: sourceNumber,
           repo_id: sourcePrRepoId,
         },
         sourceFilePaths,
@@ -278,7 +259,6 @@ export default function Home() {
           merged_by_login: followupPrMergedByLogin,
           head_branch: followupPrHeadBranch,
           ai_generated: followupPrAIGenerated,
-          number: followupNumber,
           repo_id: followupPrRepoId,
         },
         followupFilePaths,
@@ -579,43 +559,25 @@ export default function Home() {
                       />
                     </label>
 
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <label className="form-control">
-                        <span className="label mb-1">
-                          <span className="label-text">PR Number</span>
-                        </span>
-                        <input
-                          className="input input-bordered"
-                          min="1"
-                          onChange={(event) =>
-                            setSourcePrNumber(event.target.value)
-                          }
-                          placeholder="90"
-                          type="number"
-                          value={sourcePrNumber}
-                        />
-                      </label>
-
-                      <label className="form-control">
-                        <span className="label mb-1">
-                          <span className="label-text">Repo</span>
-                        </span>
-                        <select
-                          className="select select-bordered"
-                          onChange={(event) =>
-                            setSourcePrRepoId(event.target.value)
-                          }
-                          value={sourcePrRepoId}
-                        >
-                          <option value="">Choose repo</option>
-                          {repos.map((repo) => (
-                            <option key={repo.id} value={repo.id}>
-                              {repo.name}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
+                    <label className="form-control">
+                      <span className="label mb-1">
+                        <span className="label-text">Repo</span>
+                      </span>
+                      <select
+                        className="select select-bordered"
+                        onChange={(event) =>
+                          setSourcePrRepoId(event.target.value)
+                        }
+                        value={sourcePrRepoId}
+                      >
+                        <option value="">Choose repo</option>
+                        {repos.map((repo) => (
+                          <option key={repo.id} value={repo.id}>
+                            {repo.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
 
                     <div className="grid gap-4 md:grid-cols-2">
                       <label className="form-control">
@@ -720,43 +682,25 @@ export default function Home() {
                       />
                     </label>
 
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <label className="form-control">
-                        <span className="label mb-1">
-                          <span className="label-text">PR Number</span>
-                        </span>
-                        <input
-                          className="input input-bordered"
-                          min="1"
-                          onChange={(event) =>
-                            setFollowupPrNumber(event.target.value)
-                          }
-                          placeholder="91"
-                          type="number"
-                          value={followupPrNumber}
-                        />
-                      </label>
-
-                      <label className="form-control">
-                        <span className="label mb-1">
-                          <span className="label-text">Repo</span>
-                        </span>
-                        <select
-                          className="select select-bordered"
-                          onChange={(event) =>
-                            setFollowupPrRepoId(event.target.value)
-                          }
-                          value={followupPrRepoId}
-                        >
-                          <option value="">Choose repo</option>
-                          {repos.map((repo) => (
-                            <option key={repo.id} value={repo.id}>
-                              {repo.name}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
+                    <label className="form-control">
+                      <span className="label mb-1">
+                        <span className="label-text">Repo</span>
+                      </span>
+                      <select
+                        className="select select-bordered"
+                        onChange={(event) =>
+                          setFollowupPrRepoId(event.target.value)
+                        }
+                        value={followupPrRepoId}
+                      >
+                        <option value="">Choose repo</option>
+                        {repos.map((repo) => (
+                          <option key={repo.id} value={repo.id}>
+                            {repo.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
 
                     <div className="grid gap-4 md:grid-cols-2">
                       <label className="form-control">
