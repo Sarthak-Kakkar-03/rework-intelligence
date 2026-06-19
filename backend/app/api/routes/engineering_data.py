@@ -1,14 +1,14 @@
 from fastapi import APIRouter, HTTPException
 
 from app.queries import (
-    get_context_recommendations as query_context_recommendations,
+    get_context_artifacts as query_context_artifacts,
     get_pull_requests as query_pull_requests,
     get_rework_events as query_rework_events,
     get_rework_event_detail as query_rework_event_detail,
 )
 
 from app.api.models import (
-    ContextRecommendation,
+    ContextArtifact,
     PullRequest,
     ReworkEvent,
     ReworkEventDetail,
@@ -39,27 +39,27 @@ def get_rework_events() -> list[ReworkEvent]:
     return query_rework_events()
 
 
-@router.get("/context-recommendations", response_model=list[ContextRecommendation])
-def get_context_recommendations() -> list[ContextRecommendation]:
+@router.get("/context-artifacts", response_model=list[ContextArtifact])
+def get_context_artifacts() -> list[ContextArtifact]:
     """
-    Retrieve context recommendations.
+    Retrieve context artifacts.
     """
-    return query_context_recommendations()
+    return query_context_artifacts()
 
 
 @router.get("/rework-events/{rework_id}", response_model=ReworkEventDetail)
 def get_rework_event_detail(rework_id: str) -> ReworkEventDetail:
     """
     Retrieve details about a rework event.
-    
+
     Parameters:
-    	rework_id (str): The identifier of the rework event to retrieve
-    
+        rework_id (str): The identifier of the rework event to retrieve
+
     Returns:
-    	detail (ReworkEventDetail): The requested rework event's details
-    
+        detail (ReworkEventDetail): The requested rework event's details
+
     Raises:
-    	HTTPException: With status code 404 if the rework event is not found
+        HTTPException: With status code 404 if the rework event is not found
     """
     detail = query_rework_event_detail(rework_event_id=rework_id)
 

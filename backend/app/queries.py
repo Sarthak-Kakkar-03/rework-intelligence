@@ -2,14 +2,13 @@ from contextlib import closing
 
 from app.api.models import (
     AutopsySummary,
-    ContextRecommendation,
+    ContextArtifact,
     PullRequest,
     ReworkEvent,
     ReworkEventDetail,
     ReworkEventDetailContextArtifact,
     ReworkEventDetailEvent,
     ReworkEventDetailPullRequest,
-    ReworkEventDetailRecommendation,
 )
 from app.db import get_connection
 
@@ -19,7 +18,7 @@ def get_autopsy_summary() -> AutopsySummary:
     Fetch aggregate metrics and entity counts from the database.
 
     Returns:
-        An AutopsySummary containing counts of teams, repos, issues, pull requests, rework events, context artifacts, context recommendations, AI-assisted pull requests, total rework hours, and average days after merge.
+        An AutopsySummary containing counts of teams, repos, issues, pull requests, rework events, context artifacts, AI-assisted pull requests, total rework hours, and average days after merge.
     """
     sql = """
         SELECT
@@ -29,7 +28,6 @@ def get_autopsy_summary() -> AutopsySummary:
           (SELECT COUNT(*) FROM pull_requests) AS pull_request_count,
           (SELECT COUNT(*) FROM rework_events) AS rework_event_count,
           (SELECT COUNT(*) FROM context_artifacts) AS context_artifact_count,
-          (SELECT COUNT(*) FROM context_recommendations) AS context_recommendation_count,
           (SELECT COUNT(*) FROM pull_requests WHERE ai_assisted = 1) AS ai_assisted_pr_count,
           COALESCE((SELECT SUM(human_hours_spent) FROM rework_events), 0) AS total_rework_hours,
           COALESCE((SELECT ROUND(AVG(days_after_merge), 1) FROM rework_events), 0) AS avg_days_after_merge
@@ -44,7 +42,6 @@ def get_autopsy_summary() -> AutopsySummary:
             pull_request_count=row["pull_request_count"],
             rework_event_count=row["rework_event_count"],
             context_artifact_count=row["context_artifact_count"],
-            context_recommendation_count=row["context_recommendation_count"],
             ai_assisted_pr_count=row["ai_assisted_pr_count"],
             total_rework_hours=row["total_rework_hours"],
             avg_days_after_merge=row["avg_days_after_merge"],
@@ -169,55 +166,108 @@ def get_rework_events() -> list[ReworkEvent]:
         ]
 
 
-def get_context_recommendations() -> list[ContextRecommendation]:
+def get_context_artifacts() -> list[ContextArtifact]:
     """
-    Fetch all context recommendations.
-    
+    Fetch all context artifacts.
+
     Returns:
-        list[ContextRecommendation]: Context recommendations sorted by priority (high, medium, low) and then by ID.
+        list[ContextArtifact]: Context artifacts ordered by rework event and ID.
     """
     sql = """
         SELECT
           id,
           rework_event_id,
-          recommended_artifact_id,
-          missing_context_type,
-          priority,
-          recommendation,
-          reason
-        FROM context_recommendations
-        ORDER BY
-          CASE priority
-            WHEN 'high' THEN 1
-            WHEN 'medium' THEN 2
-            WHEN 'low' THEN 3
-            ELSE 4
-          END,
-          id
+          name,
+          artifact_type,
+          repo_id,
+          team_id,
+          last_updated_at,
+          summary
+        FROM context_artifacts
+        ORDER BY datetime(last_updated_at) DESC, id DESC
     """
 
     with closing(get_connection()) as conn:
         rows = conn.execute(sql).fetchall()
         return [
-            ContextRecommendation(
+            ContextArtifact(
                 id=row["id"],
                 rework_event_id=row["rework_event_id"],
-                recommended_artifact_id=row["recommended_artifact_id"],
-                missing_context_type=row["missing_context_type"],
-                priority=row["priority"],
-                recommendation=row["recommendation"],
-                reason=row["reason"],
+                name=row["name"],
+                artifact_type=row["artifact_type"],
+                repo_id=row["repo_id"],
+                team_id=row["team_id"],
+                last_updated_at=row["last_updated_at"],
+                summary=row["summary"],
             )
             for row in rows
         ]
 
 
+def get_rework_event_repo_team_ids(rework_event_id: str) -> tuple[str, str] | None:
+    sql = """
+        SELECT
+          repo.id AS repo_id,
+          repo.team_id AS team_id
+        FROM rework_events re
+        JOIN pull_requests source_pr
+          ON re.source_pr_id = source_pr.id
+        JOIN repos repo
+          ON source_pr.repo_id = repo.id
+        WHERE re.id = ?
+    """
+
+    with closing(get_connection()) as conn:
+        row = conn.execute(sql, (rework_event_id,)).fetchone()
+
+    if row is None:
+        return None
+
+    return row["repo_id"], row["team_id"]
+
+
+def insert_context_artifact(context_artifact: ContextArtifact) -> ContextArtifact:
+    sql = """
+        INSERT INTO context_artifacts (
+          id,
+          rework_event_id,
+          name,
+          artifact_type,
+          repo_id,
+          team_id,
+          last_updated_at,
+          summary
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """
+
+    with closing(get_connection()) as conn:
+        conn.execute(
+            sql,
+            (
+                context_artifact.id,
+                context_artifact.rework_event_id,
+                context_artifact.name,
+                context_artifact.artifact_type,
+                context_artifact.repo_id,
+                context_artifact.team_id,
+                context_artifact.last_updated_at.isoformat()
+                if context_artifact.last_updated_at
+                else None,
+                context_artifact.summary,
+            ),
+        )
+        conn.commit()
+
+    return context_artifact
+
+
 def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
     """
     Retrieves comprehensive details for a rework event, including its source pull request.
-    
+
     Returns:
-    	ReworkEventDetail | None: A `ReworkEventDetail` object containing the rework event and source pull request details, with optional followup PR, recommendation, and context artifact information; `None` if the rework event is not found.
+        ReworkEventDetail | None: A `ReworkEventDetail` object containing the rework event, source pull request, followup pull request, and context artifact information; `None` if the rework event is not found.
     """
     sql = """
         SELECT
@@ -240,74 +290,43 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
           followup_pr.title AS followup_pr_title,
           followup_repo.name AS followup_repo_name,
 
-          rec.id AS recommendation_id,
-          rec.priority,
-          rec.missing_context_type,
-          rec.recommendation,
-          rec.reason,
-
           artifact.id AS context_artifact_id,
           artifact.name AS context_artifact_name,
           artifact.artifact_type,
-          artifact.freshness
+          artifact.summary AS context_artifact_summary
         FROM rework_events re
         JOIN pull_requests source_pr
           ON re.source_pr_id = source_pr.id
         JOIN repos source_repo
           ON source_pr.repo_id = source_repo.id
-        LEFT JOIN pull_requests followup_pr
+        JOIN pull_requests followup_pr
           ON re.followup_pr_id = followup_pr.id
-        LEFT JOIN repos followup_repo
+        JOIN repos followup_repo
           ON followup_pr.repo_id = followup_repo.id
-        LEFT JOIN context_recommendations rec
-          ON re.id = rec.rework_event_id
         LEFT JOIN context_artifacts artifact
-          ON rec.recommended_artifact_id = artifact.id
+          ON re.id = artifact.rework_event_id
         WHERE re.id = ?
-        ORDER BY
-          CASE rec.priority
-            WHEN 'high' THEN 1
-            WHEN 'medium' THEN 2
-            WHEN 'low' THEN 3
-            ELSE 4
-          END,
-          rec.id
-        LIMIT 1
+        ORDER BY artifact.id
     """
 
     with closing(get_connection()) as conn:
-        row = conn.execute(sql, (rework_event_id,)).fetchone()
+        rows = conn.execute(sql, (rework_event_id,)).fetchall()
 
-    if row is None:
+    if not rows:
         return None
 
-    followup_pr = None
-    if row["followup_pr_id"] is not None:
-        followup_pr = ReworkEventDetailPullRequest(
-            id=row["followup_pr_id"],
-            number=row["followup_pr_number"],
-            title=row["followup_pr_title"],
-            repo_name=row["followup_repo_name"],
-        )
+    row = rows[0]
 
-    recommendation = None
-    if row["recommendation_id"] is not None:
-        recommendation = ReworkEventDetailRecommendation(
-            id=row["recommendation_id"],
-            priority=row["priority"],
-            missing_context_type=row["missing_context_type"],
-            recommendation=row["recommendation"],
-            reason=row["reason"],
+    context_artifacts = [
+        ReworkEventDetailContextArtifact(
+            id=artifact_row["context_artifact_id"],
+            name=artifact_row["context_artifact_name"],
+            artifact_type=artifact_row["artifact_type"],
+            summary=artifact_row["context_artifact_summary"],
         )
-
-    context_artifact = None
-    if row["context_artifact_id"] is not None:
-        context_artifact = ReworkEventDetailContextArtifact(
-            id=row["context_artifact_id"],
-            name=row["context_artifact_name"],
-            artifact_type=row["artifact_type"],
-            freshness=row["freshness"],
-        )
+        for artifact_row in rows
+        if artifact_row["context_artifact_id"] is not None
+    ]
 
     return ReworkEventDetail(
         rework_event=ReworkEventDetailEvent(
@@ -326,7 +345,11 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
             ai_assisted=bool(row["source_pr_ai_assisted"]),
             ai_tool=row["source_pr_ai_tool"],
         ),
-        followup_pr=followup_pr,
-        recommendation=recommendation,
-        context_artifact=context_artifact,
+        followup_pr=ReworkEventDetailPullRequest(
+            id=row["followup_pr_id"],
+            number=row["followup_pr_number"],
+            title=row["followup_pr_title"],
+            repo_name=row["followup_repo_name"],
+        ),
+        context_artifacts=context_artifacts,
     )

@@ -30,7 +30,6 @@ CREATE TABLE IF NOT EXISTS pull_requests (
   id INTEGER PRIMARY KEY,
   number INTEGER NOT NULL,
   repo_id TEXT NOT NULL,
-  UNIQUE (repo_id, number),
   title TEXT NOT NULL,
   body TEXT,
   state TEXT NOT NULL,
@@ -60,6 +59,7 @@ CREATE TABLE IF NOT EXISTS pull_requests (
   ai_tool TEXT,
   work_type TEXT NOT NULL,
 
+  UNIQUE (repo_id, number),
   FOREIGN KEY (repo_id) REFERENCES repos(id),
   FOREIGN KEY (linked_issue_key) REFERENCES issues(issue_key)
 );
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS rework_events (
   id TEXT PRIMARY KEY,
 
   source_pr_id INTEGER NOT NULL,
-  followup_pr_id INTEGER,
+  followup_pr_id INTEGER NOT NULL,
   issue_key TEXT,
 
   detected_from TEXT NOT NULL,
@@ -90,31 +90,16 @@ CREATE TABLE IF NOT EXISTS context_artifacts (
   id TEXT PRIMARY KEY,
 
   name TEXT NOT NULL,
+  rework_event_id TEXT NOT NULL,
   artifact_type TEXT NOT NULL,
 
   repo_id TEXT NOT NULL,
   team_id TEXT NOT NULL,
 
   last_updated_at TEXT,
-  freshness TEXT NOT NULL,
   summary TEXT NOT NULL,
 
+  FOREIGN KEY (rework_event_id) REFERENCES rework_events(id),
   FOREIGN KEY (repo_id) REFERENCES repos(id),
   FOREIGN KEY (team_id) REFERENCES teams(id)
-);
-
-CREATE TABLE IF NOT EXISTS context_recommendations (
-  id TEXT PRIMARY KEY,
-
-  rework_event_id TEXT NOT NULL,
-  recommended_artifact_id TEXT,
-
-  missing_context_type TEXT NOT NULL,
-  priority TEXT NOT NULL,
-
-  recommendation TEXT NOT NULL,
-  reason TEXT NOT NULL,
-
-  FOREIGN KEY (rework_event_id) REFERENCES rework_events(id),
-  FOREIGN KEY (recommended_artifact_id) REFERENCES context_artifacts(id)
 );

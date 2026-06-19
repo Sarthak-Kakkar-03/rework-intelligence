@@ -35,7 +35,7 @@ class PullRequest(BaseModel):
 class ReworkEvent(BaseModel):
     id: str
     source_pr_id: int
-    followup_pr_id: int | None = None
+    followup_pr_id: int
     issue_key: str | None = None
     detected_from: str
     rework_type: str
@@ -46,14 +46,21 @@ class ReworkEvent(BaseModel):
     summary: str
 
 
-class ContextRecommendation(BaseModel):
+class ContextArtifact(BaseModel):
     id: str
     rework_event_id: str
-    recommended_artifact_id: str | None = None
-    missing_context_type: str
-    priority: str
-    recommendation: str
-    reason: str
+    name: str
+    artifact_type: str
+    repo_id: str
+    team_id: str
+    last_updated_at: datetime | None = None
+    summary: str
+
+
+class ContextArtifactCreate(BaseModel):
+    name: str
+    artifact_type: str
+    summary: str
 
 
 class AutopsySummary(BaseModel):
@@ -63,7 +70,6 @@ class AutopsySummary(BaseModel):
     pull_request_count: int = Field(ge=0)
     rework_event_count: int = Field(ge=0)
     context_artifact_count: int = Field(ge=0)
-    context_recommendation_count: int = Field(ge=0)
     ai_assisted_pr_count: int = Field(ge=0)
     total_rework_hours: float = Field(ge=0)
     avg_days_after_merge: float = Field(ge=0)
@@ -87,24 +93,15 @@ class ReworkEventDetailPullRequest(BaseModel):
     ai_tool: str | None = None
 
 
-class ReworkEventDetailRecommendation(BaseModel):
-    id: str
-    priority: str
-    missing_context_type: str
-    recommendation: str
-    reason: str
-
-
 class ReworkEventDetailContextArtifact(BaseModel):
     id: str
     name: str
     artifact_type: str
-    freshness: str
+    summary: str
 
 
 class ReworkEventDetail(BaseModel):
     rework_event: ReworkEventDetailEvent
     source_pr: ReworkEventDetailPullRequest
-    followup_pr: ReworkEventDetailPullRequest | None = None
-    recommendation: ReworkEventDetailRecommendation | None = None
-    context_artifact: ReworkEventDetailContextArtifact | None = None
+    followup_pr: ReworkEventDetailPullRequest
+    context_artifacts: list[ReworkEventDetailContextArtifact] = []

@@ -24,7 +24,6 @@ TABLE_LOAD_ORDER = [
     ("pull_requests", "pull_requests.json"),
     ("rework_events", "rework_events.json"),
     ("context_artifacts", "context_artifacts.json"),
-    ("context_recommendations", "context_recommendations.json"),
 ]
 
 

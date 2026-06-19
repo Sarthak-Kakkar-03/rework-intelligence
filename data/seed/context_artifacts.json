@@ -2,51 +2,41 @@
   {
     "id": "CTX-12",
     "name": "Jira Sync Idempotency Contract",
+    "rework_event_id": "RW-501",
     "artifact_type": "runbook",
     "repo_id": "repo-jira-sync-worker",
     "team_id": "team-data-integrations",
     "last_updated_at": "2025-11-04T12:00:00Z",
-    "freshness": "stale",
     "summary": "Explains how external_issue_id and source_system_id prevent duplicate Jira links during retries and replay."
   },
   {
     "id": "CTX-18",
     "name": "Deployment Risk Warehouse Schema Contract",
+    "rework_event_id": "RW-503",
     "artifact_type": "schema_contract",
     "repo_id": "repo-deployment-risk-api",
     "team_id": "team-platform",
     "last_updated_at": "2026-01-18T15:30:00Z",
-    "freshness": "stale",
     "summary": "Defines deployment risk fields consumed by dashboards, including deploy_status, risk_score, and environment."
-  },
-  {
-    "id": "CTX-21",
-    "name": "GitHub Ingest Staging Auth Test Matrix",
-    "artifact_type": "test_plan",
-    "repo_id": "repo-github-ingest-service",
-    "team_id": "team-data-integrations",
-    "last_updated_at": null,
-    "freshness": "missing",
-    "summary": "Proposed artifact describing local, staging, and production GitHub App auth behavior."
-  },
-  {
-    "id": "CTX-27",
-    "name": "Agent Context Pack Freshness Rules",
-    "artifact_type": "adr",
-    "repo_id": "repo-agent-context-builder",
-    "team_id": "team-devex",
-    "last_updated_at": "2026-06-02T09:00:00Z",
-    "freshness": "fresh",
-    "summary": "Describes how agent context artifacts are scored by recency, ownership, and repo relevance."
   },
   {
     "id": "CTX-34",
     "name": "Dashboard Metric Naming Conventions",
+    "rework_event_id": "RW-502",
     "artifact_type": "runbook",
     "repo_id": "repo-metrics-dashboard",
     "team_id": "team-devex",
     "last_updated_at": "2026-04-12T10:00:00Z",
-    "freshness": "fresh",
+    "summary": "Documents naming conventions for dashboard cards, filters, and metric labels."
+  },
+  {
+    "id": "CTX-35",
+    "name": "Conventions test",
+    "rework_event_id": "RW-502",
+    "artifact_type": "runbook",
+    "repo_id": "repo-metrics-dashboard",
+    "team_id": "team-devex",
+    "last_updated_at": "2026-04-12T10:00:00Z",
     "summary": "Documents naming conventions for dashboard cards, filters, and metric labels."
   }
 ]
