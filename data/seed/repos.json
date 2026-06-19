@@ -15,18 +15,13 @@
     "team_id": "team-platform"
   },
   {
-    "id": "repo-agent-context-builder",
-    "name": "agent-context-builder",
-    "team_id": "team-devex"
-  },
-  {
     "id": "repo-metrics-dashboard",
     "name": "metrics-dashboard",
     "team_id": "team-devex"
   },
   {
-    "id": "test-repo-1",
-    "name": "test-team",
-    "team_id": "test-team-1"
+    "id": "repo-docs-site",
+    "name": "docs-site",
+    "team_id": "team-devex"
   }
 ]

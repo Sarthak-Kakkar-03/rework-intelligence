@@ -1,38 +1,38 @@
 [
   {
     "id": "RW-501",
-    "source_pr_id": 1042,
-    "followup_pr_id": 1048,
+    "source_pr_id": 1001,
+    "followup_pr_id": 1002,
     "detected_from": "followup_pr",
     "rework_type": "fix_forward",
     "severity": "medium",
     "days_after_merge": 3,
     "human_hours_spent": 5.5,
     "root_cause_label": "missing_domain_constraint",
-    "summary": "AI-assisted retry logic reprocessed successful Jira sync jobs because the idempotency contract was not included in the working context."
+    "summary": "AI-generated retry logic was followed by a non-AI fix in the same repo after duplicate Jira links appeared during replay."
   },
   {
     "id": "RW-502",
-    "source_pr_id": 1051,
-    "followup_pr_id": 1054,
-    "detected_from": "dashboard_bug",
-    "rework_type": "downstream_fix",
-    "severity": "medium",
-    "days_after_merge": 1,
-    "human_hours_spent": 4,
-    "root_cause_label": "schema_contract_drift",
-    "summary": "AI-assisted schema rename changed the deployment risk API payload without updating the dashboard contract that depended on the previous field name."
+    "source_pr_id": 1003,
+    "followup_pr_id": 1004,
+    "detected_from": "explicit_rework_marker",
+    "rework_type": "explicit_rework",
+    "severity": "low",
+    "days_after_merge": 16,
+    "human_hours_spent": 2,
+    "root_cause_label": "missing_environment_context",
+    "summary": "A same-repo follow-up PR explicitly used #rework to mark the staging-only GitHub App auth context gap."
   },
   {
     "id": "RW-503",
-    "source_pr_id": 1058,
-    "followup_pr_id": 1062,
-    "detected_from": "staging_failure",
-    "rework_type": "environment_fix",
-    "severity": "high",
-    "days_after_merge": 1,
-    "human_hours_spent": 6.5,
-    "root_cause_label": "missing_test_context",
-    "summary": "AI-generated tests covered local token validation but missed staging-only GitHub App auth behavior, causing a staging failure after merge."
+    "source_pr_id": 1005,
+    "followup_pr_id": 1006,
+    "detected_from": "followup_pr",
+    "rework_type": "late_fix_forward",
+    "severity": "medium",
+    "days_after_merge": 17,
+    "human_hours_spent": 4,
+    "root_cause_label": "schema_contract_drift",
+    "summary": "A later non-AI fix touched the same deployment risk schema file and used fix language after the AI-generated payload rename."
   }
 ]
