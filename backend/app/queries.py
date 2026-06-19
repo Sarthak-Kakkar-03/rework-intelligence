@@ -184,7 +184,7 @@ def get_context_artifacts() -> list[ContextArtifact]:
           last_updated_at,
           summary
         FROM context_artifacts
-        ORDER BY rework_event_id, id
+        ORDER BY datetime(last_updated_at) DESC, id DESC
     """
 
     with closing(get_connection()) as conn:
