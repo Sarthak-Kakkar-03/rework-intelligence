@@ -57,10 +57,11 @@ function parseFilePaths(filePathText: string): string[] {
 }
 
 /**
- * Renders the main rework autopsy dashboard.
+ * Main dashboard for rework analysis and context artifact generation.
  *
- * Displays summary data, rework event statistics and table, root cause
- * breakdown, and context artifacts.
+ * Displays summary statistics, rework events, root cause breakdown, and
+ * context artifacts. Provides controls to add pull request pairs for analysis
+ * and to recompute rework event metrics.
  */
 export default function Home() {
   const [summary, setSummary] = useState<AutopsySummary | null>(null);
@@ -161,6 +162,9 @@ export default function Home() {
 
   const fallbackHeadline = `Found ${summary?.rework_event_count ?? reworkEvents.length} rework events across ${summary?.pull_request_count ?? 0} pull requests, with ${summary?.context_artifact_count ?? contextArtifacts.length} context artifacts.`;
 
+  /**
+   * Opens the add PR pair modal, pre-filled with example values.
+   */
   function openAddPrModal() {
     setSourcePrTitle("Add retry handling for billing sync");
     setSourcePrBody(
@@ -190,6 +194,11 @@ export default function Home() {
     setAddPrModalOpen(true);
   }
 
+  /**
+   * Creates a pull request with the specified files.
+   *
+   * @returns The created pull request.
+   */
   async function createPullRequestWithFiles(
     pullRequest: {
       title: string;
@@ -199,6 +208,7 @@ export default function Home() {
       head_branch: string;
       ai_generated: boolean;
       repo_id: string;
+      closed_at: string;
     },
     filePaths: string[],
   ): Promise<PullRequest> {
@@ -223,6 +233,14 @@ export default function Home() {
     return (await response.json()) as PullRequest;
   }
 
+  /**
+   * Creates a source pull request and a follow-up pull request from the provided form data.
+   *
+   * Validates that both source and follow-up PRs have a repo selected and at least one file path.
+   * Computes closure timestamps (source: current time, follow-up: one day later) and submits both
+   * pull requests to the backend. On success, closes the modal and refreshes the dashboard.
+   * On failure, displays an error message.
+   */
   async function addPullRequestPair() {
     if (isAddingPrPair) return;
 
@@ -237,15 +255,15 @@ export default function Home() {
 
       const sourceFilePaths = parseFilePaths(sourcePrFiles);
       const followupFilePaths = parseFilePaths(followupPrFiles);
-      const sourceFilePathSet = new Set(sourceFilePaths);
-      const hasSharedFilePath = followupFilePaths.some((filePath) =>
-        sourceFilePathSet.has(filePath),
-      );
 
-      if (!hasSharedFilePath) {
-        setAddPrError("Add at least one shared file path between the two PRs.");
+      if (sourceFilePaths.length === 0 || followupFilePaths.length === 0) {
+        setAddPrError("Add at least one file path for each PR.");
         return;
       }
+
+      const sourceClosedAt = new Date();
+      const followupClosedAt = new Date(sourceClosedAt);
+      followupClosedAt.setDate(sourceClosedAt.getDate() + 1);
 
       await createPullRequestWithFiles(
         {
@@ -256,6 +274,7 @@ export default function Home() {
           head_branch: sourcePrHeadBranch,
           ai_generated: sourcePrAIGenerated,
           repo_id: sourcePrRepoId,
+          closed_at: sourceClosedAt.toISOString(),
         },
         sourceFilePaths,
       );
@@ -269,6 +288,7 @@ export default function Home() {
           head_branch: followupPrHeadBranch,
           ai_generated: followupPrAIGenerated,
           repo_id: followupPrRepoId,
+          closed_at: followupClosedAt.toISOString(),
         },
         followupFilePaths,
       );
@@ -277,7 +297,7 @@ export default function Home() {
       await loadDashboardData();
     } catch {
       setAddPrError(
-        "Unable to create PR pair. Check for duplicate PR numbers and make sure the backend is working.",
+        "Unable to create PR pair. Check the selected repos and make sure the backend is working.",
       );
     } finally {
       setIsAddingPrPair(false);
@@ -527,8 +547,8 @@ export default function Home() {
               <div className="modal-box max-w-5xl">
                 <h2 className="text-lg font-semibold">Add PR Pair</h2>
                 <p className="mt-1 text-sm text-base-content/70">
-                  Create a source PR and a follow-up PR. Add at least one shared
-                  file path, then run Compute Rework.
+                  Create a source PR and a follow-up PR. Add at least one file
+                  path for each PR, then run Compute Rework.
                 </p>
 
                 {addPrError && (
@@ -579,7 +599,9 @@ export default function Home() {
                         }
                         value={sourcePrRepoId}
                       >
-                        <option value="">Choose repo</option>
+                        <option disabled value="">
+                          Choose repo
+                        </option>
                         {repos.map((repo) => (
                           <option key={repo.id} value={repo.id}>
                             {repo.name}
@@ -702,7 +724,9 @@ export default function Home() {
                         }
                         value={followupPrRepoId}
                       >
-                        <option value="">Choose repo</option>
+                        <option disabled value="">
+                          Choose repo
+                        </option>
                         {repos.map((repo) => (
                           <option key={repo.id} value={repo.id}>
                             {repo.name}
