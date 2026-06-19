@@ -118,3 +118,8 @@ class PullRequestCreate(BaseModel):
     ai_generated: bool
     number: int
     repo_id: str
+
+
+class ReworkRecomputeResult(BaseModel):
+    rework_event_count: int = Field(ge=0)
+    message: str

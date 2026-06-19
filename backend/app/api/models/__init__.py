@@ -9,6 +9,7 @@ from app.api.models.schemas import (
     ReworkEventDetailContextArtifact,
     ReworkEventDetailEvent,
     ReworkEventDetailPullRequest,
+    ReworkRecomputeResult,
     PullRequestCreate,
 )
 
@@ -24,5 +25,6 @@ __all__ = [
     "ReworkEventDetailContextArtifact",
     "ReworkEventDetailEvent",
     "ReworkEventDetailPullRequest",
+    "ReworkRecomputeResult",
     "PullRequestCreate",
 ]
