@@ -380,7 +380,6 @@ def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
 
     with closing(get_connection()) as conn:
         try:
-            conn.execute("BEGIN")
             conn.execute("DELETE FROM context_artifacts")
             conn.execute("DELETE FROM rework_events")
             conn.executemany(sql, values)

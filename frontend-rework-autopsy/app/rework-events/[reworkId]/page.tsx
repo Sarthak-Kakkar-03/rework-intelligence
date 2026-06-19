@@ -45,6 +45,7 @@ export default function ReworkEventDetailPage() {
   const [isSubmittingArtifact, setIsSubmittingArtifact] = useState(false);
   const [rootCauseInput, setRootCauseInput] = useState("");
   const [isUpdatingRootCause, setIsUpdatingRootCause] = useState(false);
+  const [rootCauseError, setRootCauseError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadReworkEventDetail() {
@@ -142,6 +143,7 @@ export default function ReworkEventDetailPage() {
   async function updateRootCause() {
     if (isUpdatingRootCause) return;
     setIsUpdatingRootCause(true);
+    setRootCauseError(null);
 
     try {
       const response = await fetch(
@@ -165,7 +167,7 @@ export default function ReworkEventDetailPage() {
       setDetail(updatedDetail);
       setRootCauseInput(updatedDetail.rework_event.root_cause_label);
     } catch {
-      setError(
+      setRootCauseError(
         `Unable to update root cause. Make sure the backend is running on ${API_BASE_URL}.`,
       );
     } finally {
@@ -242,6 +244,11 @@ export default function ReworkEventDetailPage() {
                     {isUpdatingRootCause ? "Saving..." : "Save Root Cause"}
                   </button>
                 </div>
+                {rootCauseError && (
+                  <div className="alert alert-error">
+                    <span>{rootCauseError}</span>
+                  </div>
+                )}
                 <div className="stats stats-vertical bg-base-200 lg:stats-horizontal">
                   <div className="stat">
                     <div className="stat-title">Days After Merge</div>
