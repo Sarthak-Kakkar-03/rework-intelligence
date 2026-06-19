@@ -34,13 +34,17 @@ from random import randint
 
 router = APIRouter(prefix="/api", tags=["Ingest"])
 logger = logging.getLogger(__name__)
+MAX_PULL_REQUEST_CREATE_ATTEMPTS = 3
 
 
-def _build_pull_request(pull_request: PullRequestCreate) -> PullRequest:
+def _build_pull_request(
+    pull_request: PullRequestCreate,
+    pull_request_number: int,
+) -> PullRequest:
     now = datetime.now(timezone.utc)
     return PullRequest(
         id=randint(1_000_000, 9_999_999),
-        number=get_next_pull_request_number(repo_id=pull_request.repo_id),
+        number=pull_request_number,
         repo_id=pull_request.repo_id,
         title=pull_request.title,
         body=pull_request.body,
@@ -91,15 +95,27 @@ def ingest_context_artifact(
 
 @router.post("/ingest/pull-request", response_model=PullRequest)
 def ingest_pull_request(pull_request: PullRequestCreate) -> PullRequest:
-    pull_request = _build_pull_request(pull_request)
+    last_error: sqlite3.IntegrityError | None = None
 
-    try:
-        return insert_pull_request(pull_request=pull_request)
-    except sqlite3.IntegrityError as exc:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Pull request could not be created: {exc}",
-        ) from exc
+    for _ in range(MAX_PULL_REQUEST_CREATE_ATTEMPTS):
+        pull_request_number = get_next_pull_request_number(
+            repo_id=pull_request.repo_id
+        )
+        new_pull_request = _build_pull_request(
+            pull_request=pull_request,
+            pull_request_number=pull_request_number,
+        )
+
+        try:
+            return insert_pull_request(pull_request=new_pull_request)
+        except sqlite3.IntegrityError as exc:
+            last_error = exc
+            logger.exception("Pull request could not be created")
+
+    raise HTTPException(
+        status_code=400,
+        detail="Pull request could not be created",
+    ) from last_error
 
 
 @router.post(
@@ -127,19 +143,30 @@ def ingest_pull_request_files(
 def ingest_pull_request_with_files(
     request: PullRequestWithFilesCreate,
 ) -> PullRequest:
-    pull_request = _build_pull_request(request.pull_request)
+    last_error: sqlite3.IntegrityError | None = None
 
-    try:
-        return insert_pull_request_with_files(
-            pull_request=pull_request,
-            file_paths=request.file_paths,
+    for _ in range(MAX_PULL_REQUEST_CREATE_ATTEMPTS):
+        pull_request_number = get_next_pull_request_number(
+            repo_id=request.pull_request.repo_id
         )
-    except sqlite3.IntegrityError as exc:
-        logger.exception("Pull request with files could not be created")
-        raise HTTPException(
-            status_code=400,
-            detail="Pull request with files could not be created",
-        ) from exc
+        pull_request = _build_pull_request(
+            pull_request=request.pull_request,
+            pull_request_number=pull_request_number,
+        )
+
+        try:
+            return insert_pull_request_with_files(
+                pull_request=pull_request,
+                file_paths=request.file_paths,
+            )
+        except sqlite3.IntegrityError as exc:
+            last_error = exc
+            logger.exception("Pull request with files could not be created")
+
+    raise HTTPException(
+        status_code=400,
+        detail="Pull request with files could not be created",
+    ) from last_error
 
 
 @router.post("/ingest/rework-events/recompute", response_model=ReworkRecomputeResult)

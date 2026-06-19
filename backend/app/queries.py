@@ -27,12 +27,21 @@ def _pull_request_file_id(pull_request_id: int, file_path: str) -> str:
     return f"PRF-{file_hash}"
 
 
+def _normalize_file_path(file_path: str) -> str:
+    normalized_path = file_path.strip().replace("\\", "/")
+    while normalized_path.startswith("./"):
+        normalized_path = normalized_path[2:]
+    while "//" in normalized_path:
+        normalized_path = normalized_path.replace("//", "/")
+    return normalized_path
+
+
 def _clean_file_paths(file_paths: list[str]) -> list[str]:
     clean_file_paths = []
     seen_file_paths = set()
 
     for file_path in file_paths:
-        clean_file_path = file_path.strip()
+        clean_file_path = _normalize_file_path(file_path)
         if clean_file_path and clean_file_path not in seen_file_paths:
             clean_file_paths.append(clean_file_path)
             seen_file_paths.add(clean_file_path)

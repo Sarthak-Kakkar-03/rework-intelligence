@@ -43,7 +43,16 @@ function getRootCauseCounts(reworkEvents: ReworkEvent[]) {
 function parseFilePaths(filePathText: string): string[] {
   return filePathText
     .split(/\n|,/)
-    .map((filePath) => filePath.trim())
+    .map((filePath) => {
+      let normalizedPath = filePath.trim().replaceAll("\\", "/");
+      while (normalizedPath.startsWith("./")) {
+        normalizedPath = normalizedPath.slice(2);
+      }
+      while (normalizedPath.includes("//")) {
+        normalizedPath = normalizedPath.replaceAll("//", "/");
+      }
+      return normalizedPath;
+    })
     .filter((filePath) => filePath.length > 0);
 }
 
