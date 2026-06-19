@@ -7,7 +7,7 @@
     "repo_id": "repo-jira-sync-worker",
     "team_id": "team-data-integrations",
     "last_updated_at": "2025-11-04T12:00:00Z",
-    "summary": "Explains how external_issue_id and source_system_id prevent duplicate Jira links during retries and replay."
+    "summary": "Explains how external_record_id and source_system_id prevent duplicate Jira links during retries and replay."
   },
   {
     "id": "CTX-18",

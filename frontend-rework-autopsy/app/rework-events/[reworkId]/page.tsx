@@ -207,13 +207,8 @@ export default function ReworkEventDetailPage() {
                     PR {detail.source_pr.number} in {detail.source_pr.repo_name}
                   </div>
                   <div className="mt-2 flex flex-wrap gap-2">
-                    {detail.source_pr.ai_assisted && (
-                      <span className="badge badge-info">AI-assisted</span>
-                    )}
-                    {detail.source_pr.ai_tool && (
-                      <span className="badge badge-outline">
-                        {detail.source_pr.ai_tool}
-                      </span>
+                    {detail.source_pr.ai_generated && (
+                      <span className="badge badge-info">AI-generated</span>
                     )}
                   </div>
                 </div>
@@ -283,7 +278,7 @@ export default function ReworkEventDetailPage() {
 
                 <div className="mt-5 flex flex-col gap-4">
                   <label className="form-control">
-                    <span className="label">
+                    <span className="label mb-1">
                       <span className="label-text">Name</span>
                     </span>
                     <input
@@ -297,7 +292,7 @@ export default function ReworkEventDetailPage() {
                   </label>
 
                   <label className="form-control">
-                    <span className="label">
+                    <span className="label mb-1">
                       <span className="label-text">Artifact Type</span>
                     </span>
                     <input
@@ -311,7 +306,7 @@ export default function ReworkEventDetailPage() {
                   </label>
 
                   <label className="form-control">
-                    <span className="label">
+                    <span className="label mb-1">
                       <span className="label-text">Summary</span>
                     </span>
                     <textarea

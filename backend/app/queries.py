@@ -18,17 +18,16 @@ def get_autopsy_summary() -> AutopsySummary:
     Fetch aggregate metrics and entity counts from the database.
 
     Returns:
-        An AutopsySummary containing counts of teams, repos, issues, pull requests, rework events, context artifacts, AI-assisted pull requests, total rework hours, and average days after merge.
+        An AutopsySummary containing counts of teams, repos, pull requests, rework events, context artifacts, AI-generated pull requests, total rework hours, and average days after merge.
     """
     sql = """
         SELECT
           (SELECT COUNT(*) FROM teams) AS team_count,
           (SELECT COUNT(*) FROM repos) AS repo_count,
-          (SELECT COUNT(*) FROM issues) AS issue_count,
           (SELECT COUNT(*) FROM pull_requests) AS pull_request_count,
           (SELECT COUNT(*) FROM rework_events) AS rework_event_count,
           (SELECT COUNT(*) FROM context_artifacts) AS context_artifact_count,
-          (SELECT COUNT(*) FROM pull_requests WHERE ai_assisted = 1) AS ai_assisted_pr_count,
+          (SELECT COUNT(*) FROM pull_requests WHERE ai_generated = 1) AS ai_generated_pr_count,
           COALESCE((SELECT SUM(human_hours_spent) FROM rework_events), 0) AS total_rework_hours,
           COALESCE((SELECT ROUND(AVG(days_after_merge), 1) FROM rework_events), 0) AS avg_days_after_merge
     """
@@ -38,11 +37,10 @@ def get_autopsy_summary() -> AutopsySummary:
         return AutopsySummary(
             team_count=row["team_count"],
             repo_count=row["repo_count"],
-            issue_count=row["issue_count"],
             pull_request_count=row["pull_request_count"],
             rework_event_count=row["rework_event_count"],
             context_artifact_count=row["context_artifact_count"],
-            ai_assisted_pr_count=row["ai_assisted_pr_count"],
+            ai_generated_pr_count=row["ai_generated_pr_count"],
             total_rework_hours=row["total_rework_hours"],
             avg_days_after_merge=row["avg_days_after_merge"],
         )
@@ -79,10 +77,7 @@ def get_pull_requests() -> list[PullRequest]:
           commits,
           comments,
           review_comments,
-          linked_issue_key,
-          ai_assisted,
-          ai_tool,
-          work_type
+          ai_generated
         FROM pull_requests
         ORDER BY created_at DESC, id DESC
     """
@@ -113,10 +108,7 @@ def get_pull_requests() -> list[PullRequest]:
                 commits=row["commits"],
                 comments=row["comments"],
                 review_comments=row["review_comments"],
-                linked_issue_key=row["linked_issue_key"],
-                ai_assisted=bool(row["ai_assisted"]),
-                ai_tool=row["ai_tool"],
-                work_type=row["work_type"],
+                ai_generated=bool(row["ai_generated"]),
             )
             for row in rows
         ]
@@ -134,7 +126,6 @@ def get_rework_events() -> list[ReworkEvent]:
           id,
           source_pr_id,
           followup_pr_id,
-          issue_key,
           detected_from,
           rework_type,
           severity,
@@ -153,7 +144,6 @@ def get_rework_events() -> list[ReworkEvent]:
                 id=row["id"],
                 source_pr_id=row["source_pr_id"],
                 followup_pr_id=row["followup_pr_id"],
-                issue_key=row["issue_key"],
                 detected_from=row["detected_from"],
                 rework_type=row["rework_type"],
                 severity=row["severity"],
@@ -262,6 +252,70 @@ def insert_context_artifact(context_artifact: ContextArtifact) -> ContextArtifac
     return context_artifact
 
 
+def insert_pull_request(pull_request: PullRequest) -> PullRequest:
+    sql = """
+        INSERT INTO pull_requests (
+          id,
+          number,
+          repo_id,
+          title,
+          body,
+          state,
+          draft,
+          created_at,
+          updated_at,
+          closed_at,
+          merged_at,
+          merged,
+          author_login,
+          merged_by_login,
+          base_branch,
+          head_branch,
+          additions,
+          deletions,
+          changed_files,
+          commits,
+          comments,
+          review_comments,
+          ai_generated
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+
+    with closing(get_connection()) as conn:
+        conn.execute(
+            sql,
+            (
+                pull_request.id,
+                pull_request.number,
+                pull_request.repo_id,
+                pull_request.title,
+                pull_request.body,
+                pull_request.state,
+                int(pull_request.draft),
+                pull_request.created_at.isoformat(),
+                pull_request.updated_at.isoformat(),
+                pull_request.closed_at.isoformat() if pull_request.closed_at else None,
+                pull_request.merged_at.isoformat() if pull_request.merged_at else None,
+                int(pull_request.merged),
+                pull_request.author_login,
+                pull_request.merged_by_login,
+                pull_request.base_branch,
+                pull_request.head_branch,
+                pull_request.additions,
+                pull_request.deletions,
+                pull_request.changed_files,
+                pull_request.commits,
+                pull_request.comments,
+                pull_request.review_comments,
+                int(pull_request.ai_generated),
+            ),
+        )
+        conn.commit()
+
+    return pull_request
+
+
 def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
     """
     Retrieves comprehensive details for a rework event, including its source pull request.
@@ -282,8 +336,7 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
           source_pr.number AS source_pr_number,
           source_pr.title AS source_pr_title,
           source_repo.name AS source_repo_name,
-          source_pr.ai_assisted AS source_pr_ai_assisted,
-          source_pr.ai_tool AS source_pr_ai_tool,
+          source_pr.ai_generated AS source_pr_ai_generated,
 
           followup_pr.id AS followup_pr_id,
           followup_pr.number AS followup_pr_number,
@@ -342,8 +395,7 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
             number=row["source_pr_number"],
             title=row["source_pr_title"],
             repo_name=row["source_repo_name"],
-            ai_assisted=bool(row["source_pr_ai_assisted"]),
-            ai_tool=row["source_pr_ai_tool"],
+            ai_generated=bool(row["source_pr_ai_generated"]),
         ),
         followup_pr=ReworkEventDetailPullRequest(
             id=row["followup_pr_id"],

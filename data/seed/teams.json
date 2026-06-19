@@ -10,5 +10,9 @@
   {
     "id": "team-devex",
     "name": "Developer Experience"
+  },
+  {
+    "id": "test-team-1",
+    "name": "test-team"
   }
 ]
