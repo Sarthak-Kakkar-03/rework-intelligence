@@ -57,10 +57,11 @@ function parseFilePaths(filePathText: string): string[] {
 }
 
 /**
- * Renders the main rework autopsy dashboard.
+ * Main dashboard for rework analysis and context artifact generation.
  *
- * Displays summary data, rework event statistics and table, root cause
- * breakdown, and context artifacts.
+ * Displays summary statistics, rework events, root cause breakdown, and
+ * context artifacts. Provides controls to add pull request pairs for analysis
+ * and to recompute rework event metrics.
  */
 export default function Home() {
   const [summary, setSummary] = useState<AutopsySummary | null>(null);
@@ -161,6 +162,9 @@ export default function Home() {
 
   const fallbackHeadline = `Found ${summary?.rework_event_count ?? reworkEvents.length} rework events across ${summary?.pull_request_count ?? 0} pull requests, with ${summary?.context_artifact_count ?? contextArtifacts.length} context artifacts.`;
 
+  /**
+   * Opens the add PR pair modal, pre-filled with example values.
+   */
   function openAddPrModal() {
     setSourcePrTitle("Add retry handling for billing sync");
     setSourcePrBody(
@@ -191,6 +195,11 @@ export default function Home() {
     setAddPrModalOpen(true);
   }
 
+  /**
+   * Creates a pull request with the specified files.
+   *
+   * @returns The created pull request.
+   */
   async function createPullRequestWithFiles(
     pullRequest: {
       title: string;
@@ -225,6 +234,14 @@ export default function Home() {
     return (await response.json()) as PullRequest;
   }
 
+  /**
+   * Creates a source pull request and a follow-up pull request from the provided form data.
+   *
+   * Validates that both source and follow-up PRs have a repo selected and at least one file path.
+   * Computes closure timestamps (source: current time, follow-up: one day later) and submits both
+   * pull requests to the backend. On success, closes the modal and refreshes the dashboard.
+   * On failure, displays an error message.
+   */
   async function addPullRequestPair() {
     if (isAddingPrPair) return;
 

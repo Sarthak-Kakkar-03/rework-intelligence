@@ -192,10 +192,10 @@ def get_pull_requests() -> list[PullRequest]:
 
 def get_pull_requests_ordered_by_closed_at() -> list[PullRequest]:
     """
-    Retrieves pull request records ordered by closure time for rework detection.
-
+    Retrieve all pull requests ordered by closure time.
+    
     Returns:
-        A list of PullRequest objects, ordered by closed_at ascending, then by ID.
+        A list of PullRequest objects.
     """
     sql = """
         SELECT

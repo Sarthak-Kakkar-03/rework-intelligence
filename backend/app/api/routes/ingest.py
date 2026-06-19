@@ -41,6 +41,18 @@ def _build_pull_request(
     pull_request: PullRequestCreate,
     pull_request_number: int,
 ) -> PullRequest:
+    """
+    Builds a pull request object from creation data.
+    
+    Constructs a PullRequest with derived timestamp fields based on a closed_at value, which defaults to the current UTC time if not provided in the input. The created_at, updated_at, and merged_at fields are calculated relative to closed_at (15 hours, 10 hours, and 0 hours prior respectively). Random numeric metrics are generated for code changes and review activity.
+    
+    Parameters:
+    	pull_request (PullRequestCreate): The pull request creation data
+    	pull_request_number (int): The pull request number to assign
+    
+    Returns:
+    	PullRequest: A fully constructed pull request object with synthetic metrics and derived timestamps
+    """
     closed_at = pull_request.closed_at or datetime.now(timezone.utc)
     return PullRequest(
         id=randint(1_000_000, 9_999_999),
