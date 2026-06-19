@@ -55,6 +55,7 @@ class PullRequestCreate(BaseModel):
     head_branch: str
     ai_generated: bool
     repo_id: str
+    closed_at: datetime | None = None
 
 
 class PullRequestWithFilesCreate(BaseModel):

@@ -41,7 +41,7 @@ def _build_pull_request(
     pull_request: PullRequestCreate,
     pull_request_number: int,
 ) -> PullRequest:
-    now = datetime.now(timezone.utc)
+    closed_at = pull_request.closed_at or datetime.now(timezone.utc)
     return PullRequest(
         id=randint(1_000_000, 9_999_999),
         number=pull_request_number,
@@ -50,10 +50,10 @@ def _build_pull_request(
         body=pull_request.body,
         state="closed",
         draft=0,
-        created_at=now - timedelta(hours=15),
-        updated_at=now - timedelta(hours=10),
-        closed_at=now - timedelta(hours=5),
-        merged_at=now,
+        created_at=closed_at - timedelta(hours=15),
+        updated_at=closed_at - timedelta(hours=10),
+        closed_at=closed_at,
+        merged_at=closed_at,
         merged=1,
         author_login=pull_request.author_login,
         merged_by_login=pull_request.merged_by_login,

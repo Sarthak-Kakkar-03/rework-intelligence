@@ -186,6 +186,7 @@ export default function Home() {
     setFollowupPrFiles(
       "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py",
     );
+    setFollowupWithin14Days(true);
     setAddPrError(null);
     setAddPrModalOpen(true);
   }
@@ -199,6 +200,7 @@ export default function Home() {
       head_branch: string;
       ai_generated: boolean;
       repo_id: string;
+      closed_at: string;
     },
     filePaths: string[],
   ): Promise<PullRequest> {
@@ -237,15 +239,15 @@ export default function Home() {
 
       const sourceFilePaths = parseFilePaths(sourcePrFiles);
       const followupFilePaths = parseFilePaths(followupPrFiles);
-      const sourceFilePathSet = new Set(sourceFilePaths);
-      const hasSharedFilePath = followupFilePaths.some((filePath) =>
-        sourceFilePathSet.has(filePath),
-      );
 
-      if (!hasSharedFilePath) {
-        setAddPrError("Add at least one shared file path between the two PRs.");
+      if (sourceFilePaths.length === 0 || followupFilePaths.length === 0) {
+        setAddPrError("Add at least one file path for each PR.");
         return;
       }
+
+      const sourceClosedAt = new Date();
+      const followupClosedAt = new Date(sourceClosedAt);
+      followupClosedAt.setDate(sourceClosedAt.getDate() + 1);
 
       await createPullRequestWithFiles(
         {
@@ -256,6 +258,7 @@ export default function Home() {
           head_branch: sourcePrHeadBranch,
           ai_generated: sourcePrAIGenerated,
           repo_id: sourcePrRepoId,
+          closed_at: sourceClosedAt.toISOString(),
         },
         sourceFilePaths,
       );
@@ -269,6 +272,7 @@ export default function Home() {
           head_branch: followupPrHeadBranch,
           ai_generated: followupPrAIGenerated,
           repo_id: followupPrRepoId,
+          closed_at: followupClosedAt.toISOString(),
         },
         followupFilePaths,
       );
@@ -277,7 +281,7 @@ export default function Home() {
       await loadDashboardData();
     } catch {
       setAddPrError(
-        "Unable to create PR pair. Check for duplicate PR numbers and make sure the backend is working.",
+        "Unable to create PR pair. Check the selected repos and make sure the backend is working.",
       );
     } finally {
       setIsAddingPrPair(false);
@@ -527,8 +531,8 @@ export default function Home() {
               <div className="modal-box max-w-5xl">
                 <h2 className="text-lg font-semibold">Add PR Pair</h2>
                 <p className="mt-1 text-sm text-base-content/70">
-                  Create a source PR and a follow-up PR. Add at least one shared
-                  file path, then run Compute Rework.
+                  Create a source PR and a follow-up PR. Add at least one file
+                  path for each PR, then run Compute Rework.
                 </p>
 
                 {addPrError && (
