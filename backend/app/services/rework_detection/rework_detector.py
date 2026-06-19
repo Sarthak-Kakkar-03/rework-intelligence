@@ -36,14 +36,17 @@ def is_rework_candidate(
     if has_rework_override(followup_pr=followup_pr):
         return True
 
-    return len(
-        get_rework_signals(
-            source_pr=source_pr,
-            followup_pr=followup_pr,
-            source_files=source_files,
-            followup_files=followup_files,
+    return (
+        len(
+            get_rework_signals(
+                source_pr=source_pr,
+                followup_pr=followup_pr,
+                source_files=source_files,
+                followup_files=followup_files,
+            )
         )
-    ) >= 2
+        >= 2
+    )
 
 
 def get_rework_signals(
@@ -110,8 +113,7 @@ def generate_rework_candidates() -> list[ReworkCandidate]:
                                 followup_pr=followup_pr,
                             ),
                             overlapping_files=[
-                                file.file_path
-                                for file in overlapping_files
+                                file.file_path for file in overlapping_files
                             ],
                             matched_signals=matched_signals,
                             confidence=estimate_confidence(

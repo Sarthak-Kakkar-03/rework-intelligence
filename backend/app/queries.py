@@ -591,3 +591,23 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
         ),
         context_artifacts=context_artifacts,
     )
+
+
+def change_rework_root_cause_by_id(
+    rework_id: str,
+    root_cause: str,
+) -> ReworkEventDetail | None:
+    sql = """
+        UPDATE rework_events
+        SET root_cause_label = ?
+        WHERE id = ?
+    """
+
+    with closing(get_connection()) as conn:
+        cursor = conn.execute(sql, (root_cause, rework_id))
+        conn.commit()
+
+    if cursor.rowcount == 0:
+        return None
+
+    return get_rework_event_detail(rework_event_id=rework_id)

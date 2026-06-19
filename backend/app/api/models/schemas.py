@@ -123,3 +123,7 @@ class PullRequestCreate(BaseModel):
 class ReworkRecomputeResult(BaseModel):
     rework_event_count: int = Field(ge=0)
     message: str
+
+
+class ReworkRootCause(BaseModel):
+    root_cause: str
