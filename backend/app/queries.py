@@ -204,6 +204,64 @@ def get_context_artifacts() -> list[ContextArtifact]:
         ]
 
 
+def get_rework_event_repo_team_ids(rework_event_id: str) -> tuple[str, str] | None:
+    sql = """
+        SELECT
+          repo.id AS repo_id,
+          repo.team_id AS team_id
+        FROM rework_events re
+        JOIN pull_requests source_pr
+          ON re.source_pr_id = source_pr.id
+        JOIN repos repo
+          ON source_pr.repo_id = repo.id
+        WHERE re.id = ?
+    """
+
+    with closing(get_connection()) as conn:
+        row = conn.execute(sql, (rework_event_id,)).fetchone()
+
+    if row is None:
+        return None
+
+    return row["repo_id"], row["team_id"]
+
+
+def insert_context_artifact(context_artifact: ContextArtifact) -> ContextArtifact:
+    sql = """
+        INSERT INTO context_artifacts (
+          id,
+          rework_event_id,
+          name,
+          artifact_type,
+          repo_id,
+          team_id,
+          last_updated_at,
+          summary
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """
+
+    with closing(get_connection()) as conn:
+        conn.execute(
+            sql,
+            (
+                context_artifact.id,
+                context_artifact.rework_event_id,
+                context_artifact.name,
+                context_artifact.artifact_type,
+                context_artifact.repo_id,
+                context_artifact.team_id,
+                context_artifact.last_updated_at.isoformat()
+                if context_artifact.last_updated_at
+                else None,
+                context_artifact.summary,
+            ),
+        )
+        conn.commit()
+
+    return context_artifact
+
+
 def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
     """
     Retrieves comprehensive details for a rework event, including its source pull request.
