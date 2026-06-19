@@ -9,6 +9,8 @@ from app.api.models import (
     ContextArtifactCreate,
     PullRequest,
     PullRequestCreate,
+    PullRequestFile,
+    PullRequestFilesCreate,
     ReworkRecomputeResult,
     ReworkEventDetail,
     ReworkRootCause,
@@ -18,6 +20,7 @@ from app.queries import (
     get_rework_event_repo_team_ids,
     insert_context_artifact,
     insert_pull_request,
+    insert_pull_request_files,
     replace_rework_events,
     change_rework_root_cause_by_id,
 )
@@ -87,6 +90,26 @@ def ingest_pull_request(pull_request: PullRequestCreate) -> PullRequest:
         raise HTTPException(
             status_code=400,
             detail=f"Pull request could not be created: {exc}",
+        ) from exc
+
+
+@router.post(
+    "/ingest/pull-request/{pull_request_id}/files",
+    response_model=list[PullRequestFile],
+)
+def ingest_pull_request_files(
+    pull_request_id: int,
+    files: PullRequestFilesCreate,
+) -> list[PullRequestFile]:
+    try:
+        return insert_pull_request_files(
+            pull_request_id=pull_request_id,
+            file_paths=files.file_paths,
+        )
+    except sqlite3.IntegrityError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Pull request files could not be created: {exc}",
         ) from exc
 
 

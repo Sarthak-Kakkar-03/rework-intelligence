@@ -37,6 +37,10 @@ class PullRequestFile(BaseModel):
     deletions: int = Field(default=0, ge=0)
 
 
+class PullRequestFilesCreate(BaseModel):
+    file_paths: list[str]
+
+
 class ReworkEvent(BaseModel):
     id: str
     source_pr_id: int

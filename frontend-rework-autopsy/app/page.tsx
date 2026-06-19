@@ -39,6 +39,13 @@ function getRootCauseCounts(reworkEvents: ReworkEvent[]) {
   }));
 }
 
+function parseFilePaths(filePathText: string): string[] {
+  return filePathText
+    .split(/\n|,/)
+    .map((filePath) => filePath.trim())
+    .filter((filePath) => filePath.length > 0);
+}
+
 /**
  * Renders the main rework autopsy dashboard.
  *
@@ -63,14 +70,24 @@ export default function Home() {
 
   const [addPrModalOpen, setAddPrModalOpen] = useState(false);
   const [addPrError, setAddPrError] = useState<string | null>(null);
-  const [newPrTitle, setNewPrTitle] = useState("");
-  const [newPrBody, setNewPrBody] = useState("");
-  const [newPrAuthorLogin, setNewPrAuthorLogin] = useState("");
-  const [newPrMergedByLogin, setNewPrMergedByLogin] = useState("");
-  const [newPrHeadBranch, setNewPrHeadBranch] = useState("");
-  const [newPrAIGenerated, setNewPrAIGenerated] = useState(false);
-  const [newPrNumber, setNewPrNumber] = useState("");
-  const [newPrRepoId, setNewPrRepoId] = useState("");
+  const [isAddingPrPair, setIsAddingPrPair] = useState(false);
+  const [sourcePrTitle, setSourcePrTitle] = useState("");
+  const [sourcePrBody, setSourcePrBody] = useState("");
+  const [sourcePrNumber, setSourcePrNumber] = useState("");
+  const [sourcePrRepoId, setSourcePrRepoId] = useState("");
+  const [sourcePrAuthorLogin, setSourcePrAuthorLogin] = useState("");
+  const [sourcePrMergedByLogin, setSourcePrMergedByLogin] = useState("");
+  const [sourcePrHeadBranch, setSourcePrHeadBranch] = useState("");
+  const [sourcePrAIGenerated, setSourcePrAIGenerated] = useState(true);
+  const [sourcePrFiles, setSourcePrFiles] = useState("");
+  const [followupPrTitle, setFollowupPrTitle] = useState("");
+  const [followupPrBody, setFollowupPrBody] = useState("");
+  const [followupPrNumber, setFollowupPrNumber] = useState("");
+  const [followupPrAuthorLogin, setFollowupPrAuthorLogin] = useState("");
+  const [followupPrMergedByLogin, setFollowupPrMergedByLogin] = useState("");
+  const [followupPrHeadBranch, setFollowupPrHeadBranch] = useState("");
+  const [followupPrAIGenerated, setFollowupPrAIGenerated] = useState(false);
+  const [followupPrFiles, setFollowupPrFiles] = useState("");
 
   async function loadDashboardData() {
     try {
@@ -118,69 +135,137 @@ export default function Home() {
   const fallbackHeadline = `Found ${summary?.rework_event_count ?? reworkEvents.length} rework events across ${summary?.pull_request_count ?? 0} pull requests, with ${summary?.context_artifact_count ?? contextArtifacts.length} context artifacts.`;
 
   function openAddPrModal() {
-    setNewPrTitle("");
-    setNewPrBody("");
-    setNewPrAuthorLogin("");
-    setNewPrMergedByLogin("");
-    setNewPrHeadBranch("");
-    setNewPrAIGenerated(false);
-    setNewPrNumber("");
-    setNewPrRepoId("");
+    setSourcePrTitle("");
+    setSourcePrBody("");
+    setSourcePrNumber("");
+    setSourcePrRepoId("");
+    setSourcePrAuthorLogin("");
+    setSourcePrMergedByLogin("");
+    setSourcePrHeadBranch("");
+    setSourcePrAIGenerated(true);
+    setSourcePrFiles("");
+    setFollowupPrTitle("");
+    setFollowupPrBody("");
+    setFollowupPrNumber("");
+    setFollowupPrAuthorLogin("");
+    setFollowupPrMergedByLogin("");
+    setFollowupPrHeadBranch("");
+    setFollowupPrAIGenerated(false);
+    setFollowupPrFiles("");
     setAddPrError(null);
     setAddPrModalOpen(true);
   }
 
-  async function addPullRequest() {
+  async function createPullRequestWithFiles(
+    pullRequest: {
+      title: string;
+      body: string;
+      author_login: string;
+      merged_by_login: string;
+      head_branch: string;
+      ai_generated: boolean;
+      number: number;
+      repo_id: string;
+    },
+    filePaths: string[],
+  ): Promise<PullRequest> {
+    const response = await fetch(`${API_BASE_URL}/api/ingest/pull-request`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pullRequest),
+    });
+
+    if (!response.ok) {
+      throw new Error("Create PR request failed");
+    }
+
+    const createdPr = (await response.json()) as PullRequest;
+
+    if (filePaths.length > 0) {
+      const filesResponse = await fetch(
+        `${API_BASE_URL}/api/ingest/pull-request/${createdPr.id}/files`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            file_paths: filePaths,
+          }),
+        },
+      );
+
+      if (!filesResponse.ok) {
+        throw new Error("Create PR files request failed");
+      }
+    }
+
+    return createdPr;
+  }
+
+  async function addPullRequestPair() {
+    if (isAddingPrPair) return;
+
     try {
       setAddPrError(null);
+      setIsAddingPrPair(true);
 
-      const prNumber = Number(newPrNumber);
+      const sourceNumber = Number(sourcePrNumber);
+      const followupNumber = Number(followupPrNumber);
 
-      if (!Number.isInteger(prNumber) || prNumber <= 0) {
-        setAddPrError("PR number must be a positive whole number.");
+      if (!Number.isInteger(sourceNumber) || sourceNumber <= 0) {
+        setAddPrError("Source PR number must be a positive whole number.");
         return;
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/ingest/pull-request`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: newPrTitle,
-          body: newPrBody,
-          author_login: newPrAuthorLogin,
-          merged_by_login: newPrMergedByLogin,
-          head_branch: newPrHeadBranch,
-          ai_generated: newPrAIGenerated,
-          number: prNumber,
-          repo_id: newPrRepoId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Create New PR request failed");
+      if (!Number.isInteger(followupNumber) || followupNumber <= 0) {
+        setAddPrError("Follow-up PR number must be a positive whole number.");
+        return;
       }
 
-      const createdPr = (await response.json()) as PullRequest;
-      setSummary((currentSummary) => {
-        if (!currentSummary) {
-          return currentSummary;
-        }
+      if (!sourcePrRepoId.trim()) {
+        setAddPrError("Repo ID is required.");
+        return;
+      }
 
-        return {
-          ...currentSummary,
-          pull_request_count: currentSummary.pull_request_count + 1,
-          ai_generated_pr_count:
-            currentSummary.ai_generated_pr_count +
-            (createdPr.ai_generated ? 1 : 0),
-        };
-      });
+      await createPullRequestWithFiles(
+        {
+          title: sourcePrTitle,
+          body: sourcePrBody,
+          author_login: sourcePrAuthorLogin,
+          merged_by_login: sourcePrMergedByLogin,
+          head_branch: sourcePrHeadBranch,
+          ai_generated: sourcePrAIGenerated,
+          number: sourceNumber,
+          repo_id: sourcePrRepoId,
+        },
+        parseFilePaths(sourcePrFiles),
+      );
+
+      await createPullRequestWithFiles(
+        {
+          title: followupPrTitle,
+          body: followupPrBody,
+          author_login: followupPrAuthorLogin,
+          merged_by_login: followupPrMergedByLogin,
+          head_branch: followupPrHeadBranch,
+          ai_generated: followupPrAIGenerated,
+          number: followupNumber,
+          repo_id: sourcePrRepoId,
+        },
+        parseFilePaths(followupPrFiles),
+      );
+
       setAddPrModalOpen(false);
+      await loadDashboardData();
     } catch {
       setAddPrError(
-        "Unable to create Pull Request, make sure backend is working.",
+        "Unable to create PR pair. Check for duplicate PR numbers and make sure the backend is working.",
       );
+    } finally {
+      setIsAddingPrPair(false);
     }
   }
 
@@ -412,7 +497,7 @@ export default function Home() {
                 className="btn btn-ghost btn-primary btn-lg"
                 onClick={openAddPrModal}
               >
-                Add PR
+                Add PR Pair
               </button>
               <button
                 className="btn btn-ghost btn-primary btn-lg"
@@ -424,10 +509,11 @@ export default function Home() {
             </section>
 
             <div className={`modal ${addPrModalOpen ? "modal-open" : ""}`}>
-              <div className="modal-box max-w-2xl">
-                <h2 className="text-lg font-semibold">Add Pull Request</h2>
+              <div className="modal-box max-w-5xl">
+                <h2 className="text-lg font-semibold">Add PR Pair</h2>
                 <p className="mt-1 text-sm text-base-content/70">
-                  Create a closed pull request record for the prototype data.
+                  Create a source PR and a follow-up PR. Add at least one shared
+                  file path, then run Compute Rework.
                 </p>
 
                 {addPrError && (
@@ -436,110 +522,273 @@ export default function Home() {
                   </div>
                 )}
 
-                <div className="mt-5 grid gap-4 md:grid-cols-2">
-                  <label className="form-control md:col-span-2">
-                    <span className="label mb-1">
-                      <span className="label-text">Title</span>
-                    </span>
-                    <input
-                      className="input input-bordered"
-                      onChange={(event) => setNewPrTitle(event.target.value)}
-                      placeholder="Update webhook event pagination"
-                      value={newPrTitle}
-                    />
-                  </label>
+                <div className="mt-5 grid gap-6 lg:grid-cols-2">
+                  <section className="flex flex-col gap-4">
+                    <h3 className="font-semibold">Source PR</h3>
+                    <label className="form-control">
+                      <span className="label mb-1">
+                        <span className="label-text">Title</span>
+                      </span>
+                      <input
+                        className="input input-bordered"
+                        onChange={(event) =>
+                          setSourcePrTitle(event.target.value)
+                        }
+                        placeholder="Add retry handling for billing sync"
+                        value={sourcePrTitle}
+                      />
+                    </label>
 
-                  <label className="form-control md:col-span-2">
-                    <span className="label mb-1">
-                      <span className="label-text">Body</span>
-                    </span>
-                    <textarea
-                      className="textarea textarea-bordered min-h-24"
-                      onChange={(event) => setNewPrBody(event.target.value)}
-                      placeholder="Describe the pull request."
-                      value={newPrBody}
-                    />
-                  </label>
+                    <label className="form-control">
+                      <span className="label mb-1">
+                        <span className="label-text">Body</span>
+                      </span>
+                      <textarea
+                        className="textarea textarea-bordered min-h-24"
+                        onChange={(event) =>
+                          setSourcePrBody(event.target.value)
+                        }
+                        placeholder="Adds AI-generated retry behavior for transient billing sync failures."
+                        value={sourcePrBody}
+                      />
+                    </label>
 
-                  <label className="form-control">
-                    <span className="label mb-1">
-                      <span className="label-text">PR Number</span>
-                    </span>
-                    <input
-                      className="input input-bordered"
-                      min="1"
-                      onChange={(event) => setNewPrNumber(event.target.value)}
-                      placeholder="80"
-                      type="number"
-                      value={newPrNumber}
-                    />
-                  </label>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <label className="form-control">
+                        <span className="label mb-1">
+                          <span className="label-text">PR Number</span>
+                        </span>
+                        <input
+                          className="input input-bordered"
+                          min="1"
+                          onChange={(event) =>
+                            setSourcePrNumber(event.target.value)
+                          }
+                          placeholder="90"
+                          type="number"
+                          value={sourcePrNumber}
+                        />
+                      </label>
 
-                  <label className="form-control">
-                    <span className="label mb-1">
-                      <span className="label-text">Repo ID</span>
-                    </span>
-                    <input
-                      className="input input-bordered"
-                      onChange={(event) => setNewPrRepoId(event.target.value)}
-                      placeholder="test-repo-1"
-                      value={newPrRepoId}
-                    />
-                  </label>
+                      <label className="form-control">
+                        <span className="label mb-1">
+                          <span className="label-text">Repo ID</span>
+                        </span>
+                        <input
+                          className="input input-bordered"
+                          onChange={(event) =>
+                            setSourcePrRepoId(event.target.value)
+                          }
+                          placeholder="repo-jira-sync-worker"
+                          value={sourcePrRepoId}
+                        />
+                      </label>
+                    </div>
 
-                  <label className="form-control">
-                    <span className="label mb-1">
-                      <span className="label-text">Author</span>
-                    </span>
-                    <input
-                      className="input input-bordered"
-                      onChange={(event) =>
-                        setNewPrAuthorLogin(event.target.value)
-                      }
-                      placeholder="alex-rivera"
-                      value={newPrAuthorLogin}
-                    />
-                  </label>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <label className="form-control">
+                        <span className="label mb-1">
+                          <span className="label-text">Author</span>
+                        </span>
+                        <input
+                          className="input input-bordered"
+                          onChange={(event) =>
+                            setSourcePrAuthorLogin(event.target.value)
+                          }
+                          placeholder="maya-chen"
+                          value={sourcePrAuthorLogin}
+                        />
+                      </label>
 
-                  <label className="form-control">
-                    <span className="label mb-1">
-                      <span className="label-text">Merged By</span>
-                    </span>
-                    <input
-                      className="input input-bordered"
-                      onChange={(event) =>
-                        setNewPrMergedByLogin(event.target.value)
-                      }
-                      placeholder="maya-chen"
-                      value={newPrMergedByLogin}
-                    />
-                  </label>
+                      <label className="form-control">
+                        <span className="label mb-1">
+                          <span className="label-text">Merged By</span>
+                        </span>
+                        <input
+                          className="input input-bordered"
+                          onChange={(event) =>
+                            setSourcePrMergedByLogin(event.target.value)
+                          }
+                          placeholder="alex-rivera"
+                          value={sourcePrMergedByLogin}
+                        />
+                      </label>
+                    </div>
 
-                  <label className="form-control md:col-span-2">
-                    <span className="label mb-1">
-                      <span className="label-text">Head Branch</span>
-                    </span>
-                    <input
-                      className="input input-bordered"
-                      onChange={(event) =>
-                        setNewPrHeadBranch(event.target.value)
-                      }
-                      placeholder="alex/webhook-pagination"
-                      value={newPrHeadBranch}
-                    />
-                  </label>
+                    <label className="form-control">
+                      <span className="label mb-1">
+                        <span className="label-text">Head Branch</span>
+                      </span>
+                      <input
+                        className="input input-bordered"
+                        onChange={(event) =>
+                          setSourcePrHeadBranch(event.target.value)
+                        }
+                        placeholder="maya/billing-sync-retry"
+                        value={sourcePrHeadBranch}
+                      />
+                    </label>
 
-                  <label className="flex cursor-pointer items-center gap-3 md:col-span-2">
-                    <input
-                      checked={newPrAIGenerated}
-                      className="checkbox checkbox-primary"
-                      onChange={(event) =>
-                        setNewPrAIGenerated(event.target.checked)
-                      }
-                      type="checkbox"
-                    />
-                    <span className="text-sm">AI-generated</span>
-                  </label>
+                    <label className="form-control">
+                      <span className="label mb-1">
+                        <span className="label-text">File Paths</span>
+                      </span>
+                      <textarea
+                        className="textarea textarea-bordered min-h-24"
+                        onChange={(event) =>
+                          setSourcePrFiles(event.target.value)
+                        }
+                        placeholder={
+                          "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py"
+                        }
+                        value={sourcePrFiles}
+                      />
+                    </label>
+
+                    <label className="flex cursor-pointer items-center gap-3">
+                      <input
+                        checked={sourcePrAIGenerated}
+                        className="checkbox checkbox-primary"
+                        onChange={(event) =>
+                          setSourcePrAIGenerated(event.target.checked)
+                        }
+                        type="checkbox"
+                      />
+                      <span className="text-sm">AI-generated</span>
+                    </label>
+                  </section>
+
+                  <section className="flex flex-col gap-4">
+                    <h3 className="font-semibold">Follow-up PR</h3>
+                    <label className="form-control">
+                      <span className="label mb-1">
+                        <span className="label-text">Title</span>
+                      </span>
+                      <input
+                        className="input input-bordered"
+                        onChange={(event) =>
+                          setFollowupPrTitle(event.target.value)
+                        }
+                        placeholder="Fix duplicate billing sync retries"
+                        value={followupPrTitle}
+                      />
+                    </label>
+
+                    <label className="form-control">
+                      <span className="label mb-1">
+                        <span className="label-text">Body</span>
+                      </span>
+                      <textarea
+                        className="textarea textarea-bordered min-h-24"
+                        onChange={(event) =>
+                          setFollowupPrBody(event.target.value)
+                        }
+                        placeholder="Fixes duplicate writes from retry replay after the AI-generated retry change."
+                        value={followupPrBody}
+                      />
+                    </label>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <label className="form-control">
+                        <span className="label mb-1">
+                          <span className="label-text">PR Number</span>
+                        </span>
+                        <input
+                          className="input input-bordered"
+                          min="1"
+                          onChange={(event) =>
+                            setFollowupPrNumber(event.target.value)
+                          }
+                          placeholder="91"
+                          type="number"
+                          value={followupPrNumber}
+                        />
+                      </label>
+
+                      <label className="form-control">
+                        <span className="label mb-1">
+                          <span className="label-text">Repo ID</span>
+                        </span>
+                        <input
+                          className="input input-bordered"
+                          disabled
+                          value={sourcePrRepoId}
+                        />
+                      </label>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <label className="form-control">
+                        <span className="label mb-1">
+                          <span className="label-text">Author</span>
+                        </span>
+                        <input
+                          className="input input-bordered"
+                          onChange={(event) =>
+                            setFollowupPrAuthorLogin(event.target.value)
+                          }
+                          placeholder="alex-rivera"
+                          value={followupPrAuthorLogin}
+                        />
+                      </label>
+
+                      <label className="form-control">
+                        <span className="label mb-1">
+                          <span className="label-text">Merged By</span>
+                        </span>
+                        <input
+                          className="input input-bordered"
+                          onChange={(event) =>
+                            setFollowupPrMergedByLogin(event.target.value)
+                          }
+                          placeholder="maya-chen"
+                          value={followupPrMergedByLogin}
+                        />
+                      </label>
+                    </div>
+
+                    <label className="form-control">
+                      <span className="label mb-1">
+                        <span className="label-text">Head Branch</span>
+                      </span>
+                      <input
+                        className="input input-bordered"
+                        onChange={(event) =>
+                          setFollowupPrHeadBranch(event.target.value)
+                        }
+                        placeholder="alex/fix-billing-retry"
+                        value={followupPrHeadBranch}
+                      />
+                    </label>
+
+                    <label className="form-control">
+                      <span className="label mb-1">
+                        <span className="label-text">File Paths</span>
+                      </span>
+                      <textarea
+                        className="textarea textarea-bordered min-h-24"
+                        onChange={(event) =>
+                          setFollowupPrFiles(event.target.value)
+                        }
+                        placeholder={
+                          "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py"
+                        }
+                        value={followupPrFiles}
+                      />
+                    </label>
+
+                    <label className="flex cursor-pointer items-center gap-3">
+                      <input
+                        checked={followupPrAIGenerated}
+                        className="checkbox checkbox-primary"
+                        onChange={(event) =>
+                          setFollowupPrAIGenerated(event.target.checked)
+                        }
+                        type="checkbox"
+                      />
+                      <span className="text-sm">AI-generated</span>
+                    </label>
+                  </section>
                 </div>
 
                 <div className="modal-action">
@@ -549,8 +798,12 @@ export default function Home() {
                   >
                     Cancel
                   </button>
-                  <button className="btn btn-primary" onClick={addPullRequest}>
-                    Create PR
+                  <button
+                    className="btn btn-primary"
+                    disabled={isAddingPrPair}
+                    onClick={addPullRequestPair}
+                  >
+                    {isAddingPrPair ? "Creating..." : "Create PR Pair"}
                   </button>
                 </div>
               </div>

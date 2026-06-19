@@ -595,6 +595,61 @@ def insert_pull_request(pull_request: PullRequest) -> PullRequest:
     return pull_request
 
 
+def insert_pull_request_files(
+    pull_request_id: int,
+    file_paths: list[str],
+) -> list[PullRequestFile]:
+    sql = """
+        INSERT INTO pull_request_files (
+          id,
+          pull_request_id,
+          file_path,
+          additions,
+          deletions
+        )
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT DO NOTHING
+    """
+
+    clean_file_paths = []
+    seen_file_paths = set()
+
+    for file_path in file_paths:
+        clean_file_path = file_path.strip()
+        if clean_file_path and clean_file_path not in seen_file_paths:
+            clean_file_paths.append(clean_file_path)
+            seen_file_paths.add(clean_file_path)
+
+    pull_request_files = [
+        PullRequestFile(
+            id=f"PRF-{pull_request_id}-{index + 1}",
+            pull_request_id=pull_request_id,
+            file_path=file_path,
+            additions=0,
+            deletions=0,
+        )
+        for index, file_path in enumerate(clean_file_paths)
+    ]
+
+    with closing(get_connection()) as conn:
+        conn.executemany(
+            sql,
+            [
+                (
+                    pull_request_file.id,
+                    pull_request_file.pull_request_id,
+                    pull_request_file.file_path,
+                    pull_request_file.additions,
+                    pull_request_file.deletions,
+                )
+                for pull_request_file in pull_request_files
+            ],
+        )
+        conn.commit()
+
+    return get_pull_request_files_by_pr_id(pull_request_id)
+
+
 def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
     """
     Retrieves comprehensive details for a rework event, including its source pull request.
