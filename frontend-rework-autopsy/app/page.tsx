@@ -7,6 +7,7 @@ import type {
   AutopsySummary,
   ContextArtifact,
   PullRequest,
+  Repo,
   ReworkEvent,
   ReworkRecomputeResult,
 } from "@/types";
@@ -58,6 +59,7 @@ export default function Home() {
   const [contextArtifacts, setContextArtifacts] = useState<ContextArtifact[]>(
     [],
   );
+  const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isComputingRework, setIsComputingRework] = useState(false);
@@ -83,6 +85,7 @@ export default function Home() {
   const [followupPrTitle, setFollowupPrTitle] = useState("");
   const [followupPrBody, setFollowupPrBody] = useState("");
   const [followupPrNumber, setFollowupPrNumber] = useState("");
+  const [followupPrRepoId, setFollowupPrRepoId] = useState("");
   const [followupPrAuthorLogin, setFollowupPrAuthorLogin] = useState("");
   const [followupPrMergedByLogin, setFollowupPrMergedByLogin] = useState("");
   const [followupPrHeadBranch, setFollowupPrHeadBranch] = useState("");
@@ -94,26 +97,35 @@ export default function Home() {
       setLoading(true);
       setError(null);
 
-      const [summaryResponse, eventsResponse, artifactsResponse] =
+      const [summaryResponse, eventsResponse, artifactsResponse, reposResponse] =
         await Promise.all([
           fetch(`${API_BASE_URL}/api/autopsy/summary`),
           fetch(`${API_BASE_URL}/api/rework-events`),
           fetch(`${API_BASE_URL}/api/context-artifacts`),
+          fetch(`${API_BASE_URL}/api/repos`),
         ]);
 
-      if (!summaryResponse.ok || !eventsResponse.ok || !artifactsResponse.ok) {
+      if (
+        !summaryResponse.ok ||
+        !eventsResponse.ok ||
+        !artifactsResponse.ok ||
+        !reposResponse.ok
+      ) {
         throw new Error("One or more dashboard requests failed.");
       }
 
-      const [summaryData, eventsData, artifactsData] = await Promise.all([
-        summaryResponse.json() as Promise<AutopsySummary>,
-        eventsResponse.json() as Promise<ReworkEvent[]>,
-        artifactsResponse.json() as Promise<ContextArtifact[]>,
-      ]);
+      const [summaryData, eventsData, artifactsData, reposData] =
+        await Promise.all([
+          summaryResponse.json() as Promise<AutopsySummary>,
+          eventsResponse.json() as Promise<ReworkEvent[]>,
+          artifactsResponse.json() as Promise<ContextArtifact[]>,
+          reposResponse.json() as Promise<Repo[]>,
+        ]);
 
       setSummary(summaryData);
       setReworkEvents(eventsData);
       setContextArtifacts(artifactsData);
+      setRepos(reposData);
     } catch {
       setError(
         `Unable to load dashboard data. Make sure the backend is running on ${API_BASE_URL}.`,
@@ -153,6 +165,7 @@ export default function Home() {
       "Fixes duplicate writes from retry replay after the AI-generated retry change.",
     );
     setFollowupPrNumber("91");
+    setFollowupPrRepoId("repo-jira-sync-worker");
     setFollowupPrAuthorLogin("alex-rivera");
     setFollowupPrMergedByLogin("maya-chen");
     setFollowupPrHeadBranch("alex/fix-billing-retry");
@@ -233,8 +246,8 @@ export default function Home() {
         return;
       }
 
-      if (!sourcePrRepoId.trim()) {
-        setAddPrError("Repo ID is required.");
+      if (!sourcePrRepoId.trim() || !followupPrRepoId.trim()) {
+        setAddPrError("Both PRs need a repo.");
         return;
       }
 
@@ -261,7 +274,7 @@ export default function Home() {
           head_branch: followupPrHeadBranch,
           ai_generated: followupPrAIGenerated,
           number: followupNumber,
-          repo_id: sourcePrRepoId,
+          repo_id: followupPrRepoId,
         },
         parseFilePaths(followupPrFiles),
       );
@@ -580,16 +593,22 @@ export default function Home() {
 
                       <label className="form-control">
                         <span className="label mb-1">
-                          <span className="label-text">Repo ID</span>
+                          <span className="label-text">Repo</span>
                         </span>
-                        <input
-                          className="input input-bordered"
+                        <select
+                          className="select select-bordered"
                           onChange={(event) =>
                             setSourcePrRepoId(event.target.value)
                           }
-                          placeholder="repo-jira-sync-worker"
                           value={sourcePrRepoId}
-                        />
+                        >
+                          <option value="">Choose repo</option>
+                          {repos.map((repo) => (
+                            <option key={repo.id} value={repo.id}>
+                              {repo.name}
+                            </option>
+                          ))}
+                        </select>
                       </label>
                     </div>
 
@@ -715,13 +734,22 @@ export default function Home() {
 
                       <label className="form-control">
                         <span className="label mb-1">
-                          <span className="label-text">Repo ID</span>
+                          <span className="label-text">Repo</span>
                         </span>
-                        <input
-                          className="input input-bordered"
-                          disabled
-                          value={sourcePrRepoId}
-                        />
+                        <select
+                          className="select select-bordered"
+                          onChange={(event) =>
+                            setFollowupPrRepoId(event.target.value)
+                          }
+                          value={followupPrRepoId}
+                        >
+                          <option value="">Choose repo</option>
+                          {repos.map((repo) => (
+                            <option key={repo.id} value={repo.id}>
+                              {repo.name}
+                            </option>
+                          ))}
+                        </select>
                       </label>
                     </div>
 

@@ -3,6 +3,12 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 
+class Repo(BaseModel):
+    id: str
+    name: str
+    team_id: str
+
+
 class PullRequest(BaseModel):
     id: int
     number: int

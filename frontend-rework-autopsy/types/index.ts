@@ -4,6 +4,7 @@ export type {
   IsoDateTime,
   PullRequest,
   PullRequestFile,
+  Repo,
   ReworkEvent,
   ReworkEventDetail,
   ReworkEventDetailContextArtifact,

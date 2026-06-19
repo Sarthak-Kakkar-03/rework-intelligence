@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException
 from app.queries import (
     get_context_artifacts as query_context_artifacts,
     get_pull_requests as query_pull_requests,
+    get_repos as query_repos,
     get_rework_events as query_rework_events,
     get_rework_event_detail as query_rework_event_detail,
 )
@@ -10,6 +11,7 @@ from app.queries import (
 from app.api.models import (
     ContextArtifact,
     PullRequest,
+    Repo,
     ReworkEvent,
     ReworkEventDetail,
 )
@@ -26,6 +28,14 @@ def get_pull_requests() -> list[PullRequest]:
         list[PullRequest]: A list of all pull requests.
     """
     return query_pull_requests()
+
+
+@router.get("/repos", response_model=list[Repo])
+def get_repos() -> list[Repo]:
+    """
+    Retrieve all repositories.
+    """
+    return query_repos()
 
 
 @router.get("/rework-events", response_model=list[ReworkEvent])

@@ -5,6 +5,7 @@ from app.api.models import (
     ContextArtifact,
     PullRequest,
     PullRequestFile,
+    Repo,
     ReworkEvent,
     ReworkEventDetail,
     ReworkEventDetailContextArtifact,
@@ -50,6 +51,31 @@ def get_autopsy_summary() -> AutopsySummary:
             total_rework_hours=row["total_rework_hours"],
             avg_days_after_merge=row["avg_days_after_merge"],
         )
+
+
+def get_repos() -> list[Repo]:
+    """
+    Retrieves all repository records from the database.
+    """
+    sql = """
+        SELECT
+          id,
+          name,
+          team_id
+        FROM repos
+        ORDER BY name
+    """
+
+    with closing(get_connection()) as conn:
+        rows = conn.execute(sql).fetchall()
+        return [
+            Repo(
+                id=row["id"],
+                name=row["name"],
+                team_id=row["team_id"],
+            )
+            for row in rows
+        ]
 
 
 def get_pull_requests() -> list[PullRequest]:

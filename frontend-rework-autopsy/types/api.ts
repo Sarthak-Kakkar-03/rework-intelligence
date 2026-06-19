@@ -34,6 +34,12 @@ export type PullRequestFile = {
   deletions: number;
 };
 
+export type Repo = {
+  id: string;
+  name: string;
+  team_id: string;
+};
+
 export type ReworkEvent = {
   id: string;
   source_pr_id: number;
