@@ -12,6 +12,7 @@ from app.api.models import (
     ReworkEventDetailPullRequest,
 )
 from app.db import get_connection
+from app.services.rework_detection.models import ReworkCandidate
 
 
 def get_autopsy_summary() -> AutopsySummary:
@@ -288,6 +289,57 @@ def get_rework_events() -> list[ReworkEvent]:
             )
             for row in rows
         ]
+
+
+def clear_rework_events() -> None:
+    """
+    Deletes all computed rework events and their dependent context artifacts.
+    """
+    with closing(get_connection()) as conn:
+        conn.execute("DELETE FROM context_artifacts")
+        conn.execute("DELETE FROM rework_events")
+        conn.commit()
+
+
+def insert_rework_candidates(rework_candidates: list[ReworkCandidate]) -> None:
+    """
+    Inserts detected rework candidates into the rework_events table.
+    """
+    sql = """
+        INSERT INTO rework_events (
+          id,
+          source_pr_id,
+          followup_pr_id,
+          detected_from,
+          rework_type,
+          severity,
+          days_after_merge,
+          human_hours_spent,
+          root_cause_label,
+          summary
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+
+    values = [
+        (
+            f"RW-{index + 1:03d}",
+            candidate.source_pr_id,
+            candidate.followup_pr_id,
+            "detector",
+            "computed_rework",
+            candidate.severity,
+            candidate.days_after_merge,
+            candidate.human_hours_spent,
+            candidate.root_cause_label,
+            candidate.summary,
+        )
+        for index, candidate in enumerate(rework_candidates)
+    ]
+
+    with closing(get_connection()) as conn:
+        conn.executemany(sql, values)
+        conn.commit()
 
 
 def get_context_artifacts() -> list[ContextArtifact]:
