@@ -42,6 +42,7 @@ export default function ReworkEventDetailPage() {
   const [newArtifactName, setNewArtifactName] = useState("");
   const [newArtifactType, setNewArtifactType] = useState("");
   const [newArtifactSummary, setNewArtifactSummary] = useState("");
+  const [isSubmittingArtifact, setIsSubmittingArtifact] = useState(false);
 
   useEffect(() => {
     async function loadReworkEventDetail() {
@@ -80,6 +81,8 @@ export default function ReworkEventDetailPage() {
   }
 
   async function addContextArtifact() {
+    if (isSubmittingArtifact) return;
+    setIsSubmittingArtifact(true);
     try {
       const response = await fetch(
         `${API_BASE_URL}/api/ingest/context-artifact/${encodeURIComponent(
@@ -128,6 +131,8 @@ export default function ReworkEventDetailPage() {
       setError(
         `Unable to create context artifact. Make sure the backend is running on ${API_BASE_URL}.`,
       );
+    } finally {
+      setIsSubmittingArtifact(false);
     }
   }
 
@@ -330,6 +335,7 @@ export default function ReworkEventDetailPage() {
                   <button
                     className="btn btn-success"
                     onClick={addContextArtifact}
+                    disabled={isSubmittingArtifact}
                   >
                     Create Artifact
                   </button>
