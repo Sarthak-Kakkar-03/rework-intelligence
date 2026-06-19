@@ -42,6 +42,11 @@ def is_rework_candidate(
         return False
     if has_rework_override(followup_pr=followup_pr):
         return True
+    if not get_overlapping_files(
+        source_files=source_files,
+        followup_files=followup_files,
+    ):
+        return False
 
     return (
         len(
@@ -81,10 +86,13 @@ def get_rework_signals(
 def generate_rework_candidates() -> list[ReworkCandidate]:
     pr_list: list[PullRequest] = get_pull_requests_ordered_by_closed_at()
     files_by_pr_id: dict[int, list[PullRequestFile]] = {}
+    used_source_pr_ids: set[int] = set()
     result: list[ReworkCandidate] = []
-    for source_idx, source_pr in enumerate(pr_list):
-        for followup_idx in range(source_idx + 1, len(pr_list)):
-            followup_pr = pr_list[followup_idx]
+    for followup_idx, followup_pr in enumerate(pr_list):
+        for source_idx in range(followup_idx - 1, -1, -1):
+            source_pr = pr_list[source_idx]
+            if source_pr.id in used_source_pr_ids:
+                continue
             if is_possible_rework_candidate(
                 source_pr=source_pr, followup_pr=followup_pr
             ):
@@ -148,5 +156,6 @@ def generate_rework_candidates() -> list[ReworkCandidate]:
                             ),
                         )
                     )
+                    used_source_pr_ids.add(source_pr.id)
                     break
     return result

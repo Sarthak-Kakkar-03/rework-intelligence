@@ -97,41 +97,49 @@ export default function Home() {
       setLoading(true);
       setError(null);
 
-      const [summaryResponse, eventsResponse, artifactsResponse, reposResponse] =
+      const [summaryResponse, eventsResponse, artifactsResponse] =
         await Promise.all([
           fetch(`${API_BASE_URL}/api/autopsy/summary`),
           fetch(`${API_BASE_URL}/api/rework-events`),
           fetch(`${API_BASE_URL}/api/context-artifacts`),
-          fetch(`${API_BASE_URL}/api/repos`),
         ]);
 
       if (
         !summaryResponse.ok ||
         !eventsResponse.ok ||
-        !artifactsResponse.ok ||
-        !reposResponse.ok
+        !artifactsResponse.ok
       ) {
         throw new Error("One or more dashboard requests failed.");
       }
 
-      const [summaryData, eventsData, artifactsData, reposData] =
-        await Promise.all([
-          summaryResponse.json() as Promise<AutopsySummary>,
-          eventsResponse.json() as Promise<ReworkEvent[]>,
-          artifactsResponse.json() as Promise<ContextArtifact[]>,
-          reposResponse.json() as Promise<Repo[]>,
-        ]);
+      const [summaryData, eventsData, artifactsData] = await Promise.all([
+        summaryResponse.json() as Promise<AutopsySummary>,
+        eventsResponse.json() as Promise<ReworkEvent[]>,
+        artifactsResponse.json() as Promise<ContextArtifact[]>,
+      ]);
 
       setSummary(summaryData);
       setReworkEvents(eventsData);
       setContextArtifacts(artifactsData);
-      setRepos(reposData);
     } catch {
       setError(
         `Unable to load dashboard data. Make sure the backend is running on ${API_BASE_URL}.`,
       );
     } finally {
       setLoading(false);
+    }
+
+    try {
+      const reposResponse = await fetch(`${API_BASE_URL}/api/repos`);
+
+      if (!reposResponse.ok) {
+        throw new Error("Repos request failed.");
+      }
+
+      const reposData = (await reposResponse.json()) as Repo[];
+      setRepos(reposData);
+    } catch (reposError) {
+      console.error("Unable to load repos for Add PR Pair modal.", reposError);
     }
   }
 
