@@ -1,4 +1,5 @@
 from contextlib import closing
+import hashlib
 
 from app.api.models import (
     AutopsySummary,
@@ -18,6 +19,25 @@ from app.services.rework_detection.models import ReworkCandidate
 
 def _rework_candidate_id(candidate: ReworkCandidate) -> str:
     return f"RW-{candidate.source_pr_id}-{candidate.followup_pr_id}"
+
+
+def _pull_request_file_id(pull_request_id: int, file_path: str) -> str:
+    file_key = f"{pull_request_id}:{file_path}"
+    file_hash = hashlib.sha1(file_key.encode("utf-8")).hexdigest()[:12]
+    return f"PRF-{file_hash}"
+
+
+def _clean_file_paths(file_paths: list[str]) -> list[str]:
+    clean_file_paths = []
+    seen_file_paths = set()
+
+    for file_path in file_paths:
+        clean_file_path = file_path.strip()
+        if clean_file_path and clean_file_path not in seen_file_paths:
+            clean_file_paths.append(clean_file_path)
+            seen_file_paths.add(clean_file_path)
+
+    return clean_file_paths
 
 
 def get_autopsy_summary() -> AutopsySummary:
@@ -637,24 +657,17 @@ def insert_pull_request_files(
         ON CONFLICT DO NOTHING
     """
 
-    clean_file_paths = []
-    seen_file_paths = set()
-
-    for file_path in file_paths:
-        clean_file_path = file_path.strip()
-        if clean_file_path and clean_file_path not in seen_file_paths:
-            clean_file_paths.append(clean_file_path)
-            seen_file_paths.add(clean_file_path)
+    clean_file_paths = _clean_file_paths(file_paths)
 
     pull_request_files = [
         PullRequestFile(
-            id=f"PRF-{pull_request_id}-{index + 1}",
+            id=_pull_request_file_id(pull_request_id, file_path),
             pull_request_id=pull_request_id,
             file_path=file_path,
             additions=0,
             deletions=0,
         )
-        for index, file_path in enumerate(clean_file_paths)
+        for file_path in clean_file_paths
     ]
 
     with closing(get_connection()) as conn:
@@ -674,6 +687,114 @@ def insert_pull_request_files(
         conn.commit()
 
     return get_pull_request_files_by_pr_id(pull_request_id)
+
+
+def insert_pull_request_with_files(
+    pull_request: PullRequest,
+    file_paths: list[str],
+) -> PullRequest:
+    pull_request_sql = """
+        INSERT INTO pull_requests (
+          id,
+          number,
+          repo_id,
+          title,
+          body,
+          state,
+          draft,
+          created_at,
+          updated_at,
+          closed_at,
+          merged_at,
+          merged,
+          author_login,
+          merged_by_login,
+          base_branch,
+          head_branch,
+          additions,
+          deletions,
+          changed_files,
+          commits,
+          comments,
+          review_comments,
+          ai_generated
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+    pull_request_file_sql = """
+        INSERT INTO pull_request_files (
+          id,
+          pull_request_id,
+          file_path,
+          additions,
+          deletions
+        )
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT DO NOTHING
+    """
+
+    pull_request_files = [
+        PullRequestFile(
+            id=_pull_request_file_id(pull_request.id, file_path),
+            pull_request_id=pull_request.id,
+            file_path=file_path,
+            additions=0,
+            deletions=0,
+        )
+        for file_path in _clean_file_paths(file_paths)
+    ]
+
+    with closing(get_connection()) as conn:
+        try:
+            conn.execute(
+                pull_request_sql,
+                (
+                    pull_request.id,
+                    pull_request.number,
+                    pull_request.repo_id,
+                    pull_request.title,
+                    pull_request.body,
+                    pull_request.state,
+                    int(pull_request.draft),
+                    pull_request.created_at.isoformat(),
+                    pull_request.updated_at.isoformat(),
+                    pull_request.closed_at.isoformat(),
+                    pull_request.merged_at.isoformat()
+                    if pull_request.merged_at
+                    else None,
+                    int(pull_request.merged),
+                    pull_request.author_login,
+                    pull_request.merged_by_login,
+                    pull_request.base_branch,
+                    pull_request.head_branch,
+                    pull_request.additions,
+                    pull_request.deletions,
+                    pull_request.changed_files,
+                    pull_request.commits,
+                    pull_request.comments,
+                    pull_request.review_comments,
+                    int(pull_request.ai_generated),
+                ),
+            )
+            conn.executemany(
+                pull_request_file_sql,
+                [
+                    (
+                        pull_request_file.id,
+                        pull_request_file.pull_request_id,
+                        pull_request_file.file_path,
+                        pull_request_file.additions,
+                        pull_request_file.deletions,
+                    )
+                    for pull_request_file in pull_request_files
+                ],
+            )
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+
+    return pull_request
 
 
 def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:

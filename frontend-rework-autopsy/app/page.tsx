@@ -190,40 +190,25 @@ export default function Home() {
     },
     filePaths: string[],
   ): Promise<PullRequest> {
-    const response = await fetch(`${API_BASE_URL}/api/ingest/pull-request`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${API_BASE_URL}/api/ingest/pull-request-with-files`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pull_request: pullRequest,
+          file_paths: filePaths,
+        }),
       },
-      body: JSON.stringify(pullRequest),
-    });
+    );
 
     if (!response.ok) {
-      throw new Error("Create PR request failed");
+      throw new Error("Create PR with files request failed");
     }
 
-    const createdPr = (await response.json()) as PullRequest;
-
-    if (filePaths.length > 0) {
-      const filesResponse = await fetch(
-        `${API_BASE_URL}/api/ingest/pull-request/${createdPr.id}/files`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            file_paths: filePaths,
-          }),
-        },
-      );
-
-      if (!filesResponse.ok) {
-        throw new Error("Create PR files request failed");
-      }
-    }
-
-    return createdPr;
+    return (await response.json()) as PullRequest;
   }
 
   async function addPullRequestPair() {
@@ -251,6 +236,18 @@ export default function Home() {
         return;
       }
 
+      const sourceFilePaths = parseFilePaths(sourcePrFiles);
+      const followupFilePaths = parseFilePaths(followupPrFiles);
+      const sourceFilePathSet = new Set(sourceFilePaths);
+      const hasSharedFilePath = followupFilePaths.some((filePath) =>
+        sourceFilePathSet.has(filePath),
+      );
+
+      if (!hasSharedFilePath) {
+        setAddPrError("Add at least one shared file path between the two PRs.");
+        return;
+      }
+
       await createPullRequestWithFiles(
         {
           title: sourcePrTitle,
@@ -262,7 +259,7 @@ export default function Home() {
           number: sourceNumber,
           repo_id: sourcePrRepoId,
         },
-        parseFilePaths(sourcePrFiles),
+        sourceFilePaths,
       );
 
       await createPullRequestWithFiles(
@@ -276,7 +273,7 @@ export default function Home() {
           number: followupNumber,
           repo_id: followupPrRepoId,
         },
-        parseFilePaths(followupPrFiles),
+        followupFilePaths,
       );
 
       setAddPrModalOpen(false);
