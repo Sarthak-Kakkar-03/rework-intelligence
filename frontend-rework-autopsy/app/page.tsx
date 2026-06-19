@@ -190,7 +190,6 @@ export default function Home() {
     setFollowupPrFiles(
       "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py",
     );
-    setFollowupWithin14Days(true);
     setAddPrError(null);
     setAddPrModalOpen(true);
   }
