@@ -18,6 +18,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ## Main Responsibilities
 
 - Load local seed data into SQLite.
+- Reuse `scripts/reset_db.sh` for demo startup in Docker.
 - Serve pull requests, repos, rework events, context artifacts, and summary
   metrics.
 - Recompute likely rework events from PR metadata and changed files.

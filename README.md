@@ -52,6 +52,19 @@ scripts/                 Local helper scripts
 
 ## Run Locally
 
+Demo-ready Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+Open http://localhost:3000.
+
+The backend container reseeds SQLite on startup so every demo starts from the
+same data.
+
+Manual backend/frontend setup:
+
 Start the backend:
 
 ```bash
