@@ -361,7 +361,7 @@ def insert_pull_request(pull_request: PullRequest) -> PullRequest:
                 int(pull_request.draft),
                 pull_request.created_at.isoformat(),
                 pull_request.updated_at.isoformat(),
-                pull_request.closed_at.isoformat() if pull_request.closed_at else None,
+                pull_request.closed_at.isoformat(),
                 pull_request.merged_at.isoformat() if pull_request.merged_at else None,
                 int(pull_request.merged),
                 pull_request.author_login,

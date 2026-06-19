@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS pull_requests (
 
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
-  closed_at TEXT,
+  closed_at TEXT NOT NULL,
   merged_at TEXT,
   merged INTEGER NOT NULL DEFAULT 0,
 

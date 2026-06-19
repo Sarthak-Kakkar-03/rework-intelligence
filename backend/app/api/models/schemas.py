@@ -13,7 +13,7 @@ class PullRequest(BaseModel):
     draft: bool = False
     created_at: datetime
     updated_at: datetime
-    closed_at: datetime | None = None
+    closed_at: datetime
     merged_at: datetime | None = None
     merged: bool = False
     author_login: str
