@@ -252,6 +252,70 @@ def insert_context_artifact(context_artifact: ContextArtifact) -> ContextArtifac
     return context_artifact
 
 
+def insert_pull_request(pull_request: PullRequest) -> PullRequest:
+    sql = """
+        INSERT INTO pull_requests (
+          id,
+          number,
+          repo_id,
+          title,
+          body,
+          state,
+          draft,
+          created_at,
+          updated_at,
+          closed_at,
+          merged_at,
+          merged,
+          author_login,
+          merged_by_login,
+          base_branch,
+          head_branch,
+          additions,
+          deletions,
+          changed_files,
+          commits,
+          comments,
+          review_comments,
+          ai_generated
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+
+    with closing(get_connection()) as conn:
+        conn.execute(
+            sql,
+            (
+                pull_request.id,
+                pull_request.number,
+                pull_request.repo_id,
+                pull_request.title,
+                pull_request.body,
+                pull_request.state,
+                int(pull_request.draft),
+                pull_request.created_at.isoformat(),
+                pull_request.updated_at.isoformat(),
+                pull_request.closed_at.isoformat() if pull_request.closed_at else None,
+                pull_request.merged_at.isoformat() if pull_request.merged_at else None,
+                int(pull_request.merged),
+                pull_request.author_login,
+                pull_request.merged_by_login,
+                pull_request.base_branch,
+                pull_request.head_branch,
+                pull_request.additions,
+                pull_request.deletions,
+                pull_request.changed_files,
+                pull_request.commits,
+                pull_request.comments,
+                pull_request.review_comments,
+                int(pull_request.ai_generated),
+            ),
+        )
+        conn.commit()
+
+    return pull_request
+
+
 def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
     """
     Retrieves comprehensive details for a rework event, including its source pull request.

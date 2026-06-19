@@ -1,11 +1,22 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from fastapi import APIRouter, HTTPException
 
-from app.api.models import ContextArtifact, ContextArtifactCreate
+from app.api.models import (
+    ContextArtifact,
+    ContextArtifactCreate,
+    PullRequest,
+    PullRequestCreate,
+)
 
-from app.queries import get_rework_event_repo_team_ids, insert_context_artifact
+from app.queries import (
+    get_rework_event_repo_team_ids,
+    insert_context_artifact,
+    insert_pull_request,
+)
+
+from random import randint
 
 router = APIRouter(prefix="/api", tags=["Ingest"])
 
@@ -32,3 +43,34 @@ def ingest_context_artifact(
     )
 
     return insert_context_artifact(context_artifact)
+
+
+@router.post("/ingest/pull-request", response_model=PullRequest)
+def ingest_pull_request(pull_request: PullRequestCreate) -> PullRequest:
+    now = datetime.now(timezone.utc)
+    pull_request = PullRequest(
+        id=randint(1_000_000, 9_999_999),
+        number=pull_request.number,
+        repo_id=pull_request.repo_id,
+        title=pull_request.title,
+        body=pull_request.body,
+        state="closed",
+        draft=0,
+        created_at=now - timedelta(hours=15),
+        updated_at=now - timedelta(hours=10),
+        closed_at=now - timedelta(hours=5),
+        merged_at=now,
+        merged=1,
+        author_login=pull_request.author_login,
+        merged_by_login=pull_request.merged_by_login,
+        base_branch="main",
+        head_branch=pull_request.head_branch,
+        additions=randint(1000, 4000),
+        deletions=randint(50, 600),
+        changed_files=randint(1, 6),
+        commits=randint(1, 8),
+        comments=randint(2, 20),
+        review_comments=randint(3, 9),
+        ai_generated=pull_request.ai_generated,
+    )
+    return insert_pull_request(pull_request=pull_request)

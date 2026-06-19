@@ -99,3 +99,14 @@ class ReworkEventDetail(BaseModel):
     source_pr: ReworkEventDetailPullRequest
     followup_pr: ReworkEventDetailPullRequest
     context_artifacts: list[ReworkEventDetailContextArtifact] = []
+
+
+class PullRequestCreate(BaseModel):
+    title: str
+    body: str
+    author_login: str
+    merged_by_login: str
+    head_branch: str
+    ai_generated: bool
+    number: int
+    repo_id: str

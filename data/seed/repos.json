@@ -23,5 +23,10 @@
     "id": "repo-metrics-dashboard",
     "name": "metrics-dashboard",
     "team_id": "team-devex"
+  },
+  {
+    "id": "test-repo-1",
+    "name": "test-team",
+    "team_id": "test-team-1"
   }
 ]
