@@ -1,6 +1,13 @@
 from app.services.rework_detection.signals import *
 from app.api.models import PullRequest, PullRequestFile
 from app.services.rework_detection.models import ReworkCandidate
+from app.services.rework_detection.estimates import (
+    build_summary,
+    estimate_confidence,
+    estimate_days_after_merge,
+    estimate_human_hours_spent,
+    estimate_severity,
+)
 from app.queries import (
     get_pull_requests_ordered_by_closed_at,
     get_pull_request_files_by_pr_id,
@@ -85,24 +92,41 @@ def generate_rework_candidates() -> list[ReworkCandidate]:
                         followup_files=followup_files,
                         source_files=source_files,
                     )
+                    overlapping_files = get_overlapping_files(
+                        source_files=source_files,
+                        followup_files=followup_files,
+                    )
+                    human_hours_spent = estimate_human_hours_spent(
+                        followup_pr=followup_pr,
+                        overlapping_files=overlapping_files,
+                    )
                     result.append(
                         ReworkCandidate(
                             source_pr_id=source_pr.id,
                             followup_pr_id=followup_pr.id,
                             repo_id=source_pr.repo_id,
-                            days_after_merge=1,  # placeholder
+                            days_after_merge=estimate_days_after_merge(
+                                source_pr=source_pr,
+                                followup_pr=followup_pr,
+                            ),
                             overlapping_files=[
                                 file.file_path
-                                for file in get_overlapping_files(
-                                    source_files=source_files, followup_files=followup_files
-                                )
+                                for file in overlapping_files
                             ],
                             matched_signals=matched_signals,
-                            confidence="placeholder",
-                            severity="placeholder",
-                            human_hours_spent=1.0,
+                            confidence=estimate_confidence(
+                                matched_signals=matched_signals,
+                            ),
+                            severity=estimate_severity(
+                                human_hours_spent=human_hours_spent,
+                            ),
+                            human_hours_spent=human_hours_spent,
                             root_cause_label="placeholder",
-                            summary="placeholder",
+                            summary=build_summary(
+                                source_pr=source_pr,
+                                followup_pr=followup_pr,
+                                matched_signals=matched_signals,
+                            ),
                         )
                     )
                     break
