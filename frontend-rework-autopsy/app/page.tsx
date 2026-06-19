@@ -135,23 +135,31 @@ export default function Home() {
   const fallbackHeadline = `Found ${summary?.rework_event_count ?? reworkEvents.length} rework events across ${summary?.pull_request_count ?? 0} pull requests, with ${summary?.context_artifact_count ?? contextArtifacts.length} context artifacts.`;
 
   function openAddPrModal() {
-    setSourcePrTitle("");
-    setSourcePrBody("");
-    setSourcePrNumber("");
-    setSourcePrRepoId("");
-    setSourcePrAuthorLogin("");
-    setSourcePrMergedByLogin("");
-    setSourcePrHeadBranch("");
+    setSourcePrTitle("Add retry handling for billing sync");
+    setSourcePrBody(
+      "Adds AI-generated retry behavior for transient billing sync failures.",
+    );
+    setSourcePrNumber("90");
+    setSourcePrRepoId("repo-jira-sync-worker");
+    setSourcePrAuthorLogin("maya-chen");
+    setSourcePrMergedByLogin("alex-rivera");
+    setSourcePrHeadBranch("maya/billing-sync-retry");
     setSourcePrAIGenerated(true);
-    setSourcePrFiles("");
-    setFollowupPrTitle("");
-    setFollowupPrBody("");
-    setFollowupPrNumber("");
-    setFollowupPrAuthorLogin("");
-    setFollowupPrMergedByLogin("");
-    setFollowupPrHeadBranch("");
+    setSourcePrFiles(
+      "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py",
+    );
+    setFollowupPrTitle("Fix duplicate billing sync retries");
+    setFollowupPrBody(
+      "Fixes duplicate writes from retry replay after the AI-generated retry change.",
+    );
+    setFollowupPrNumber("91");
+    setFollowupPrAuthorLogin("alex-rivera");
+    setFollowupPrMergedByLogin("maya-chen");
+    setFollowupPrHeadBranch("alex/fix-billing-retry");
     setFollowupPrAIGenerated(false);
-    setFollowupPrFiles("");
+    setFollowupPrFiles(
+      "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py",
+    );
     setAddPrError(null);
     setAddPrModalOpen(true);
   }
