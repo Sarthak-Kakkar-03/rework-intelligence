@@ -26,7 +26,6 @@ class PullRequest(BaseModel):
     commits: int = Field(default=0, ge=0)
     comments: int = Field(default=0, ge=0)
     review_comments: int = Field(default=0, ge=0)
-    linked_issue_key: str | None = None
     ai_generated: bool = False
 
 
@@ -34,7 +33,6 @@ class ReworkEvent(BaseModel):
     id: str
     source_pr_id: int
     followup_pr_id: int
-    issue_key: str | None = None
     detected_from: str
     rework_type: str
     severity: str
@@ -64,7 +62,6 @@ class ContextArtifactCreate(BaseModel):
 class AutopsySummary(BaseModel):
     team_count: int = Field(ge=0)
     repo_count: int = Field(ge=0)
-    issue_count: int = Field(ge=0)
     pull_request_count: int = Field(ge=0)
     rework_event_count: int = Field(ge=0)
     context_artifact_count: int = Field(ge=0)

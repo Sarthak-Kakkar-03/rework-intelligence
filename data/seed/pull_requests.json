@@ -4,7 +4,7 @@
     "number": 42,
     "repo_id": "repo-jira-sync-worker",
     "title": "Add retry handling for Jira sync failures",
-    "body": "Implements retry handling for transient Jira API failures. Linked issue: ENG-219.",
+    "body": "Implements retry handling for transient Jira API failures.",
     "state": "closed",
     "draft": 0,
     "created_at": "2026-05-29T08:15:00Z",
@@ -22,7 +22,6 @@
     "commits": 4,
     "comments": 6,
     "review_comments": 13,
-    "linked_issue_key": "ENG-219",
     "ai_generated": true
   },
   {
@@ -30,7 +29,7 @@
     "number": 48,
     "repo_id": "repo-jira-sync-worker",
     "title": "Prevent duplicate Jira links during retry replay",
-    "body": "Fix-forward for duplicate issue links created when retry jobs replay successful sync writes. Linked issue: ENG-231.",
+    "body": "Fix-forward for duplicate Jira links created when retry jobs replay successful sync writes.",
     "state": "closed",
     "draft": 0,
     "created_at": "2026-06-01T11:15:00Z",
@@ -48,7 +47,6 @@
     "commits": 3,
     "comments": 4,
     "review_comments": 8,
-    "linked_issue_key": "ENG-231",
     "ai_generated": false
   },
   {
@@ -56,7 +54,7 @@
     "number": 51,
     "repo_id": "repo-deployment-risk-api",
     "title": "Rename deployment status field in risk payload",
-    "body": "Renames deploy_status to deployment_state in API response. Linked issue: ENG-244.",
+    "body": "Renames deploy_status to deployment_state in API response.",
     "state": "closed",
     "draft": 0,
     "created_at": "2026-06-02T09:00:00Z",
@@ -74,7 +72,6 @@
     "commits": 2,
     "comments": 3,
     "review_comments": 5,
-    "linked_issue_key": "ENG-244",
     "ai_generated": true
   },
   {
@@ -82,7 +79,7 @@
     "number": 54,
     "repo_id": "repo-metrics-dashboard",
     "title": "Fix deployment cards after payload field rename",
-    "body": "Updates dashboard cards to read deployment_state after upstream API rename. Linked issue: ENG-251.",
+    "body": "Updates dashboard cards to read deployment_state after upstream API rename.",
     "state": "closed",
     "draft": 0,
     "created_at": "2026-06-03T09:10:00Z",
@@ -100,7 +97,6 @@
     "commits": 2,
     "comments": 2,
     "review_comments": 3,
-    "linked_issue_key": "ENG-251",
     "ai_generated": false
   },
   {
@@ -108,7 +104,7 @@
     "number": 58,
     "repo_id": "repo-github-ingest-service",
     "title": "Add tests for GitHub ingest auth behavior",
-    "body": "Adds unit tests for ingest token validation and webhook auth. Linked issue: ENG-260.",
+    "body": "Adds unit tests for ingest token validation and webhook auth.",
     "state": "closed",
     "draft": 0,
     "created_at": "2026-06-04T08:40:00Z",
@@ -126,7 +122,6 @@
     "commits": 3,
     "comments": 5,
     "review_comments": 10,
-    "linked_issue_key": "ENG-260",
     "ai_generated": true
   },
   {
@@ -134,7 +129,7 @@
     "number": 62,
     "repo_id": "repo-github-ingest-service",
     "title": "Patch staging-only GitHub App auth validation",
-    "body": "Fixes staging auth path missed by generated tests. Linked issue: ENG-267.",
+    "body": "Fixes staging auth path missed by generated tests.",
     "state": "closed",
     "draft": 0,
     "created_at": "2026-06-05T11:30:00Z",
@@ -152,7 +147,6 @@
     "commits": 2,
     "comments": 3,
     "review_comments": 4,
-    "linked_issue_key": "ENG-267",
     "ai_generated": false
   },
   {
@@ -160,7 +154,7 @@
     "number": 65,
     "repo_id": "repo-agent-context-builder",
     "title": "Add context pack freshness scoring",
-    "body": "Scores context artifacts by age, owner, and linked repo. Linked issue: ENG-272.",
+    "body": "Scores context artifacts by age, owner, and linked repo.",
     "state": "closed",
     "draft": 0,
     "created_at": "2026-06-05T14:20:00Z",
@@ -178,7 +172,6 @@
     "commits": 5,
     "comments": 7,
     "review_comments": 12,
-    "linked_issue_key": "ENG-272",
     "ai_generated": true
   },
   {
@@ -186,7 +179,7 @@
     "number": 68,
     "repo_id": "repo-deployment-risk-api",
     "title": "Improve deployment risk API error handling",
-    "body": "Adds explicit errors for missing deployment metadata. Linked issue: ENG-280.",
+    "body": "Adds explicit errors for missing deployment metadata.",
     "state": "closed",
     "draft": 0,
     "created_at": "2026-06-07T09:10:00Z",
@@ -204,7 +197,6 @@
     "commits": 2,
     "comments": 2,
     "review_comments": 4,
-    "linked_issue_key": "ENG-280",
     "ai_generated": false
   },
   {
@@ -230,7 +222,6 @@
     "commits": 3,
     "comments": 4,
     "review_comments": 6,
-    "linked_issue_key": null,
     "ai_generated": true
   },
   {
@@ -256,7 +247,6 @@
     "commits": 2,
     "comments": 2,
     "review_comments": 3,
-    "linked_issue_key": null,
     "ai_generated": false
   },
   {
@@ -282,7 +272,6 @@
     "commits": 3,
     "comments": 3,
     "review_comments": 5,
-    "linked_issue_key": null,
     "ai_generated": true
   },
   {
@@ -308,7 +297,6 @@
     "commits": 3,
     "comments": 4,
     "review_comments": 7,
-    "linked_issue_key": null,
     "ai_generated": true
   }
 ]

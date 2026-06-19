@@ -18,13 +18,12 @@ def get_autopsy_summary() -> AutopsySummary:
     Fetch aggregate metrics and entity counts from the database.
 
     Returns:
-        An AutopsySummary containing counts of teams, repos, issues, pull requests, rework events, context artifacts, AI-generated pull requests, total rework hours, and average days after merge.
+        An AutopsySummary containing counts of teams, repos, pull requests, rework events, context artifacts, AI-generated pull requests, total rework hours, and average days after merge.
     """
     sql = """
         SELECT
           (SELECT COUNT(*) FROM teams) AS team_count,
           (SELECT COUNT(*) FROM repos) AS repo_count,
-          (SELECT COUNT(*) FROM issues) AS issue_count,
           (SELECT COUNT(*) FROM pull_requests) AS pull_request_count,
           (SELECT COUNT(*) FROM rework_events) AS rework_event_count,
           (SELECT COUNT(*) FROM context_artifacts) AS context_artifact_count,
@@ -38,7 +37,6 @@ def get_autopsy_summary() -> AutopsySummary:
         return AutopsySummary(
             team_count=row["team_count"],
             repo_count=row["repo_count"],
-            issue_count=row["issue_count"],
             pull_request_count=row["pull_request_count"],
             rework_event_count=row["rework_event_count"],
             context_artifact_count=row["context_artifact_count"],
@@ -79,7 +77,6 @@ def get_pull_requests() -> list[PullRequest]:
           commits,
           comments,
           review_comments,
-          linked_issue_key,
           ai_generated
         FROM pull_requests
         ORDER BY created_at DESC, id DESC
@@ -111,7 +108,6 @@ def get_pull_requests() -> list[PullRequest]:
                 commits=row["commits"],
                 comments=row["comments"],
                 review_comments=row["review_comments"],
-                linked_issue_key=row["linked_issue_key"],
                 ai_generated=bool(row["ai_generated"]),
             )
             for row in rows
@@ -130,7 +126,6 @@ def get_rework_events() -> list[ReworkEvent]:
           id,
           source_pr_id,
           followup_pr_id,
-          issue_key,
           detected_from,
           rework_type,
           severity,
@@ -149,7 +144,6 @@ def get_rework_events() -> list[ReworkEvent]:
                 id=row["id"],
                 source_pr_id=row["source_pr_id"],
                 followup_pr_id=row["followup_pr_id"],
-                issue_key=row["issue_key"],
                 detected_from=row["detected_from"],
                 rework_type=row["rework_type"],
                 severity=row["severity"],

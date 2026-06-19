@@ -13,7 +13,6 @@ The prototype uses local synthetic JSON data, but the shape should stay close to
 - Changed file paths
 - Diff summaries, not full source code
 - Review comments
-- Linked tickets
 - Rework estimate
 - Mock context artifacts
 

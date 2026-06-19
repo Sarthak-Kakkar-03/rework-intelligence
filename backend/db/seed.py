@@ -20,7 +20,6 @@ SEED_DIR = REPO_ROOT / "data" / "seed"
 TABLE_LOAD_ORDER = [
     ("teams", "teams.json"),
     ("repos", "repos.json"),
-    ("issues", "issues.json"),
     ("pull_requests", "pull_requests.json"),
     ("rework_events", "rework_events.json"),
     ("context_artifacts", "context_artifacts.json"),

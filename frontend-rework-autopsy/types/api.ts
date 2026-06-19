@@ -23,7 +23,6 @@ export type PullRequest = {
   commits: number;
   comments: number;
   review_comments: number;
-  linked_issue_key: string | null;
   ai_generated: boolean;
 };
 
@@ -33,7 +32,6 @@ export type ReworkEvent = {
   source_pr_title?: string;
   followup_pr_id: number;
   followup_pr_title?: string;
-  issue_key: string | null;
   detected_from: string;
   rework_type: string;
   severity: string;
@@ -58,7 +56,6 @@ export type AutopsySummary = {
   headline?: string;
   team_count: number;
   repo_count: number;
-  issue_count: number;
   pull_request_count: number;
   rework_event_count: number;
   context_artifact_count: number;
