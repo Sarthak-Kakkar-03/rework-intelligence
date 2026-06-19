@@ -1,0 +1,219 @@
+[
+  {
+    "id": "PRF-1042-001",
+    "pull_request_id": 1042,
+    "file_path": "src/jira_sync/retry_worker.py",
+    "additions": 72,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-1042-002",
+    "pull_request_id": 1042,
+    "file_path": "src/jira_sync/client.py",
+    "additions": 38,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-1042-003",
+    "pull_request_id": 1042,
+    "file_path": "src/jira_sync/idempotency.py",
+    "additions": 31,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-1042-004",
+    "pull_request_id": 1042,
+    "file_path": "tests/test_retry_worker.py",
+    "additions": 43,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-1048-001",
+    "pull_request_id": 1048,
+    "file_path": "src/jira_sync/retry_worker.py",
+    "additions": 36,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-1048-002",
+    "pull_request_id": 1048,
+    "file_path": "src/jira_sync/idempotency.py",
+    "additions": 28,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-1048-003",
+    "pull_request_id": 1048,
+    "file_path": "tests/test_retry_worker.py",
+    "additions": 22,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-1051-001",
+    "pull_request_id": 1051,
+    "file_path": "src/deployment_risk/api.py",
+    "additions": 24,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-1051-002",
+    "pull_request_id": 1051,
+    "file_path": "src/deployment_risk/schema.py",
+    "additions": 18,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-1051-003",
+    "pull_request_id": 1051,
+    "file_path": "docs/deployment-risk-contract.md",
+    "additions": 17,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-1054-001",
+    "pull_request_id": 1054,
+    "file_path": "src/deployment_risk/schema.py",
+    "additions": 11,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-1054-002",
+    "pull_request_id": 1054,
+    "file_path": "src/dashboard/deployment_cards.tsx",
+    "additions": 19,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-1054-003",
+    "pull_request_id": 1054,
+    "file_path": "tests/deployment_cards.test.tsx",
+    "additions": 8,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-1058-001",
+    "pull_request_id": 1058,
+    "file_path": "src/github_ingest/auth.py",
+    "additions": 45,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-1058-002",
+    "pull_request_id": 1058,
+    "file_path": "src/github_ingest/webhook.py",
+    "additions": 31,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-1058-003",
+    "pull_request_id": 1058,
+    "file_path": "tests/test_github_auth.py",
+    "additions": 92,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-1062-001",
+    "pull_request_id": 1062,
+    "file_path": "src/github_ingest/auth.py",
+    "additions": 21,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-1062-002",
+    "pull_request_id": 1062,
+    "file_path": "tests/test_github_auth.py",
+    "additions": 18,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-1062-003",
+    "pull_request_id": 1062,
+    "file_path": "config/staging/github_app.yaml",
+    "additions": 9,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-1065-001",
+    "pull_request_id": 1065,
+    "file_path": "src/context_builder/freshness_score.py",
+    "additions": 71,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-1065-002",
+    "pull_request_id": 1065,
+    "file_path": "src/context_builder/artifact_index.py",
+    "additions": 39,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-1068-001",
+    "pull_request_id": 1068,
+    "file_path": "src/deployment_risk/errors.py",
+    "additions": 35,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-1068-002",
+    "pull_request_id": 1068,
+    "file_path": "tests/test_risk_api_errors.py",
+    "additions": 24,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-1071-001",
+    "pull_request_id": 1071,
+    "file_path": "src/dashboard/filters/ai_work_filter.tsx",
+    "additions": 48,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-1071-002",
+    "pull_request_id": 1071,
+    "file_path": "src/dashboard/query_params.ts",
+    "additions": 21,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-1074-001",
+    "pull_request_id": 1074,
+    "file_path": "src/context_builder/owner_metadata.py",
+    "additions": 26,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-1074-002",
+    "pull_request_id": 1074,
+    "file_path": "docs/context-artifact-ownership.md",
+    "additions": 15,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-1077-001",
+    "pull_request_id": 1077,
+    "file_path": "src/jira_sync/payload_parser.py",
+    "additions": 42,
+    "deletions": 55
+  },
+  {
+    "id": "PRF-1077-002",
+    "pull_request_id": 1077,
+    "file_path": "tests/test_payload_parser.py",
+    "additions": 25,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-1080-001",
+    "pull_request_id": 1080,
+    "file_path": "src/github_ingest/backfill.py",
+    "additions": 43,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-1080-002",
+    "pull_request_id": 1080,
+    "file_path": "src/github_ingest/pagination.py",
+    "additions": 37,
+    "deletions": 11
+  }
+]

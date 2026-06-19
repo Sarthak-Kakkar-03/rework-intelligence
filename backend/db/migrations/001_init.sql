@@ -47,6 +47,17 @@ CREATE TABLE IF NOT EXISTS pull_requests (
   FOREIGN KEY (repo_id) REFERENCES repos(id)
 );
 
+CREATE TABLE IF NOT EXISTS pull_request_files (
+  id TEXT PRIMARY KEY,
+  pull_request_id INTEGER NOT NULL,
+  file_path TEXT NOT NULL,
+  additions INTEGER NOT NULL DEFAULT 0,
+  deletions INTEGER NOT NULL DEFAULT 0,
+
+  UNIQUE (pull_request_id, file_path),
+  FOREIGN KEY (pull_request_id) REFERENCES pull_requests(id)
+);
+
 CREATE TABLE IF NOT EXISTS rework_events (
   id TEXT PRIMARY KEY,
 
