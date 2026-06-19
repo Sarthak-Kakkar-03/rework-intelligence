@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-import type { AutopsySummary, ContextArtifact, ReworkEvent } from "@/types";
+import type {
+  AutopsySummary,
+  ContextArtifact,
+  PullRequest,
+  ReworkEvent,
+} from "@/types";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
@@ -47,6 +52,16 @@ export default function Home() {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [addPrModalOpen, setAddPrModalOpen] = useState(false);
+  const [newPrTitle, setNewPrTitle] = useState("");
+  const [newPrBody, setNewPrBody] = useState("");
+  const [newPrAuthorLogin, setNewPrAuthorLogin] = useState("");
+  const [newPrMergedByLogin, setNewPrMergedByLogin] = useState("");
+  const [newPrHeadBranch, setNewPrHeadBranch] = useState("");
+  const [newPrAIGenerated, setNewPrAIGenerated] = useState(false);
+  const [newPrNumber, setNewPrNumber] = useState("");
+  const [newPrRepoId, setNewPrRepoId] = useState("");
 
   useEffect(() => {
     async function loadDashboardData() {
@@ -96,6 +111,63 @@ export default function Home() {
       : getRootCauseCounts(reworkEvents);
 
   const fallbackHeadline = `Found ${summary?.rework_event_count ?? reworkEvents.length} rework events across ${summary?.pull_request_count ?? 0} pull requests, with ${summary?.context_artifact_count ?? contextArtifacts.length} context artifacts.`;
+
+  function openAddPrModal() {
+    setNewPrTitle("");
+    setNewPrBody("");
+    setNewPrAuthorLogin("");
+    setNewPrMergedByLogin("");
+    setNewPrHeadBranch("");
+    setNewPrAIGenerated(false);
+    setNewPrNumber("");
+    setNewPrRepoId("");
+    setAddPrModalOpen(true);
+  }
+
+  async function addPullRequest() {
+    try {
+      setError(null);
+
+      const response = await fetch(`${API_BASE_URL}/api/ingest/pull-request`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: newPrTitle,
+          body: newPrBody,
+          author_login: newPrAuthorLogin,
+          merged_by_login: newPrMergedByLogin,
+          head_branch: newPrHeadBranch,
+          ai_generated: newPrAIGenerated,
+          number: Number(newPrNumber),
+          repo_id: newPrRepoId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Create New PR request failed");
+      }
+
+      const createdPr = (await response.json()) as PullRequest;
+      setSummary((currentSummary) => {
+        if (!currentSummary) {
+          return currentSummary;
+        }
+
+        return {
+          ...currentSummary,
+          pull_request_count: currentSummary.pull_request_count + 1,
+          ai_generated_pr_count:
+            currentSummary.ai_generated_pr_count +
+            (createdPr.ai_generated ? 1 : 0),
+        };
+      });
+      setAddPrModalOpen(false);
+    } catch {
+      setError("Unable to create Pull Request, make sure backend is working");
+    }
+  }
 
   return (
     <main className="min-h-screen bg-base-200 px-4 py-8 text-base-content">
@@ -279,6 +351,149 @@ export default function Home() {
                 </p>
               )}
             </section>
+            <section className="flex flex-1 justify-evenly">
+              <button
+                className="btn btn-ghost btn-primary btn-lg"
+                onClick={openAddPrModal}
+              >
+                Add PR
+              </button>
+              <button className="btn btn-ghost btn-primary btn-lg">
+                Refresh
+              </button>
+            </section>
+
+            <div className={`modal ${addPrModalOpen ? "modal-open" : ""}`}>
+              <div className="modal-box max-w-2xl">
+                <h2 className="text-lg font-semibold">Add Pull Request</h2>
+                <p className="mt-1 text-sm text-base-content/70">
+                  Create a closed pull request record for the prototype data.
+                </p>
+
+                <div className="mt-5 grid gap-4 md:grid-cols-2">
+                  <label className="form-control md:col-span-2">
+                    <span className="label mb-1">
+                      <span className="label-text">Title</span>
+                    </span>
+                    <input
+                      className="input input-bordered"
+                      onChange={(event) => setNewPrTitle(event.target.value)}
+                      placeholder="Update webhook event pagination"
+                      value={newPrTitle}
+                    />
+                  </label>
+
+                  <label className="form-control md:col-span-2">
+                    <span className="label mb-1">
+                      <span className="label-text">Body</span>
+                    </span>
+                    <textarea
+                      className="textarea textarea-bordered min-h-24"
+                      onChange={(event) => setNewPrBody(event.target.value)}
+                      placeholder="Describe the pull request."
+                      value={newPrBody}
+                    />
+                  </label>
+
+                  <label className="form-control">
+                    <span className="label mb-1">
+                      <span className="label-text">PR Number</span>
+                    </span>
+                    <input
+                      className="input input-bordered"
+                      min="1"
+                      onChange={(event) => setNewPrNumber(event.target.value)}
+                      placeholder="80"
+                      type="number"
+                      value={newPrNumber}
+                    />
+                  </label>
+
+                  <label className="form-control">
+                    <span className="label mb-1">
+                      <span className="label-text">Repo ID</span>
+                    </span>
+                    <input
+                      className="input input-bordered"
+                      onChange={(event) => setNewPrRepoId(event.target.value)}
+                      placeholder="test-repo-1"
+                      value={newPrRepoId}
+                    />
+                  </label>
+
+                  <label className="form-control">
+                    <span className="label mb-1">
+                      <span className="label-text">Author</span>
+                    </span>
+                    <input
+                      className="input input-bordered"
+                      onChange={(event) =>
+                        setNewPrAuthorLogin(event.target.value)
+                      }
+                      placeholder="alex-rivera"
+                      value={newPrAuthorLogin}
+                    />
+                  </label>
+
+                  <label className="form-control">
+                    <span className="label mb-1">
+                      <span className="label-text">Merged By</span>
+                    </span>
+                    <input
+                      className="input input-bordered"
+                      onChange={(event) =>
+                        setNewPrMergedByLogin(event.target.value)
+                      }
+                      placeholder="maya-chen"
+                      value={newPrMergedByLogin}
+                    />
+                  </label>
+
+                  <label className="form-control md:col-span-2">
+                    <span className="label mb-1">
+                      <span className="label-text">Head Branch</span>
+                    </span>
+                    <input
+                      className="input input-bordered"
+                      onChange={(event) =>
+                        setNewPrHeadBranch(event.target.value)
+                      }
+                      placeholder="alex/webhook-pagination"
+                      value={newPrHeadBranch}
+                    />
+                  </label>
+
+                  <label className="flex cursor-pointer items-center gap-3 md:col-span-2">
+                    <input
+                      checked={newPrAIGenerated}
+                      className="checkbox checkbox-primary"
+                      onChange={(event) =>
+                        setNewPrAIGenerated(event.target.checked)
+                      }
+                      type="checkbox"
+                    />
+                    <span className="text-sm">AI-generated</span>
+                  </label>
+                </div>
+
+                <div className="modal-action">
+                  <button
+                    className="btn btn-ghost"
+                    onClick={() => setAddPrModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button className="btn btn-primary" onClick={addPullRequest}>
+                    Create PR
+                  </button>
+                </div>
+              </div>
+              <button
+                aria-label="Close add pull request modal"
+                className="modal-backdrop"
+                onClick={() => setAddPrModalOpen(false)}
+              />
+            </div>
           </>
         )}
       </div>

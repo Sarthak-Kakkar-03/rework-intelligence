@@ -278,7 +278,7 @@ export default function ReworkEventDetailPage() {
 
                 <div className="mt-5 flex flex-col gap-4">
                   <label className="form-control">
-                    <span className="label">
+                    <span className="label mb-1">
                       <span className="label-text">Name</span>
                     </span>
                     <input
@@ -292,7 +292,7 @@ export default function ReworkEventDetailPage() {
                   </label>
 
                   <label className="form-control">
-                    <span className="label">
+                    <span className="label mb-1">
                       <span className="label-text">Artifact Type</span>
                     </span>
                     <input
@@ -306,7 +306,7 @@ export default function ReworkEventDetailPage() {
                   </label>
 
                   <label className="form-control">
-                    <span className="label">
+                    <span className="label mb-1">
                       <span className="label-text">Summary</span>
                     </span>
                     <textarea
