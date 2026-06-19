@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class ReworkCandidate(BaseModel):
     source_pr_id: int
     followup_pr_id: int

@@ -115,6 +115,74 @@ def get_pull_requests() -> list[PullRequest]:
         ]
 
 
+def get_pull_requests_ordered_by_closed_at() -> list[PullRequest]:
+    """
+    Retrieves pull request records ordered by closure time for rework detection.
+
+    Returns:
+        A list of PullRequest objects, ordered by closed_at ascending, then by ID.
+    """
+    sql = """
+        SELECT
+          id,
+          number,
+          repo_id,
+          title,
+          body,
+          state,
+          draft,
+          created_at,
+          updated_at,
+          closed_at,
+          merged_at,
+          merged,
+          author_login,
+          merged_by_login,
+          base_branch,
+          head_branch,
+          additions,
+          deletions,
+          changed_files,
+          commits,
+          comments,
+          review_comments,
+          ai_generated
+        FROM pull_requests
+        ORDER BY datetime(closed_at) ASC, id ASC
+    """
+
+    with closing(get_connection()) as conn:
+        rows = conn.execute(sql).fetchall()
+        return [
+            PullRequest(
+                id=row["id"],
+                number=row["number"],
+                repo_id=row["repo_id"],
+                title=row["title"],
+                body=row["body"],
+                state=row["state"],
+                draft=bool(row["draft"]),
+                created_at=row["created_at"],
+                updated_at=row["updated_at"],
+                closed_at=row["closed_at"],
+                merged_at=row["merged_at"],
+                merged=bool(row["merged"]),
+                author_login=row["author_login"],
+                merged_by_login=row["merged_by_login"],
+                base_branch=row["base_branch"],
+                head_branch=row["head_branch"],
+                additions=row["additions"],
+                deletions=row["deletions"],
+                changed_files=row["changed_files"],
+                commits=row["commits"],
+                comments=row["comments"],
+                review_comments=row["review_comments"],
+                ai_generated=bool(row["ai_generated"]),
+            )
+            for row in rows
+        ]
+
+
 def get_pull_request_files() -> list[PullRequestFile]:
     """
     Retrieves all changed-file records for pull requests.
