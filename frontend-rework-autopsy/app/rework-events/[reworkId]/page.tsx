@@ -43,6 +43,8 @@ export default function ReworkEventDetailPage() {
   const [newArtifactType, setNewArtifactType] = useState("");
   const [newArtifactSummary, setNewArtifactSummary] = useState("");
   const [isSubmittingArtifact, setIsSubmittingArtifact] = useState(false);
+  const [rootCauseInput, setRootCauseInput] = useState("");
+  const [isUpdatingRootCause, setIsUpdatingRootCause] = useState(false);
 
   useEffect(() => {
     async function loadReworkEventDetail() {
@@ -61,6 +63,7 @@ export default function ReworkEventDetailPage() {
         const data = (await response.json()) as ReworkEventDetail;
 
         setDetail(data);
+        setRootCauseInput(data.rework_event.root_cause_label);
       } catch {
         setError(
           `Unable to load rework event ${reworkId}. Make sure the backend is running on ${API_BASE_URL}.`,
@@ -136,6 +139,40 @@ export default function ReworkEventDetailPage() {
     }
   }
 
+  async function updateRootCause() {
+    if (isUpdatingRootCause) return;
+    setIsUpdatingRootCause(true);
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/ingest/${encodeURIComponent(reworkId)}/root-cause`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            root_cause: rootCauseInput,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Update root cause request failed.");
+      }
+
+      const updatedDetail = (await response.json()) as ReworkEventDetail;
+      setDetail(updatedDetail);
+      setRootCauseInput(updatedDetail.rework_event.root_cause_label);
+    } catch {
+      setError(
+        `Unable to update root cause. Make sure the backend is running on ${API_BASE_URL}.`,
+      );
+    } finally {
+      setIsUpdatingRootCause(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-base-200 px-4 py-8 text-base-content">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -181,6 +218,30 @@ export default function ReworkEventDetailPage() {
                 <h2 className="text-xl font-semibold">
                   {detail.rework_event.summary}
                 </h2>
+                <div className="flex flex-col gap-3 md:flex-row md:items-end">
+                  <label className="form-control flex-1">
+                    <span className="label mb-1">
+                      <span className="label-text">Root Cause</span>
+                    </span>
+                    <input
+                      className="input input-bordered"
+                      onChange={(event) =>
+                        setRootCauseInput(event.target.value)
+                      }
+                      value={rootCauseInput}
+                    />
+                  </label>
+                  <button
+                    className="btn btn-primary"
+                    disabled={
+                      isUpdatingRootCause ||
+                      rootCauseInput === detail.rework_event.root_cause_label
+                    }
+                    onClick={updateRootCause}
+                  >
+                    {isUpdatingRootCause ? "Saving..." : "Save Root Cause"}
+                  </button>
+                </div>
                 <div className="stats stats-vertical bg-base-200 lg:stats-horizontal">
                   <div className="stat">
                     <div className="stat-title">Days After Merge</div>
