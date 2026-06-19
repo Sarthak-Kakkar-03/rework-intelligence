@@ -15,6 +15,10 @@ from app.db import get_connection
 from app.services.rework_detection.models import ReworkCandidate
 
 
+def _rework_candidate_id(candidate: ReworkCandidate) -> str:
+    return f"RW-{candidate.source_pr_id}-{candidate.followup_pr_id}"
+
+
 def get_autopsy_summary() -> AutopsySummary:
     """
     Fetch aggregate metrics and entity counts from the database.
@@ -293,11 +297,18 @@ def get_rework_events() -> list[ReworkEvent]:
 
 def clear_rework_events() -> None:
     """
-    Deletes all computed rework events and their dependent context artifacts.
+    Deletes rework events that do not have dependent context artifacts.
     """
     with closing(get_connection()) as conn:
-        conn.execute("DELETE FROM context_artifacts")
-        conn.execute("DELETE FROM rework_events")
+        conn.execute(
+            """
+            DELETE FROM rework_events
+            WHERE id NOT IN (
+              SELECT rework_event_id
+              FROM context_artifacts
+            )
+            """
+        )
         conn.commit()
 
 
@@ -323,7 +334,7 @@ def insert_rework_candidates(rework_candidates: list[ReworkCandidate]) -> None:
 
     values = [
         (
-            f"RW-{index + 1:03d}",
+            _rework_candidate_id(candidate),
             candidate.source_pr_id,
             candidate.followup_pr_id,
             "detector",
@@ -344,7 +355,7 @@ def insert_rework_candidates(rework_candidates: list[ReworkCandidate]) -> None:
 
 def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
     """
-    Replaces rework events with detected candidates in one transaction.
+    Upserts detected rework events and removes stale events without artifacts.
     """
     sql = """
         INSERT INTO rework_events (
@@ -360,11 +371,20 @@ def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
           summary
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+          source_pr_id = excluded.source_pr_id,
+          followup_pr_id = excluded.followup_pr_id,
+          detected_from = excluded.detected_from,
+          rework_type = excluded.rework_type,
+          severity = excluded.severity,
+          days_after_merge = excluded.days_after_merge,
+          human_hours_spent = excluded.human_hours_spent,
+          summary = excluded.summary
     """
 
     values = [
         (
-            f"RW-{index + 1:03d}",
+            _rework_candidate_id(candidate),
             candidate.source_pr_id,
             candidate.followup_pr_id,
             "detector",
@@ -380,8 +400,34 @@ def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
 
     with closing(get_connection()) as conn:
         try:
-            conn.execute("DELETE FROM context_artifacts")
-            conn.execute("DELETE FROM rework_events")
+            candidate_ids = [
+                _rework_candidate_id(candidate) for candidate in rework_candidates
+            ]
+
+            if candidate_ids:
+                placeholders = ", ".join("?" for _ in candidate_ids)
+                conn.execute(
+                    f"""
+                    DELETE FROM rework_events
+                    WHERE id NOT IN ({placeholders})
+                      AND id NOT IN (
+                        SELECT rework_event_id
+                        FROM context_artifacts
+                      )
+                    """,
+                    candidate_ids,
+                )
+            else:
+                conn.execute(
+                    """
+                    DELETE FROM rework_events
+                    WHERE id NOT IN (
+                      SELECT rework_event_id
+                      FROM context_artifacts
+                    )
+                    """
+                )
+
             conn.executemany(sql, values)
             conn.commit()
         except Exception:

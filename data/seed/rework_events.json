@@ -1,6 +1,6 @@
 [
   {
-    "id": "RW-501",
+    "id": "RW-1001-1002",
     "source_pr_id": 1001,
     "followup_pr_id": 1002,
     "detected_from": "followup_pr",
@@ -12,7 +12,7 @@
     "summary": "AI-generated retry logic was followed by a non-AI fix in the same repo after duplicate Jira links appeared during replay."
   },
   {
-    "id": "RW-502",
+    "id": "RW-1003-1004",
     "source_pr_id": 1003,
     "followup_pr_id": 1004,
     "detected_from": "explicit_rework_marker",
@@ -24,7 +24,7 @@
     "summary": "A same-repo follow-up PR explicitly used #rework to mark the staging-only GitHub App auth context gap."
   },
   {
-    "id": "RW-503",
+    "id": "RW-1005-1006",
     "source_pr_id": 1005,
     "followup_pr_id": 1006,
     "detected_from": "followup_pr",
