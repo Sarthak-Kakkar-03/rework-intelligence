@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-import { API_BASE_URL, apiGet } from "@/lib/api";
 import type { AutopsySummary, ContextArtifact, ReworkEvent } from "@/types";
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
 
 function formatLabel(label: string | undefined): string {
   if (!label) {
@@ -52,10 +54,25 @@ export default function Home() {
         setLoading(true);
         setError(null);
 
+        const [summaryResponse, eventsResponse, artifactsResponse] =
+          await Promise.all([
+            fetch(`${API_BASE_URL}/api/autopsy/summary`),
+            fetch(`${API_BASE_URL}/api/rework-events`),
+            fetch(`${API_BASE_URL}/api/context-artifacts`),
+          ]);
+
+        if (
+          !summaryResponse.ok ||
+          !eventsResponse.ok ||
+          !artifactsResponse.ok
+        ) {
+          throw new Error("One or more dashboard requests failed.");
+        }
+
         const [summaryData, eventsData, artifactsData] = await Promise.all([
-          apiGet("/api/autopsy/summary"),
-          apiGet("/api/rework-events"),
-          apiGet("/api/context-artifacts"),
+          summaryResponse.json() as Promise<AutopsySummary>,
+          eventsResponse.json() as Promise<ReworkEvent[]>,
+          artifactsResponse.json() as Promise<ContextArtifact[]>,
         ]);
 
         setSummary(summaryData);

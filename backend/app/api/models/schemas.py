@@ -57,6 +57,12 @@ class ContextArtifact(BaseModel):
     summary: str
 
 
+class ContextArtifactCreate(BaseModel):
+    name: str
+    artifact_type: str
+    summary: str
+
+
 class AutopsySummary(BaseModel):
     team_count: int = Field(ge=0)
     repo_count: int = Field(ge=0)

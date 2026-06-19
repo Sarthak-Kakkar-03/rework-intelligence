@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { API_BASE_URL, apiGet } from "@/lib/api";
-import type { ReworkEventDetail } from "@/types";
+import type { ContextArtifact, ReworkEventDetail } from "@/types";
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
 
 /**
  * Converts an underscore-delimited label into a space-separated, title-cased string.
@@ -27,7 +29,7 @@ function formatLabel(label: string | undefined): string {
  * Renders detailed information about a rework event identified by the `reworkId` URL parameter.
  *
  * Displays the event summary, severity and root cause, core statistics, source PR details,
- * follow-up PR, and context artifact.
+ * follow-up PR, and context artifacts.
  */
 export default function ReworkEventDetailPage() {
   const params = useParams<{ reworkId: string }>();
@@ -36,6 +38,10 @@ export default function ReworkEventDetailPage() {
   const [detail, setDetail] = useState<ReworkEventDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [addArtifactModalOpen, setAddArtifactModalOpen] = useState(false);
+  const [newArtifactName, setNewArtifactName] = useState("");
+  const [newArtifactType, setNewArtifactType] = useState("");
+  const [newArtifactSummary, setNewArtifactSummary] = useState("");
 
   useEffect(() => {
     async function loadReworkEventDetail() {
@@ -43,10 +49,15 @@ export default function ReworkEventDetailPage() {
         setLoading(true);
         setError(null);
 
-        const path = `/api/rework-events/${encodeURIComponent(
-          reworkId,
-        )}` as `/api/rework-events/${string}`;
-        const data = await apiGet(path);
+        const response = await fetch(
+          `${API_BASE_URL}/api/rework-events/${encodeURIComponent(reworkId)}`,
+        );
+
+        if (!response.ok) {
+          throw new Error("Rework event request failed.");
+        }
+
+        const data = (await response.json()) as ReworkEventDetail;
 
         setDetail(data);
       } catch {
@@ -60,6 +71,65 @@ export default function ReworkEventDetailPage() {
 
     loadReworkEventDetail();
   }, [reworkId]);
+
+  function openAddArtifactModal() {
+    setNewArtifactName("");
+    setNewArtifactType("");
+    setNewArtifactSummary("");
+    setAddArtifactModalOpen(true);
+  }
+
+  async function addContextArtifact() {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/ingest/context-artifact/${encodeURIComponent(
+          reworkId,
+        )}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: newArtifactName,
+            artifact_type: newArtifactType,
+            summary: newArtifactSummary,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Create context artifact request failed.");
+      }
+
+      const createdArtifact = (await response.json()) as ContextArtifact;
+
+      setDetail((currentDetail) => {
+        if (!currentDetail) {
+          return currentDetail;
+        }
+
+        return {
+          ...currentDetail,
+          context_artifacts: [
+            ...currentDetail.context_artifacts,
+            {
+              id: createdArtifact.id,
+              name: createdArtifact.name,
+              artifact_type: createdArtifact.artifact_type,
+              summary: createdArtifact.summary,
+            },
+          ],
+        };
+      });
+
+      setAddArtifactModalOpen(false);
+    } catch {
+      setError(
+        `Unable to create context artifact. Make sure the backend is running on ${API_BASE_URL}.`,
+      );
+    }
+  }
 
   return (
     <main className="min-h-screen bg-base-200 px-4 py-8 text-base-content">
@@ -188,6 +258,89 @@ export default function ReworkEventDetailPage() {
                 </div>
               </article>
             </section>
+            <section>
+              <button
+                className="btn btn-ghost btn-success btn-lg"
+                onClick={openAddArtifactModal}
+              >
+                Add Context Artifact
+              </button>
+            </section>
+
+            <div
+              className={`modal ${addArtifactModalOpen ? "modal-open" : ""}`}
+            >
+              <div className="modal-box">
+                <h2 className="text-lg font-semibold">Add Context Artifact</h2>
+                <p className="mt-1 text-sm text-base-content/70">
+                  Create a context artifact for rework event {reworkId}.
+                </p>
+
+                <div className="mt-5 flex flex-col gap-4">
+                  <label className="form-control">
+                    <span className="label">
+                      <span className="label-text">Name</span>
+                    </span>
+                    <input
+                      className="input input-bordered"
+                      onChange={(event) =>
+                        setNewArtifactName(event.target.value)
+                      }
+                      placeholder="Jira Sync Idempotency Contract"
+                      value={newArtifactName}
+                    />
+                  </label>
+
+                  <label className="form-control">
+                    <span className="label">
+                      <span className="label-text">Artifact Type</span>
+                    </span>
+                    <input
+                      className="input input-bordered"
+                      onChange={(event) =>
+                        setNewArtifactType(event.target.value)
+                      }
+                      placeholder="runbook"
+                      value={newArtifactType}
+                    />
+                  </label>
+
+                  <label className="form-control">
+                    <span className="label">
+                      <span className="label-text">Summary</span>
+                    </span>
+                    <textarea
+                      className="textarea textarea-bordered min-h-28"
+                      onChange={(event) =>
+                        setNewArtifactSummary(event.target.value)
+                      }
+                      placeholder="Describe the context this artifact gives future agents."
+                      value={newArtifactSummary}
+                    />
+                  </label>
+                </div>
+
+                <div className="modal-action">
+                  <button
+                    className="btn btn-ghost"
+                    onClick={() => setAddArtifactModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn btn-success"
+                    onClick={addContextArtifact}
+                  >
+                    Create Artifact
+                  </button>
+                </div>
+              </div>
+              <button
+                aria-label="Close add artifact modal"
+                className="modal-backdrop"
+                onClick={() => setAddArtifactModalOpen(false)}
+              />
+            </div>
           </>
         )}
       </div>

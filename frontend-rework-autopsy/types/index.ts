@@ -1,5 +1,4 @@
 export type {
-  ApiResponses,
   AutopsySummary,
   ContextArtifact,
   IsoDateTime,

@@ -104,11 +104,3 @@ export type ReworkEventDetail = {
   followup_pr: ReworkEventDetailPullRequest;
   context_artifacts: ReworkEventDetailContextArtifact[];
 };
-
-export type ApiResponses = {
-  "/api/autopsy/summary": AutopsySummary;
-  "/api/pull-requests": PullRequest[];
-  "/api/rework-events": ReworkEvent[];
-  [path: `/api/rework-events/${string}`]: ReworkEventDetail;
-  "/api/context-artifacts": ContextArtifact[];
-};
