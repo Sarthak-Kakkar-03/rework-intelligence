@@ -579,7 +579,9 @@ export default function Home() {
                         }
                         value={sourcePrRepoId}
                       >
-                        <option value="">Choose repo</option>
+                        <option disabled value="">
+                          Choose repo
+                        </option>
                         {repos.map((repo) => (
                           <option key={repo.id} value={repo.id}>
                             {repo.name}
@@ -702,7 +704,9 @@ export default function Home() {
                         }
                         value={followupPrRepoId}
                       >
-                        <option value="">Choose repo</option>
+                        <option disabled value="">
+                          Choose repo
+                        </option>
                         {repos.map((repo) => (
                           <option key={repo.id} value={repo.id}>
                             {repo.name}

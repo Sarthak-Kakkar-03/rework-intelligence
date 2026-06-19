@@ -223,7 +223,7 @@ def get_pull_requests_ordered_by_closed_at() -> list[PullRequest]:
           review_comments,
           ai_generated
         FROM pull_requests
-        ORDER BY datetime(closed_at) ASC, id ASC
+        ORDER BY closed_at ASC, id ASC
     """
 
     with closing(get_connection()) as conn:
