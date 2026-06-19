@@ -4,6 +4,7 @@ from app.api.models import (
     AutopsySummary,
     ContextArtifact,
     PullRequest,
+    PullRequestFile,
     ReworkEvent,
     ReworkEventDetail,
     ReworkEventDetailContextArtifact,
@@ -109,6 +110,71 @@ def get_pull_requests() -> list[PullRequest]:
                 comments=row["comments"],
                 review_comments=row["review_comments"],
                 ai_generated=bool(row["ai_generated"]),
+            )
+            for row in rows
+        ]
+
+
+def get_pull_request_files() -> list[PullRequestFile]:
+    """
+    Retrieves all changed-file records for pull requests.
+
+    Returns:
+        A list of PullRequestFile objects ordered by pull request and file path.
+    """
+    sql = """
+        SELECT
+          id,
+          pull_request_id,
+          file_path,
+          additions,
+          deletions
+        FROM pull_request_files
+        ORDER BY pull_request_id, file_path
+    """
+
+    with closing(get_connection()) as conn:
+        rows = conn.execute(sql).fetchall()
+        return [
+            PullRequestFile(
+                id=row["id"],
+                pull_request_id=row["pull_request_id"],
+                file_path=row["file_path"],
+                additions=row["additions"],
+                deletions=row["deletions"],
+            )
+            for row in rows
+        ]
+
+
+def get_pull_request_files_by_pr_id(pull_request_id: int) -> list[PullRequestFile]:
+    """
+    Retrieves changed-file records for one pull request.
+
+    Returns:
+        A list of PullRequestFile objects ordered by file path.
+    """
+    sql = """
+        SELECT
+          id,
+          pull_request_id,
+          file_path,
+          additions,
+          deletions
+        FROM pull_request_files
+        WHERE pull_request_id = ?
+        ORDER BY file_path
+    """
+
+    with closing(get_connection()) as conn:
+        rows = conn.execute(sql, (pull_request_id,)).fetchall()
+        return [
+            PullRequestFile(
+                id=row["id"],
+                pull_request_id=row["pull_request_id"],
+                file_path=row["file_path"],
+                additions=row["additions"],
+                deletions=row["deletions"],
             )
             for row in rows
         ]

@@ -29,6 +29,14 @@ class PullRequest(BaseModel):
     ai_generated: bool = False
 
 
+class PullRequestFile(BaseModel):
+    id: str
+    pull_request_id: int
+    file_path: str
+    additions: int = Field(default=0, ge=0)
+    deletions: int = Field(default=0, ge=0)
+
+
 class ReworkEvent(BaseModel):
     id: str
     source_pr_id: int
