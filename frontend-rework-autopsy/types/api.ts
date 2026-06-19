@@ -26,6 +26,20 @@ export type PullRequest = {
   ai_generated: boolean;
 };
 
+export type PullRequestFile = {
+  id: string;
+  pull_request_id: number;
+  file_path: string;
+  additions: number;
+  deletions: number;
+};
+
+export type Repo = {
+  id: string;
+  name: string;
+  team_id: string;
+};
+
 export type ReworkEvent = {
   id: string;
   source_pr_id: number;

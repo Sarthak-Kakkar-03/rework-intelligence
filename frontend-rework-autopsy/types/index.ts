@@ -3,6 +3,8 @@ export type {
   ContextArtifact,
   IsoDateTime,
   PullRequest,
+  PullRequestFile,
+  Repo,
   ReworkEvent,
   ReworkEventDetail,
   ReworkEventDetailContextArtifact,

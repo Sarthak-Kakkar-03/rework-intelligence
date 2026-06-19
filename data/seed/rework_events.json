@@ -1,38 +1,38 @@
 [
   {
-    "id": "RW-501",
+    "id": "RW-1001-1002",
     "source_pr_id": 1001,
     "followup_pr_id": 1002,
-    "detected_from": "followup_pr",
-    "rework_type": "fix_forward",
+    "detected_from": "detector",
+    "rework_type": "computed_rework",
     "severity": "medium",
     "days_after_merge": 3,
-    "human_hours_spent": 5.5,
+    "human_hours_spent": 4.8,
     "root_cause_label": "missing_domain_constraint",
-    "summary": "AI-generated retry logic was followed by a non-AI fix in the same repo after duplicate Jira links appeared during replay."
+    "summary": "PR 41 was followed by PR 42 in repo-jira-sync-worker; matched signals: Non AI PR within 2 weeks, Detected Overlapping files, Followup has rework language."
   },
   {
-    "id": "RW-502",
+    "id": "RW-1003-1004",
     "source_pr_id": 1003,
     "followup_pr_id": 1004,
-    "detected_from": "explicit_rework_marker",
-    "rework_type": "explicit_rework",
+    "detected_from": "detector",
+    "rework_type": "computed_rework",
     "severity": "low",
     "days_after_merge": 16,
-    "human_hours_spent": 2,
+    "human_hours_spent": 1.8,
     "root_cause_label": "missing_environment_context",
-    "summary": "A same-repo follow-up PR explicitly used #rework to mark the staging-only GitHub App auth context gap."
+    "summary": "PR 58 was followed by PR 59 in repo-github-ingest-service; matched signals: Rework Override Indicated."
   },
   {
-    "id": "RW-503",
+    "id": "RW-1005-1006",
     "source_pr_id": 1005,
     "followup_pr_id": 1006,
-    "detected_from": "followup_pr",
-    "rework_type": "late_fix_forward",
-    "severity": "medium",
+    "detected_from": "detector",
+    "rework_type": "computed_rework",
+    "severity": "low",
     "days_after_merge": 17,
-    "human_hours_spent": 4,
+    "human_hours_spent": 2.8,
     "root_cause_label": "schema_contract_drift",
-    "summary": "A later non-AI fix touched the same deployment risk schema file and used fix language after the AI-generated payload rename."
+    "summary": "PR 51 was followed by PR 52 in repo-deployment-risk-api; matched signals: Detected Overlapping files, Followup has rework language."
   }
 ]

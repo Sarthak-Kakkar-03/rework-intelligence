@@ -1,10 +1,12 @@
 from contextlib import closing
+import hashlib
 
 from app.api.models import (
     AutopsySummary,
     ContextArtifact,
     PullRequest,
     PullRequestFile,
+    Repo,
     ReworkEvent,
     ReworkEventDetail,
     ReworkEventDetailContextArtifact,
@@ -13,6 +15,38 @@ from app.api.models import (
 )
 from app.db import get_connection
 from app.services.rework_detection.models import ReworkCandidate
+
+
+def _rework_candidate_id(candidate: ReworkCandidate) -> str:
+    return f"RW-{candidate.source_pr_id}-{candidate.followup_pr_id}"
+
+
+def _pull_request_file_id(pull_request_id: int, file_path: str) -> str:
+    file_key = f"{pull_request_id}:{file_path}"
+    file_hash = hashlib.sha1(file_key.encode("utf-8")).hexdigest()[:12]
+    return f"PRF-{file_hash}"
+
+
+def _normalize_file_path(file_path: str) -> str:
+    normalized_path = file_path.strip().replace("\\", "/")
+    while normalized_path.startswith("./"):
+        normalized_path = normalized_path[2:]
+    while "//" in normalized_path:
+        normalized_path = normalized_path.replace("//", "/")
+    return normalized_path
+
+
+def _clean_file_paths(file_paths: list[str]) -> list[str]:
+    clean_file_paths = []
+    seen_file_paths = set()
+
+    for file_path in file_paths:
+        clean_file_path = _normalize_file_path(file_path)
+        if clean_file_path and clean_file_path not in seen_file_paths:
+            clean_file_paths.append(clean_file_path)
+            seen_file_paths.add(clean_file_path)
+
+    return clean_file_paths
 
 
 def get_autopsy_summary() -> AutopsySummary:
@@ -46,6 +80,46 @@ def get_autopsy_summary() -> AutopsySummary:
             total_rework_hours=row["total_rework_hours"],
             avg_days_after_merge=row["avg_days_after_merge"],
         )
+
+
+def get_repos() -> list[Repo]:
+    """
+    Retrieves all repository records from the database.
+    """
+    sql = """
+        SELECT
+          id,
+          name,
+          team_id
+        FROM repos
+        ORDER BY name
+    """
+
+    with closing(get_connection()) as conn:
+        rows = conn.execute(sql).fetchall()
+        return [
+            Repo(
+                id=row["id"],
+                name=row["name"],
+                team_id=row["team_id"],
+            )
+            for row in rows
+        ]
+
+
+def get_next_pull_request_number(repo_id: str) -> int:
+    """
+    Returns the next pull request number for a repository.
+    """
+    sql = """
+        SELECT COALESCE(MAX(number), 0) + 1 AS next_number
+        FROM pull_requests
+        WHERE repo_id = ?
+    """
+
+    with closing(get_connection()) as conn:
+        row = conn.execute(sql, (repo_id,)).fetchone()
+        return row["next_number"]
 
 
 def get_pull_requests() -> list[PullRequest]:
@@ -293,11 +367,18 @@ def get_rework_events() -> list[ReworkEvent]:
 
 def clear_rework_events() -> None:
     """
-    Deletes all computed rework events and their dependent context artifacts.
+    Deletes rework events that do not have dependent context artifacts.
     """
     with closing(get_connection()) as conn:
-        conn.execute("DELETE FROM context_artifacts")
-        conn.execute("DELETE FROM rework_events")
+        conn.execute(
+            """
+            DELETE FROM rework_events
+            WHERE id NOT IN (
+              SELECT rework_event_id
+              FROM context_artifacts
+            )
+            """
+        )
         conn.commit()
 
 
@@ -323,7 +404,7 @@ def insert_rework_candidates(rework_candidates: list[ReworkCandidate]) -> None:
 
     values = [
         (
-            f"RW-{index + 1:03d}",
+            _rework_candidate_id(candidate),
             candidate.source_pr_id,
             candidate.followup_pr_id,
             "detector",
@@ -344,7 +425,7 @@ def insert_rework_candidates(rework_candidates: list[ReworkCandidate]) -> None:
 
 def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
     """
-    Replaces rework events with detected candidates in one transaction.
+    Upserts detected rework events and removes stale events without artifacts.
     """
     sql = """
         INSERT INTO rework_events (
@@ -360,11 +441,20 @@ def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
           summary
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+          source_pr_id = excluded.source_pr_id,
+          followup_pr_id = excluded.followup_pr_id,
+          detected_from = excluded.detected_from,
+          rework_type = excluded.rework_type,
+          severity = excluded.severity,
+          days_after_merge = excluded.days_after_merge,
+          human_hours_spent = excluded.human_hours_spent,
+          summary = excluded.summary
     """
 
     values = [
         (
-            f"RW-{index + 1:03d}",
+            _rework_candidate_id(candidate),
             candidate.source_pr_id,
             candidate.followup_pr_id,
             "detector",
@@ -380,8 +470,34 @@ def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
 
     with closing(get_connection()) as conn:
         try:
-            conn.execute("DELETE FROM context_artifacts")
-            conn.execute("DELETE FROM rework_events")
+            candidate_ids = [
+                _rework_candidate_id(candidate) for candidate in rework_candidates
+            ]
+
+            if candidate_ids:
+                placeholders = ", ".join("?" for _ in candidate_ids)
+                conn.execute(
+                    f"""
+                    DELETE FROM rework_events
+                    WHERE id NOT IN ({placeholders})
+                      AND id NOT IN (
+                        SELECT rework_event_id
+                        FROM context_artifacts
+                      )
+                    """,
+                    candidate_ids,
+                )
+            else:
+                conn.execute(
+                    """
+                    DELETE FROM rework_events
+                    WHERE id NOT IN (
+                      SELECT rework_event_id
+                      FROM context_artifacts
+                    )
+                    """
+                )
+
             conn.executemany(sql, values)
             conn.commit()
         except Exception:
@@ -545,6 +661,162 @@ def insert_pull_request(pull_request: PullRequest) -> PullRequest:
             ),
         )
         conn.commit()
+
+    return pull_request
+
+
+def insert_pull_request_files(
+    pull_request_id: int,
+    file_paths: list[str],
+) -> list[PullRequestFile]:
+    sql = """
+        INSERT INTO pull_request_files (
+          id,
+          pull_request_id,
+          file_path,
+          additions,
+          deletions
+        )
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT DO NOTHING
+    """
+
+    clean_file_paths = _clean_file_paths(file_paths)
+
+    pull_request_files = [
+        PullRequestFile(
+            id=_pull_request_file_id(pull_request_id, file_path),
+            pull_request_id=pull_request_id,
+            file_path=file_path,
+            additions=0,
+            deletions=0,
+        )
+        for file_path in clean_file_paths
+    ]
+
+    with closing(get_connection()) as conn:
+        conn.executemany(
+            sql,
+            [
+                (
+                    pull_request_file.id,
+                    pull_request_file.pull_request_id,
+                    pull_request_file.file_path,
+                    pull_request_file.additions,
+                    pull_request_file.deletions,
+                )
+                for pull_request_file in pull_request_files
+            ],
+        )
+        conn.commit()
+
+    return get_pull_request_files_by_pr_id(pull_request_id)
+
+
+def insert_pull_request_with_files(
+    pull_request: PullRequest,
+    file_paths: list[str],
+) -> PullRequest:
+    pull_request_sql = """
+        INSERT INTO pull_requests (
+          id,
+          number,
+          repo_id,
+          title,
+          body,
+          state,
+          draft,
+          created_at,
+          updated_at,
+          closed_at,
+          merged_at,
+          merged,
+          author_login,
+          merged_by_login,
+          base_branch,
+          head_branch,
+          additions,
+          deletions,
+          changed_files,
+          commits,
+          comments,
+          review_comments,
+          ai_generated
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+    pull_request_file_sql = """
+        INSERT INTO pull_request_files (
+          id,
+          pull_request_id,
+          file_path,
+          additions,
+          deletions
+        )
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT DO NOTHING
+    """
+
+    pull_request_files = [
+        PullRequestFile(
+            id=_pull_request_file_id(pull_request.id, file_path),
+            pull_request_id=pull_request.id,
+            file_path=file_path,
+            additions=0,
+            deletions=0,
+        )
+        for file_path in _clean_file_paths(file_paths)
+    ]
+
+    with closing(get_connection()) as conn:
+        try:
+            conn.execute(
+                pull_request_sql,
+                (
+                    pull_request.id,
+                    pull_request.number,
+                    pull_request.repo_id,
+                    pull_request.title,
+                    pull_request.body,
+                    pull_request.state,
+                    int(pull_request.draft),
+                    pull_request.created_at.isoformat(),
+                    pull_request.updated_at.isoformat(),
+                    pull_request.closed_at.isoformat(),
+                    pull_request.merged_at.isoformat()
+                    if pull_request.merged_at
+                    else None,
+                    int(pull_request.merged),
+                    pull_request.author_login,
+                    pull_request.merged_by_login,
+                    pull_request.base_branch,
+                    pull_request.head_branch,
+                    pull_request.additions,
+                    pull_request.deletions,
+                    pull_request.changed_files,
+                    pull_request.commits,
+                    pull_request.comments,
+                    pull_request.review_comments,
+                    int(pull_request.ai_generated),
+                ),
+            )
+            conn.executemany(
+                pull_request_file_sql,
+                [
+                    (
+                        pull_request_file.id,
+                        pull_request_file.pull_request_id,
+                        pull_request_file.file_path,
+                        pull_request_file.additions,
+                        pull_request_file.deletions,
+                    )
+                    for pull_request_file in pull_request_files
+                ],
+            )
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
 
     return pull_request
 

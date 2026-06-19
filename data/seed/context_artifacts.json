@@ -2,7 +2,7 @@
   {
     "id": "CTX-12",
     "name": "Jira Sync Idempotency Contract",
-    "rework_event_id": "RW-501",
+    "rework_event_id": "RW-1001-1002",
     "artifact_type": "runbook",
     "repo_id": "repo-jira-sync-worker",
     "team_id": "team-data-integrations",
@@ -12,7 +12,7 @@
   {
     "id": "CTX-18",
     "name": "GitHub App Staging Auth Runbook",
-    "rework_event_id": "RW-502",
+    "rework_event_id": "RW-1003-1004",
     "artifact_type": "runbook",
     "repo_id": "repo-github-ingest-service",
     "team_id": "team-data-integrations",
@@ -22,7 +22,7 @@
   {
     "id": "CTX-34",
     "name": "Deployment Risk Payload Compatibility Contract",
-    "rework_event_id": "RW-503",
+    "rework_event_id": "RW-1005-1006",
     "artifact_type": "schema_contract",
     "repo_id": "repo-deployment-risk-api",
     "team_id": "team-platform",

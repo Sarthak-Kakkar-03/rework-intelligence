@@ -3,6 +3,12 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 
+class Repo(BaseModel):
+    id: str
+    name: str
+    team_id: str
+
+
 class PullRequest(BaseModel):
     id: int
     number: int
@@ -35,6 +41,25 @@ class PullRequestFile(BaseModel):
     file_path: str
     additions: int = Field(default=0, ge=0)
     deletions: int = Field(default=0, ge=0)
+
+
+class PullRequestFilesCreate(BaseModel):
+    file_paths: list[str]
+
+
+class PullRequestCreate(BaseModel):
+    title: str
+    body: str
+    author_login: str
+    merged_by_login: str
+    head_branch: str
+    ai_generated: bool
+    repo_id: str
+
+
+class PullRequestWithFilesCreate(BaseModel):
+    pull_request: PullRequestCreate
+    file_paths: list[str]
 
 
 class ReworkEvent(BaseModel):
@@ -107,17 +132,6 @@ class ReworkEventDetail(BaseModel):
     source_pr: ReworkEventDetailPullRequest
     followup_pr: ReworkEventDetailPullRequest
     context_artifacts: list[ReworkEventDetailContextArtifact] = []
-
-
-class PullRequestCreate(BaseModel):
-    title: str
-    body: str
-    author_login: str
-    merged_by_login: str
-    head_branch: str
-    ai_generated: bool
-    number: int
-    repo_id: str
 
 
 class ReworkRecomputeResult(BaseModel):
