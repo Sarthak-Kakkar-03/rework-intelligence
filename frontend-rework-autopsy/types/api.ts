@@ -68,6 +68,11 @@ export type AutopsySummary = {
   }[];
 };
 
+export type ReworkRecomputeResult = {
+  rework_event_count: number;
+  message: string;
+};
+
 export type ReworkEventDetailEvent = {
   id: string;
   severity: string;

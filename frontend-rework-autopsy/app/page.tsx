@@ -8,6 +8,7 @@ import type {
   ContextArtifact,
   PullRequest,
   ReworkEvent,
+  ReworkRecomputeResult,
 } from "@/types";
 
 const API_BASE_URL =
@@ -52,6 +53,10 @@ export default function Home() {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isComputingRework, setIsComputingRework] = useState(false);
+  const [computeReworkMessage, setComputeReworkMessage] = useState<
+    string | null
+  >(null);
 
   const [addPrModalOpen, setAddPrModalOpen] = useState(false);
   const [addPrError, setAddPrError] = useState<string | null>(null);
@@ -64,46 +69,42 @@ export default function Home() {
   const [newPrNumber, setNewPrNumber] = useState("");
   const [newPrRepoId, setNewPrRepoId] = useState("");
 
-  useEffect(() => {
-    async function loadDashboardData() {
-      try {
-        setLoading(true);
-        setError(null);
+  async function loadDashboardData() {
+    try {
+      setLoading(true);
+      setError(null);
 
-        const [summaryResponse, eventsResponse, artifactsResponse] =
-          await Promise.all([
-            fetch(`${API_BASE_URL}/api/autopsy/summary`),
-            fetch(`${API_BASE_URL}/api/rework-events`),
-            fetch(`${API_BASE_URL}/api/context-artifacts`),
-          ]);
-
-        if (
-          !summaryResponse.ok ||
-          !eventsResponse.ok ||
-          !artifactsResponse.ok
-        ) {
-          throw new Error("One or more dashboard requests failed.");
-        }
-
-        const [summaryData, eventsData, artifactsData] = await Promise.all([
-          summaryResponse.json() as Promise<AutopsySummary>,
-          eventsResponse.json() as Promise<ReworkEvent[]>,
-          artifactsResponse.json() as Promise<ContextArtifact[]>,
+      const [summaryResponse, eventsResponse, artifactsResponse] =
+        await Promise.all([
+          fetch(`${API_BASE_URL}/api/autopsy/summary`),
+          fetch(`${API_BASE_URL}/api/rework-events`),
+          fetch(`${API_BASE_URL}/api/context-artifacts`),
         ]);
 
-        setSummary(summaryData);
-        setReworkEvents(eventsData);
-        setContextArtifacts(artifactsData);
-      } catch {
-        setError(
-          `Unable to load dashboard data. Make sure the backend is running on ${API_BASE_URL}.`,
-        );
-      } finally {
-        setLoading(false);
+      if (!summaryResponse.ok || !eventsResponse.ok || !artifactsResponse.ok) {
+        throw new Error("One or more dashboard requests failed.");
       }
-    }
 
-    loadDashboardData();
+      const [summaryData, eventsData, artifactsData] = await Promise.all([
+        summaryResponse.json() as Promise<AutopsySummary>,
+        eventsResponse.json() as Promise<ReworkEvent[]>,
+        artifactsResponse.json() as Promise<ContextArtifact[]>,
+      ]);
+
+      setSummary(summaryData);
+      setReworkEvents(eventsData);
+      setContextArtifacts(artifactsData);
+    } catch {
+      setError(
+        `Unable to load dashboard data. Make sure the backend is running on ${API_BASE_URL}.`,
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    void Promise.resolve().then(() => loadDashboardData());
   }, []);
 
   const rootCauseCounts =
@@ -174,7 +175,38 @@ export default function Home() {
       });
       setAddPrModalOpen(false);
     } catch {
-      setAddPrError("Unable to create Pull Request, make sure backend is working.");
+      setAddPrError(
+        "Unable to create Pull Request, make sure backend is working.",
+      );
+    }
+  }
+
+  async function computeRework() {
+    try {
+      setIsComputingRework(true);
+      setComputeReworkMessage(null);
+      setError(null);
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/ingest/rework-events/recompute`,
+        {
+          method: "POST",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Rework recompute request failed.");
+      }
+
+      const result = (await response.json()) as ReworkRecomputeResult;
+      setComputeReworkMessage(result.message);
+      await loadDashboardData();
+    } catch {
+      setError(
+        `Unable to compute rework events. Make sure the backend is running on ${API_BASE_URL}.`,
+      );
+    } finally {
+      setIsComputingRework(false);
     }
   }
 
@@ -200,6 +232,12 @@ export default function Home() {
         {error && (
           <div className="alert alert-error">
             <span>{error}</span>
+          </div>
+        )}
+
+        {computeReworkMessage && (
+          <div className="alert alert-success">
+            <span>{computeReworkMessage}</span>
           </div>
         )}
 
@@ -367,8 +405,12 @@ export default function Home() {
               >
                 Add PR
               </button>
-              <button className="btn btn-ghost btn-primary btn-lg">
-                Refresh
+              <button
+                className="btn btn-ghost btn-primary btn-lg"
+                disabled={isComputingRework}
+                onClick={computeRework}
+              >
+                {isComputingRework ? "Computing..." : "Compute Rework"}
               </button>
             </section>
 
