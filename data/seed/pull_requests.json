@@ -23,9 +23,7 @@
     "comments": 6,
     "review_comments": 13,
     "linked_issue_key": "ENG-219",
-    "ai_assisted": 1,
-    "ai_tool": "Cursor",
-    "work_type": "retry_logic"
+    "ai_generated": true
   },
   {
     "id": 1048,
@@ -51,9 +49,7 @@
     "comments": 4,
     "review_comments": 8,
     "linked_issue_key": "ENG-231",
-    "ai_assisted": 0,
-    "ai_tool": null,
-    "work_type": "fix_forward"
+    "ai_generated": false
   },
   {
     "id": 1051,
@@ -79,9 +75,7 @@
     "comments": 3,
     "review_comments": 5,
     "linked_issue_key": "ENG-244",
-    "ai_assisted": 1,
-    "ai_tool": "GitHub Copilot",
-    "work_type": "schema_refactor"
+    "ai_generated": true
   },
   {
     "id": 1054,
@@ -107,9 +101,7 @@
     "comments": 2,
     "review_comments": 3,
     "linked_issue_key": "ENG-251",
-    "ai_assisted": 0,
-    "ai_tool": null,
-    "work_type": "dashboard_fix"
+    "ai_generated": false
   },
   {
     "id": 1058,
@@ -135,9 +127,7 @@
     "comments": 5,
     "review_comments": 10,
     "linked_issue_key": "ENG-260",
-    "ai_assisted": 1,
-    "ai_tool": "Claude Code",
-    "work_type": "test_generation"
+    "ai_generated": true
   },
   {
     "id": 1062,
@@ -163,9 +153,7 @@
     "comments": 3,
     "review_comments": 4,
     "linked_issue_key": "ENG-267",
-    "ai_assisted": 0,
-    "ai_tool": null,
-    "work_type": "staging_fix"
+    "ai_generated": false
   },
   {
     "id": 1065,
@@ -191,9 +179,7 @@
     "comments": 7,
     "review_comments": 12,
     "linked_issue_key": "ENG-272",
-    "ai_assisted": 1,
-    "ai_tool": "Cursor",
-    "work_type": "scoring_logic"
+    "ai_generated": true
   },
   {
     "id": 1068,
@@ -219,9 +205,7 @@
     "comments": 2,
     "review_comments": 4,
     "linked_issue_key": "ENG-280",
-    "ai_assisted": 0,
-    "ai_tool": null,
-    "work_type": "error_handling"
+    "ai_generated": false
   },
   {
     "id": 1071,
@@ -247,9 +231,7 @@
     "comments": 4,
     "review_comments": 6,
     "linked_issue_key": null,
-    "ai_assisted": 1,
-    "ai_tool": "GitHub Copilot",
-    "work_type": "dashboard_feature"
+    "ai_generated": true
   },
   {
     "id": 1074,
@@ -275,9 +257,7 @@
     "comments": 2,
     "review_comments": 3,
     "linked_issue_key": null,
-    "ai_assisted": 0,
-    "ai_tool": null,
-    "work_type": "metadata_cleanup"
+    "ai_generated": false
   },
   {
     "id": 1077,
@@ -303,9 +283,7 @@
     "comments": 3,
     "review_comments": 5,
     "linked_issue_key": null,
-    "ai_assisted": 1,
-    "ai_tool": "Cursor",
-    "work_type": "refactor"
+    "ai_generated": true
   },
   {
     "id": 1080,
@@ -331,8 +309,6 @@
     "comments": 4,
     "review_comments": 7,
     "linked_issue_key": null,
-    "ai_assisted": 1,
-    "ai_tool": "Claude Code",
-    "work_type": "api_integration"
+    "ai_generated": true
   }
 ]

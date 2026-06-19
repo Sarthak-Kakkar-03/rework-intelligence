@@ -144,9 +144,9 @@ export default function Home() {
               </div>
 
               <div className="stat">
-                <div className="stat-title">AI-assisted PRs</div>
+                <div className="stat-title">AI-generated PRs</div>
                 <div className="stat-value text-2xl">
-                  {summary?.ai_assisted_pr_count ?? 0}
+                  {summary?.ai_generated_pr_count ?? 0}
                 </div>
               </div>
 

@@ -4,7 +4,7 @@ The prototype uses local synthetic JSON data, but the shape should stay close to
 
 ## Include
 
-- AI-assisted PR metadata
+- AI-generated PR metadata
 - Follow-up or rework PR metadata
 - PR titles and descriptions
 - Labels

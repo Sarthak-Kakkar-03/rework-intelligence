@@ -24,9 +24,7 @@ export type PullRequest = {
   comments: number;
   review_comments: number;
   linked_issue_key: string | null;
-  ai_assisted: boolean;
-  ai_tool: string | null;
-  work_type: string;
+  ai_generated: boolean;
 };
 
 export type ReworkEvent = {
@@ -64,7 +62,7 @@ export type AutopsySummary = {
   pull_request_count: number;
   rework_event_count: number;
   context_artifact_count: number;
-  ai_assisted_pr_count: number;
+  ai_generated_pr_count: number;
   total_rework_hours: number;
   avg_days_after_merge: number;
   top_root_causes?: {
@@ -87,8 +85,7 @@ export type ReworkEventDetailPullRequest = {
   number: number;
   title: string;
   repo_name: string;
-  ai_assisted: boolean | null;
-  ai_tool: string | null;
+  ai_generated: boolean | null;
 };
 
 export type ReworkEventDetailContextArtifact = {

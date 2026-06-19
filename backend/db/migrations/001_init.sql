@@ -55,9 +55,7 @@ CREATE TABLE IF NOT EXISTS pull_requests (
   review_comments INTEGER NOT NULL DEFAULT 0,
 
   linked_issue_key TEXT,
-  ai_assisted INTEGER NOT NULL DEFAULT 0,
-  ai_tool TEXT,
-  work_type TEXT NOT NULL,
+  ai_generated INTEGER NOT NULL DEFAULT 0,
 
   UNIQUE (repo_id, number),
   FOREIGN KEY (repo_id) REFERENCES repos(id),

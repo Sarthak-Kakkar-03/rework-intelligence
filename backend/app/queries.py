@@ -18,7 +18,7 @@ def get_autopsy_summary() -> AutopsySummary:
     Fetch aggregate metrics and entity counts from the database.
 
     Returns:
-        An AutopsySummary containing counts of teams, repos, issues, pull requests, rework events, context artifacts, AI-assisted pull requests, total rework hours, and average days after merge.
+        An AutopsySummary containing counts of teams, repos, issues, pull requests, rework events, context artifacts, AI-generated pull requests, total rework hours, and average days after merge.
     """
     sql = """
         SELECT
@@ -28,7 +28,7 @@ def get_autopsy_summary() -> AutopsySummary:
           (SELECT COUNT(*) FROM pull_requests) AS pull_request_count,
           (SELECT COUNT(*) FROM rework_events) AS rework_event_count,
           (SELECT COUNT(*) FROM context_artifacts) AS context_artifact_count,
-          (SELECT COUNT(*) FROM pull_requests WHERE ai_assisted = 1) AS ai_assisted_pr_count,
+          (SELECT COUNT(*) FROM pull_requests WHERE ai_generated = 1) AS ai_generated_pr_count,
           COALESCE((SELECT SUM(human_hours_spent) FROM rework_events), 0) AS total_rework_hours,
           COALESCE((SELECT ROUND(AVG(days_after_merge), 1) FROM rework_events), 0) AS avg_days_after_merge
     """
@@ -42,7 +42,7 @@ def get_autopsy_summary() -> AutopsySummary:
             pull_request_count=row["pull_request_count"],
             rework_event_count=row["rework_event_count"],
             context_artifact_count=row["context_artifact_count"],
-            ai_assisted_pr_count=row["ai_assisted_pr_count"],
+            ai_generated_pr_count=row["ai_generated_pr_count"],
             total_rework_hours=row["total_rework_hours"],
             avg_days_after_merge=row["avg_days_after_merge"],
         )
@@ -80,9 +80,7 @@ def get_pull_requests() -> list[PullRequest]:
           comments,
           review_comments,
           linked_issue_key,
-          ai_assisted,
-          ai_tool,
-          work_type
+          ai_generated
         FROM pull_requests
         ORDER BY created_at DESC, id DESC
     """
@@ -114,9 +112,7 @@ def get_pull_requests() -> list[PullRequest]:
                 comments=row["comments"],
                 review_comments=row["review_comments"],
                 linked_issue_key=row["linked_issue_key"],
-                ai_assisted=bool(row["ai_assisted"]),
-                ai_tool=row["ai_tool"],
-                work_type=row["work_type"],
+                ai_generated=bool(row["ai_generated"]),
             )
             for row in rows
         ]
@@ -282,8 +278,7 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
           source_pr.number AS source_pr_number,
           source_pr.title AS source_pr_title,
           source_repo.name AS source_repo_name,
-          source_pr.ai_assisted AS source_pr_ai_assisted,
-          source_pr.ai_tool AS source_pr_ai_tool,
+          source_pr.ai_generated AS source_pr_ai_generated,
 
           followup_pr.id AS followup_pr_id,
           followup_pr.number AS followup_pr_number,
@@ -342,8 +337,7 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
             number=row["source_pr_number"],
             title=row["source_pr_title"],
             repo_name=row["source_repo_name"],
-            ai_assisted=bool(row["source_pr_ai_assisted"]),
-            ai_tool=row["source_pr_ai_tool"],
+            ai_generated=bool(row["source_pr_ai_generated"]),
         ),
         followup_pr=ReworkEventDetailPullRequest(
             id=row["followup_pr_id"],

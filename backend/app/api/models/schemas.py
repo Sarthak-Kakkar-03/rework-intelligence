@@ -27,9 +27,7 @@ class PullRequest(BaseModel):
     comments: int = Field(default=0, ge=0)
     review_comments: int = Field(default=0, ge=0)
     linked_issue_key: str | None = None
-    ai_assisted: bool = False
-    ai_tool: str | None = None
-    work_type: str
+    ai_generated: bool = False
 
 
 class ReworkEvent(BaseModel):
@@ -70,7 +68,7 @@ class AutopsySummary(BaseModel):
     pull_request_count: int = Field(ge=0)
     rework_event_count: int = Field(ge=0)
     context_artifact_count: int = Field(ge=0)
-    ai_assisted_pr_count: int = Field(ge=0)
+    ai_generated_pr_count: int = Field(ge=0)
     total_rework_hours: float = Field(ge=0)
     avg_days_after_merge: float = Field(ge=0)
 
@@ -89,8 +87,7 @@ class ReworkEventDetailPullRequest(BaseModel):
     number: int
     title: str
     repo_name: str
-    ai_assisted: bool | None = None
-    ai_tool: str | None = None
+    ai_generated: bool | None = None
 
 
 class ReworkEventDetailContextArtifact(BaseModel):
