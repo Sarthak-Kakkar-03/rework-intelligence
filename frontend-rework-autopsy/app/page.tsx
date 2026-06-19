@@ -54,6 +54,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   const [addPrModalOpen, setAddPrModalOpen] = useState(false);
+  const [addPrError, setAddPrError] = useState<string | null>(null);
   const [newPrTitle, setNewPrTitle] = useState("");
   const [newPrBody, setNewPrBody] = useState("");
   const [newPrAuthorLogin, setNewPrAuthorLogin] = useState("");
@@ -121,12 +122,20 @@ export default function Home() {
     setNewPrAIGenerated(false);
     setNewPrNumber("");
     setNewPrRepoId("");
+    setAddPrError(null);
     setAddPrModalOpen(true);
   }
 
   async function addPullRequest() {
     try {
-      setError(null);
+      setAddPrError(null);
+
+      const prNumber = Number(newPrNumber);
+
+      if (!Number.isInteger(prNumber) || prNumber <= 0) {
+        setAddPrError("PR number must be a positive whole number.");
+        return;
+      }
 
       const response = await fetch(`${API_BASE_URL}/api/ingest/pull-request`, {
         method: "POST",
@@ -140,7 +149,7 @@ export default function Home() {
           merged_by_login: newPrMergedByLogin,
           head_branch: newPrHeadBranch,
           ai_generated: newPrAIGenerated,
-          number: Number(newPrNumber),
+          number: prNumber,
           repo_id: newPrRepoId,
         }),
       });
@@ -165,7 +174,7 @@ export default function Home() {
       });
       setAddPrModalOpen(false);
     } catch {
-      setError("Unable to create Pull Request, make sure backend is working");
+      setAddPrError("Unable to create Pull Request, make sure backend is working.");
     }
   }
 
@@ -369,6 +378,12 @@ export default function Home() {
                 <p className="mt-1 text-sm text-base-content/70">
                   Create a closed pull request record for the prototype data.
                 </p>
+
+                {addPrError && (
+                  <div className="alert alert-error mt-4">
+                    <span>{addPrError}</span>
+                  </div>
+                )}
 
                 <div className="mt-5 grid gap-4 md:grid-cols-2">
                   <label className="form-control md:col-span-2">

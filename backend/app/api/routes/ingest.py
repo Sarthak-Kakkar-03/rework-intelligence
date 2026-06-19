@@ -1,4 +1,5 @@
 import uuid
+import sqlite3
 from datetime import datetime, timezone, timedelta
 
 from fastapi import APIRouter, HTTPException
@@ -73,4 +74,11 @@ def ingest_pull_request(pull_request: PullRequestCreate) -> PullRequest:
         review_comments=randint(3, 9),
         ai_generated=pull_request.ai_generated,
     )
-    return insert_pull_request(pull_request=pull_request)
+
+    try:
+        return insert_pull_request(pull_request=pull_request)
+    except sqlite3.IntegrityError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Pull request could not be created: {exc}",
+        ) from exc
