@@ -37,9 +37,28 @@ logger = logging.getLogger(__name__)
 MAX_PULL_REQUEST_CREATE_ATTEMPTS = 3
 
 
+def _clean_file_paths(file_paths: list[str]) -> list[str]:
+    clean_file_paths = []
+    seen_file_paths = set()
+
+    for file_path in file_paths:
+        clean_file_path = file_path.strip().replace("\\", "/")
+        while clean_file_path.startswith("./"):
+            clean_file_path = clean_file_path[2:]
+        while "//" in clean_file_path:
+            clean_file_path = clean_file_path.replace("//", "/")
+
+        if clean_file_path and clean_file_path not in seen_file_paths:
+            clean_file_paths.append(clean_file_path)
+            seen_file_paths.add(clean_file_path)
+
+    return clean_file_paths
+
+
 def _build_pull_request(
     pull_request: PullRequestCreate,
     pull_request_number: int,
+    changed_files: int = 0,
 ) -> PullRequest:
     """
     Builds a pull request object from creation data.
@@ -73,7 +92,7 @@ def _build_pull_request(
         head_branch=pull_request.head_branch,
         additions=240,
         deletions=60,
-        changed_files=4,
+        changed_files=changed_files,
         commits=3,
         comments=6,
         review_comments=6,
@@ -154,6 +173,7 @@ def ingest_pull_request_with_files(
     request: PullRequestWithFilesCreate,
 ) -> PullRequest:
     last_error: sqlite3.IntegrityError | None = None
+    clean_file_paths = _clean_file_paths(request.file_paths)
 
     for _ in range(MAX_PULL_REQUEST_CREATE_ATTEMPTS):
         pull_request_number = get_next_pull_request_number(
@@ -162,12 +182,13 @@ def ingest_pull_request_with_files(
         pull_request = _build_pull_request(
             pull_request=request.pull_request,
             pull_request_number=pull_request_number,
+            changed_files=len(clean_file_paths),
         )
 
         try:
             return insert_pull_request_with_files(
                 pull_request=pull_request,
-                file_paths=request.file_paths,
+                file_paths=clean_file_paths,
             )
         except sqlite3.IntegrityError as exc:
             last_error = exc
