@@ -1,69 +1,30 @@
 # Rework Autopsy
 
-I built Rework Autopsy as a small Faros-style product loop for AI-assisted
-engineering work.
+Rework Autopsy is a small product loop for AI-assisted engineering work.
 
-The idea came from Faros's context-engineering direction: AI coding agents are
-faster when they are given the institutional knowledge that experienced
-engineers already carry. Without that context, agents can increase throughput
-while also creating review churn, bugs, and follow-up cleanup.
+I built it to detect when an AI-generated pull request is followed by likely human rework, show that rework in a dashboard, and let a human add context artifacts that future AI coding agents should use before making similar changes.
 
-This prototype detects where AI-generated pull requests are followed by likely
-human rework, then helps teams manage the context artifacts that should be
-injected into AI coding agents before similar future changes.
+The goal is not to blame AI for every follow-up PR. The goal is to help an engineering leader see where AI-assisted work may be creating cleanup work, and what missing context could reduce that next time.
 
-The product question is:
+---
 
-> Where is AI-assisted work creating rework, why is it happening, and what
-> context should an AI coding agent have before generating this kind of PR
-> again?
-
-Context artifacts are not auto-generated fixes. They are human-curated inputs
-such as runbooks, schema contracts, repo conventions, deployment notes, and
-domain constraints.
-
-## Who It Is For
-
-- Engineering managers who want to see where AI-assisted work creates follow-up
-  human cost.
-- Platform and DevEx teams managing agent context packs.
-- Engineers reviewing why an AI-generated PR needed later cleanup.
-
-## Product Loop
-
-```text
-PR activity
-  -> rule-based rework detection
-  -> dashboard and detail page
-  -> human labels root cause
-  -> human adds or manages context artifacts
-  -> future AI coding agents can use those artifacts as context
-```
-
-## Structure
-
-```text
-backend/                 FastAPI backend, SQLite queries, and rework detection
-data/seed/               Local synthetic seed data
-docs/                    Notes on mock data and detector assumptions
-frontend-rework-autopsy/ Next.js dashboard
-scripts/                 Local helper scripts
-```
-
-## Run Locally
-
-Demo-ready Docker Compose:
+## Run With Docker Compose
 
 ```bash
 docker compose up --build
 ```
 
-Open http://localhost:3000.
+Open:
 
-The backend container reseeds SQLite on startup so every demo starts from the
-same data.
+```text
+http://localhost:3000
+```
 
-Manual backend/frontend setup:
+The backend container reseeds SQLite on startup, so every demo starts from the same data.
+
+---
+
+## Manual Local Run
 
 Start the backend:
 
@@ -81,109 +42,193 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open:
 
-Useful frontend scripts:
-
-```bash
-npm run lint
-npm run format
-npm run format:check
-npm run build
+```text
+http://localhost:3000
 ```
 
-## Rework Detection Rules
+---
 
-The detector compares closed pull requests in each repo and creates at most one
-rework event per source PR and at most one rework event per follow-up PR.
+## What Did I Build?
 
-A pair must first pass the hard gates:
+I built an end-to-end prototype with:
 
-- Same repo.
-- Follow-up PR closed after the source PR.
+* FastAPI backend
+* SQLite database
+* Seeded PR, team, repository, rework, and context artifact data
+* Rule-based rework detector
+* Next.js dashboard
+* Rework detail page
+* Demo flow for adding PR pairs and recomputing rework
+* UI flow for creating context artifacts linked to rework events
+* Placeholder root cause labels for grouping different kinds of rework
 
-Then the follow-up is classified as rework when either:
+The core loop is:
 
-- The follow-up title or body contains `#rework`.
-- Or the PRs share at least one changed file and at least two signals match:
-  - Source PR is AI-generated and follow-up PR is not AI-generated within 14 days.
-  - The PRs have overlapping changed files.
-  - Follow-up title or body contains rework language such as `fix`, `patch`, or `restore`.
+```text
+AI-assisted PR
+  → likely human follow-up PR
+  → rework event
+  → dashboard/detail page
+  → human adds missing context artifact
+```
 
-Negative cases:
+---
 
-- Different repos never match, even if titles or files look related.
-- Same-repo PRs with only one weak signal do not match.
-- Non-`#rework` pairs without file overlap do not match.
+## Who Is It For?
 
-The Add PR Pair demo creates an AI-generated source PR, a non-AI follow-up PR,
-and editable file paths. Shared file paths are not required, so the demo can
-also show negative examples. After clicking Compute Rework, qualifying pairs
-produce new rework events.
+This is for engineering leaders, platform teams, and developers responsible for rolling out AI coding agents.
 
-## What Is Real, Mocked, Or Assumed
+The user I had in mind is someone who does not only care whether AI is making engineers faster. They also care whether AI-assisted work is creating downstream cleanup, and what institutional knowledge should be made available to agents before similar work happens again.
 
-- Mocked: PRs, repos, teams, changed files, rework events, and context
-  artifacts are seeded from local JSON.
-- Real implementation shape: FastAPI routes, SQLite persistence, typed frontend
-  calls, a recompute endpoint, and a dashboard/detail workflow.
-- Assumed: `ai_generated` is already known on each PR. In a production system
-  that could come from GitHub labels, commit metadata, Faros ingestion, or the
-  agentic PR workflow itself.
-- Assumed: root cause labels are human-editable because this prototype should
-  not pretend to infer every causal explanation perfectly.
+---
 
-## What The Prototype Shows
+## What Question Does It Answer?
 
-- Summary metrics for total PRs, AI-generated PRs, rework events, estimated
-  human hours lost, and context artifacts.
-- A rework events table showing source PR, follow-up PR, severity, root cause,
-  days after merge, and estimated human hours.
-- A detail page where a user can inspect one rework event, edit the root cause,
-  and add context artifacts.
-- A demo Add PR Pair flow for creating positive or negative examples, then
-  recomputing rework.
-- Context artifact management for future agent input context, not
-  auto-generated recommendations.
+Rework Autopsy helps answer:
 
-## Tradeoffs
+> Where is AI-assisted work creating follow-up rework, and what context should we preserve so future agents avoid similar mistakes?
 
-- The detector is rule-based and intentionally explainable instead of using an
-  opaque model.
-- SQLite and seed JSON keep the prototype runnable and inspectable, but they are
-  not meant to represent production ingestion scale.
-- Human-hour estimates are simple heuristics, useful for ranking and demo
-  storytelling rather than precise accounting.
-- Context artifacts are created by humans. The system detects where context may
-  be missing, but does not invent the artifact content.
-- Pairing is conservative: closest valid source and follow-up PRs are selected
-  to avoid duplicate demo events.
+The dashboard answers where rework is happening.
 
-## What I Would Do With One More Week
+The detail page shows why a PR pair was flagged.
 
-- Replace JSON seed data with GitHub API or Faros-style normalized work data.
-- Add evidence panels showing exactly which files and language signals matched.
-- Add a context-pack view showing which artifacts would be injected for a repo
-  or team.
-- Add tests around detection edge cases and recompute behavior.
-- Add Docker Compose for one-command review.
+The context artifact flow gives the team a lightweight way to capture what the agent may have been missing.
 
-## How AI Was Used
+---
 
-AI was used as a coding assistant for scaffolding, implementation, review, and
-debugging. I still kept the detection rules explicit and inspectable so the
-logic can be explained during review.
+## What Data Is Real, Mocked, Or Assumed?
 
-AI was less helpful when it suggested over-general abstractions, generated
-stale wording that implied automatic recommendations, or missed product
-constraints like keeping demo examples easy to explain.
+### Mocked
 
-## Deliberately Not Built
+The prototype uses seeded mock data for:
 
-- Auth, permissions, or multi-tenant concerns.
-- Charts.
-- Automated context artifact generation.
-- A real agentic PR workflow integration.
-- Large-scale matching or deduplication beyond the demo rules.
+* Pull requests
+* Repositories
+* Teams
+* Changed files
+* Rework events
+* Context artifacts
+* Root cause labels
 
-See [Mock Data Notes](docs/mock-data.md) for the synthetic data shape and classification taxonomy.
+### Real
+
+The application structure is real:
+
+* FastAPI routes
+* SQLite persistence
+* Rule-based rework recomputation
+* Typed frontend data flow
+* Dashboard and detail views
+* Human-created context artifacts
+
+### Assumed
+
+The prototype assumes:
+
+* `ai_generated` is already known for each PR
+* PR closed timestamps are available
+* Changed file paths are available
+* A later PR can be compared against an earlier AI-assisted PR
+* A human can decide what context is worth preserving
+* Root cause labels can be reviewed and edited by a human
+
+In a production version, this data would likely come from GitHub, Faros-style normalized engineering data, or another source of PR metadata.
+
+---
+
+## How Does Rework Detection Work?
+
+The detector looks for likely relationships between an AI-generated PR and a later follow-up PR.
+
+It considers signals like:
+
+* Was the original PR AI-generated?
+* Did the follow-up PR happen shortly after?
+* Did both PRs touch overlapping files?
+* Does the follow-up title or description suggest a fix, cleanup, revert, or adjustment?
+
+I kept the detector rule-based because I wanted the output to be explainable. For this prototype, I cared more about showing the product loop clearly than hiding the logic behind a black-box score.
+
+Root cause labels are lightweight placeholders used to group rework into issue types. In a real system, humans should be able to review and edit them.
+
+---
+
+## What Tradeoffs Did I Make?
+
+I used simple, explainable rules instead of an ML or LLM-based detector. That made the demo easier to test, explain, and trust.
+
+I used SQLite and JSON seed data instead of a real integration. This keeps the project easy to run and avoids spending most of the week on data plumbing.
+
+The current system treats rework as a simple AI PR → follow-up PR relationship. In reality, rework can happen across multiple PRs, partial fixes, reopened tickets, and longer chains.
+
+I did not inspect actual code diffs yet. I focused on metadata and changed-file overlap because code-level analysis would be harder to mock well and easier to overclaim.
+
+Human rework hours are estimated with a simple heuristic. A real version would need better signals like PR size, review time, cycle time, ticket history, or manually entered estimates.
+
+Context artifacts are currently shallow metadata objects that can be created from the UI. They are not backed by a full file or document storage system yet. That is intentional for the demo: I wanted to show the rework-to-context loop first before building a larger system for storing, versioning, and retrieving actual context files.
+
+---
+
+## What Would I Do With One More Week?
+
+With one more week, I would first add a way to mark flagged rework as a false positive. That feedback is important because not every follow-up PR is bad rework, and the system should learn from human judgment instead of treating every detection as final.
+
+I would also replace the seed data with GitHub or Faros-style normalized PR data so the loop could run on a real repository.
+
+If code diffs were available, I would add an LLM-assisted layer to summarize what changed between the AI PR and the follow-up PR. I would still keep the rule-based signals visible so the system remains explainable.
+
+I would add richer signals like PR review comments, linked tickets, revert relationships, lines changed, and commit metadata.
+
+I would expand the data model to support multiple follow-up PRs for one AI-assisted PR.
+
+I would also build a deeper context artifact system. Right now, artifacts are lightweight records. A real version should store the actual files or documents behind them, such as runbooks, architecture notes, API contracts, testing guidelines, or prior incident notes.
+
+---
+
+## Things I Deliberately Did Not Build
+
+I did not build a full GitHub integration. Seeded data made the demo more reliable and kept the focus on the product loop.
+
+I did not build a blame system. The point is not to say “AI caused this.” The point is to surface places where AI-assisted work appears to create human cleanup, then help the team improve future agent context.
+
+I did not build a code-rewriting agent. This product is about visibility, diagnosis, and context improvement rather than automatically changing code.
+
+I did not build a full context file system. Context artifacts are shallow objects for now. They can be created from the UI and linked to rework events, but the underlying file storage, retrieval, versioning, and search layer is out of scope for this demo.
+
+---
+
+## How Did I Use AI?
+
+I used AI as a development assistant, but tried to keep the product decisions and implementation boundaries under my control.
+
+I used Codex locally in my IDE to discuss future additions and help with controlled implementation tasks like boilerplate, SQL changes, and type updates.
+
+I also used CodeRabbit on PRs as a review agent. That helped me get a second pass on possible bugs, unclear code, and places where the implementation was getting too broad.
+
+I kept AI changes incremental so I could still understand and review what changed.
+
+---
+
+## What Did AI Get Wrong Or Make Harder?
+
+AI was helpful for speed, but it sometimes pushed toward unnecessary breadth.
+
+For example, when I asked it to verify a small set of frontend model types against the SQL migration, it generated types for nearly every table instead of only the types needed by the current UI.
+
+Another example was the demo flow for adding PR pairs. I wanted a simple frontend-driven way to create PR pairs with different timestamps. AI tried to move that logic into the backend and compute close-time gaps internally, which made the API more complicated than necessary. I kept the simpler approach because it was easier to explain, test, and revert.
+
+The main lesson was that AI works best when the task is specific and bounded. When the request is vague, it tends to add code instead of protecting the product shape.
+
+---
+
+## Why This Is Faros-Shaped
+
+Faros helps engineering organizations understand how work happens across tools, teams, code, delivery, and outcomes.
+
+Rework Autopsy fits that shape because it connects engineering activity data to a practical operating question:
+
+> Is AI-assisted development creating downstream human cleanup, and what should we change in the engineering system to improve it?
+
+I wanted the output to be more than a metric. The loop should help a team notice a pattern, inspect the evidence, and preserve useful context for the next agent-assisted change.

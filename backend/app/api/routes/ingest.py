@@ -43,15 +43,15 @@ def _build_pull_request(
 ) -> PullRequest:
     """
     Builds a pull request object from creation data.
-    
+
     Constructs a PullRequest with derived timestamp fields based on a closed_at value, which defaults to the current UTC time if not provided in the input. The created_at, updated_at, and merged_at fields are calculated relative to closed_at (15 hours, 10 hours, and 0 hours prior respectively). Random numeric metrics are generated for code changes and review activity.
-    
+
     Parameters:
-    	pull_request (PullRequestCreate): The pull request creation data
-    	pull_request_number (int): The pull request number to assign
-    
+        pull_request (PullRequestCreate): The pull request creation data
+        pull_request_number (int): The pull request number to assign
+
     Returns:
-    	PullRequest: A fully constructed pull request object with synthetic metrics and derived timestamps
+        PullRequest: A fully constructed pull request object with synthetic metrics and derived timestamps
     """
     closed_at = pull_request.closed_at or datetime.now(timezone.utc)
     return PullRequest(
@@ -110,9 +110,7 @@ def ingest_pull_request(pull_request: PullRequestCreate) -> PullRequest:
     last_error: sqlite3.IntegrityError | None = None
 
     for _ in range(MAX_PULL_REQUEST_CREATE_ATTEMPTS):
-        pull_request_number = get_next_pull_request_number(
-            repo_id=pull_request.repo_id
-        )
+        pull_request_number = get_next_pull_request_number(repo_id=pull_request.repo_id)
         new_pull_request = _build_pull_request(
             pull_request=pull_request,
             pull_request_number=pull_request_number,
