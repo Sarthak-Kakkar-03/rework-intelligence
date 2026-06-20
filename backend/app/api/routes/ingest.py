@@ -71,12 +71,12 @@ def _build_pull_request(
         merged_by_login=pull_request.merged_by_login,
         base_branch="main",
         head_branch=pull_request.head_branch,
-        additions=randint(1000, 4000),
-        deletions=randint(50, 600),
-        changed_files=randint(1, 6),
-        commits=randint(1, 8),
-        comments=randint(2, 20),
-        review_comments=randint(3, 9),
+        additions=240,
+        deletions=60,
+        changed_files=4,
+        commits=3,
+        comments=6,
+        review_comments=6,
         ai_generated=pull_request.ai_generated,
     )
 

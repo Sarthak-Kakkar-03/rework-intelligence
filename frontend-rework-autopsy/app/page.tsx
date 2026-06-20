@@ -14,6 +14,8 @@ import type {
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
 
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
 function formatLabel(label: string | undefined): string {
   if (!label) {
     return "Unknown";
@@ -59,6 +61,24 @@ function formatHours(hours: number | undefined): string {
   return (hours ?? 0).toFixed(2);
 }
 
+function getLatestClosedAt(pullRequests: PullRequest[]): Date | null {
+  let latestClosedAt: Date | null = null;
+
+  for (const pullRequest of pullRequests) {
+    const closedAt = new Date(pullRequest.closed_at);
+
+    if (Number.isNaN(closedAt.getTime())) {
+      continue;
+    }
+
+    if (!latestClosedAt || closedAt > latestClosedAt) {
+      latestClosedAt = closedAt;
+    }
+  }
+
+  return latestClosedAt;
+}
+
 /**
  * Main dashboard for rework analysis and context artifact generation.
  *
@@ -72,6 +92,7 @@ export default function Home() {
   const [contextArtifacts, setContextArtifacts] = useState<ContextArtifact[]>(
     [],
   );
+  const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -99,26 +120,40 @@ export default function Home() {
       setLoading(true);
       setError(null);
 
-      const [summaryResponse, eventsResponse, artifactsResponse] =
+      const [
+        summaryResponse,
+        eventsResponse,
+        artifactsResponse,
+        pullRequestsResponse,
+      ] =
         await Promise.all([
           fetch(`${API_BASE_URL}/api/autopsy/summary`),
           fetch(`${API_BASE_URL}/api/rework-events`),
           fetch(`${API_BASE_URL}/api/context-artifacts`),
+          fetch(`${API_BASE_URL}/api/pull-requests`),
         ]);
 
-      if (!summaryResponse.ok || !eventsResponse.ok || !artifactsResponse.ok) {
+      if (
+        !summaryResponse.ok ||
+        !eventsResponse.ok ||
+        !artifactsResponse.ok ||
+        !pullRequestsResponse.ok
+      ) {
         throw new Error("One or more dashboard requests failed.");
       }
 
-      const [summaryData, eventsData, artifactsData] = await Promise.all([
-        summaryResponse.json() as Promise<AutopsySummary>,
-        eventsResponse.json() as Promise<ReworkEvent[]>,
-        artifactsResponse.json() as Promise<ContextArtifact[]>,
-      ]);
+      const [summaryData, eventsData, artifactsData, pullRequestsData] =
+        await Promise.all([
+          summaryResponse.json() as Promise<AutopsySummary>,
+          eventsResponse.json() as Promise<ReworkEvent[]>,
+          artifactsResponse.json() as Promise<ContextArtifact[]>,
+          pullRequestsResponse.json() as Promise<PullRequest[]>,
+        ]);
 
       setSummary(summaryData);
       setReworkEvents(eventsData);
       setContextArtifacts(artifactsData);
+      setPullRequests(pullRequestsData);
     } catch {
       setError(
         `Unable to load dashboard data. Make sure the backend is running on ${API_BASE_URL}.`,
@@ -249,9 +284,13 @@ export default function Home() {
         return;
       }
 
-      const sourceClosedAt = new Date();
-      const followupClosedAt = new Date(sourceClosedAt);
-      followupClosedAt.setDate(sourceClosedAt.getDate() + 1);
+      const latestClosedAt = getLatestClosedAt(pullRequests);
+      const now = new Date();
+      const sourceClosedAt =
+        latestClosedAt && latestClosedAt > now
+          ? new Date(latestClosedAt.getTime() + ONE_DAY_MS)
+          : now;
+      const followupClosedAt = new Date(sourceClosedAt.getTime() + ONE_DAY_MS);
 
       await createPullRequestWithFiles(
         {

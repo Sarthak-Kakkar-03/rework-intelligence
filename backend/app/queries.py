@@ -325,10 +325,10 @@ def get_pull_request_files_by_pr_id(pull_request_id: int) -> list[PullRequestFil
 
 def get_rework_events() -> list[ReworkEvent]:
     """
-    Retrieve all rework event records from the database, ordered by recency and ID.
+    Retrieve all rework event records from the database.
 
     Returns:
-        list[ReworkEvent]: A list of ReworkEvent objects ordered by days_after_merge in descending order, then by ID.
+        list[ReworkEvent]: A list of ReworkEvent objects ordered by source and follow-up pull request.
     """
     sql = """
         SELECT
@@ -343,7 +343,7 @@ def get_rework_events() -> list[ReworkEvent]:
           root_cause_label,
           summary
         FROM rework_events
-        ORDER BY days_after_merge DESC, id
+        ORDER BY source_pr_id ASC, followup_pr_id ASC
     """
 
     with closing(get_connection()) as conn:
