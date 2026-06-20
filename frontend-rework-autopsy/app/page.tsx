@@ -9,11 +9,12 @@ import type {
   PullRequest,
   Repo,
   ReworkEvent,
-  ReworkRecomputeResult,
 } from "@/types";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
+
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 function formatLabel(label: string | undefined): string {
   if (!label) {
@@ -56,12 +57,34 @@ function parseFilePaths(filePathText: string): string[] {
     .filter((filePath) => filePath.length > 0);
 }
 
+function formatHours(hours: number | undefined): string {
+  return (hours ?? 0).toFixed(2);
+}
+
+function getLatestClosedAt(pullRequests: PullRequest[]): Date | null {
+  let latestClosedAt: Date | null = null;
+
+  for (const pullRequest of pullRequests) {
+    const closedAt = new Date(pullRequest.closed_at);
+
+    if (Number.isNaN(closedAt.getTime())) {
+      continue;
+    }
+
+    if (!latestClosedAt || closedAt > latestClosedAt) {
+      latestClosedAt = closedAt;
+    }
+  }
+
+  return latestClosedAt;
+}
+
 /**
  * Main dashboard for rework analysis and context artifact generation.
  *
  * Displays summary statistics, rework events, root cause breakdown, and
  * context artifacts. Provides controls to add pull request pairs for analysis
- * and to recompute rework event metrics.
+ * and automatically recomputes rework after demo PR pairs are created.
  */
 export default function Home() {
   const [summary, setSummary] = useState<AutopsySummary | null>(null);
@@ -69,16 +92,10 @@ export default function Home() {
   const [contextArtifacts, setContextArtifacts] = useState<ContextArtifact[]>(
     [],
   );
+  const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isComputingRework, setIsComputingRework] = useState(false);
-  const [computeReworkMessage, setComputeReworkMessage] = useState<
-    string | null
-  >(null);
-  const [computeReworkError, setComputeReworkError] = useState<string | null>(
-    null,
-  );
 
   const [addPrModalOpen, setAddPrModalOpen] = useState(false);
   const [addPrError, setAddPrError] = useState<string | null>(null);
@@ -89,7 +106,6 @@ export default function Home() {
   const [sourcePrAuthorLogin, setSourcePrAuthorLogin] = useState("");
   const [sourcePrMergedByLogin, setSourcePrMergedByLogin] = useState("");
   const [sourcePrHeadBranch, setSourcePrHeadBranch] = useState("");
-  const [sourcePrAIGenerated, setSourcePrAIGenerated] = useState(true);
   const [sourcePrFiles, setSourcePrFiles] = useState("");
   const [followupPrTitle, setFollowupPrTitle] = useState("");
   const [followupPrBody, setFollowupPrBody] = useState("");
@@ -97,7 +113,6 @@ export default function Home() {
   const [followupPrAuthorLogin, setFollowupPrAuthorLogin] = useState("");
   const [followupPrMergedByLogin, setFollowupPrMergedByLogin] = useState("");
   const [followupPrHeadBranch, setFollowupPrHeadBranch] = useState("");
-  const [followupPrAIGenerated, setFollowupPrAIGenerated] = useState(false);
   const [followupPrFiles, setFollowupPrFiles] = useState("");
 
   async function loadDashboardData() {
@@ -105,26 +120,40 @@ export default function Home() {
       setLoading(true);
       setError(null);
 
-      const [summaryResponse, eventsResponse, artifactsResponse] =
+      const [
+        summaryResponse,
+        eventsResponse,
+        artifactsResponse,
+        pullRequestsResponse,
+      ] =
         await Promise.all([
           fetch(`${API_BASE_URL}/api/autopsy/summary`),
           fetch(`${API_BASE_URL}/api/rework-events`),
           fetch(`${API_BASE_URL}/api/context-artifacts`),
+          fetch(`${API_BASE_URL}/api/pull-requests`),
         ]);
 
-      if (!summaryResponse.ok || !eventsResponse.ok || !artifactsResponse.ok) {
+      if (
+        !summaryResponse.ok ||
+        !eventsResponse.ok ||
+        !artifactsResponse.ok ||
+        !pullRequestsResponse.ok
+      ) {
         throw new Error("One or more dashboard requests failed.");
       }
 
-      const [summaryData, eventsData, artifactsData] = await Promise.all([
-        summaryResponse.json() as Promise<AutopsySummary>,
-        eventsResponse.json() as Promise<ReworkEvent[]>,
-        artifactsResponse.json() as Promise<ContextArtifact[]>,
-      ]);
+      const [summaryData, eventsData, artifactsData, pullRequestsData] =
+        await Promise.all([
+          summaryResponse.json() as Promise<AutopsySummary>,
+          eventsResponse.json() as Promise<ReworkEvent[]>,
+          artifactsResponse.json() as Promise<ContextArtifact[]>,
+          pullRequestsResponse.json() as Promise<PullRequest[]>,
+        ]);
 
       setSummary(summaryData);
       setReworkEvents(eventsData);
       setContextArtifacts(artifactsData);
+      setPullRequests(pullRequestsData);
     } catch {
       setError(
         `Unable to load dashboard data. Make sure the backend is running on ${API_BASE_URL}.`,
@@ -170,7 +199,6 @@ export default function Home() {
     setSourcePrAuthorLogin("maya-chen");
     setSourcePrMergedByLogin("alex-rivera");
     setSourcePrHeadBranch("maya/billing-sync-retry");
-    setSourcePrAIGenerated(true);
     setSourcePrFiles(
       "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py",
     );
@@ -182,7 +210,6 @@ export default function Home() {
     setFollowupPrAuthorLogin("alex-rivera");
     setFollowupPrMergedByLogin("maya-chen");
     setFollowupPrHeadBranch("alex/fix-billing-retry");
-    setFollowupPrAIGenerated(false);
     setFollowupPrFiles(
       "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py",
     );
@@ -257,9 +284,13 @@ export default function Home() {
         return;
       }
 
-      const sourceClosedAt = new Date();
-      const followupClosedAt = new Date(sourceClosedAt);
-      followupClosedAt.setDate(sourceClosedAt.getDate() + 1);
+      const latestClosedAt = getLatestClosedAt(pullRequests);
+      const now = new Date();
+      const sourceClosedAt =
+        latestClosedAt && latestClosedAt > now
+          ? new Date(latestClosedAt.getTime() + ONE_DAY_MS)
+          : now;
+      const followupClosedAt = new Date(sourceClosedAt.getTime() + ONE_DAY_MS);
 
       await createPullRequestWithFiles(
         {
@@ -268,7 +299,7 @@ export default function Home() {
           author_login: sourcePrAuthorLogin,
           merged_by_login: sourcePrMergedByLogin,
           head_branch: sourcePrHeadBranch,
-          ai_generated: sourcePrAIGenerated,
+          ai_generated: true,
           repo_id: sourcePrRepoId,
           closed_at: sourceClosedAt.toISOString(),
         },
@@ -282,18 +313,19 @@ export default function Home() {
           author_login: followupPrAuthorLogin,
           merged_by_login: followupPrMergedByLogin,
           head_branch: followupPrHeadBranch,
-          ai_generated: followupPrAIGenerated,
+          ai_generated: false,
           repo_id: followupPrRepoId,
           closed_at: followupClosedAt.toISOString(),
         },
         followupFilePaths,
       );
 
+      await computeRework();
       setAddPrModalOpen(false);
       await loadDashboardData();
     } catch {
       setAddPrError(
-        "Unable to create PR pair. Check the selected repos and make sure the backend is working.",
+        "Unable to create PR pair and compute rework. Check the selected repos and make sure the backend is working.",
       );
     } finally {
       setIsAddingPrPair(false);
@@ -301,31 +333,15 @@ export default function Home() {
   }
 
   async function computeRework() {
-    try {
-      setIsComputingRework(true);
-      setComputeReworkMessage(null);
-      setComputeReworkError(null);
+    const response = await fetch(
+      `${API_BASE_URL}/api/ingest/rework-events/recompute`,
+      {
+        method: "POST",
+      },
+    );
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/ingest/rework-events/recompute`,
-        {
-          method: "POST",
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Rework recompute request failed.");
-      }
-
-      const result = (await response.json()) as ReworkRecomputeResult;
-      setComputeReworkMessage(result.message);
-      await loadDashboardData();
-    } catch {
-      setComputeReworkError(
-        `Unable to compute rework events. Make sure the backend is running on ${API_BASE_URL}.`,
-      );
-    } finally {
-      setIsComputingRework(false);
+    if (!response.ok) {
+      throw new Error("Rework recompute request failed.");
     }
   }
 
@@ -351,18 +367,6 @@ export default function Home() {
         {error && (
           <div className="alert alert-error">
             <span>{error}</span>
-          </div>
-        )}
-
-        {computeReworkMessage && (
-          <div className="alert alert-success">
-            <span>{computeReworkMessage}</span>
-          </div>
-        )}
-
-        {computeReworkError && (
-          <div className="alert alert-error">
-            <span>{computeReworkError}</span>
           </div>
         )}
 
@@ -404,7 +408,7 @@ export default function Home() {
               <div className="stat">
                 <div className="stat-title">Estimated Human Hours Lost</div>
                 <div className="stat-value text-2xl">
-                  {summary?.total_rework_hours ?? 0}
+                  {formatHours(summary?.total_rework_hours)}
                 </div>
               </div>
 
@@ -459,7 +463,7 @@ export default function Home() {
                               </span>
                             </td>
                             <td>{event.days_after_merge}</td>
-                            <td>{event.human_hours_spent}</td>
+                            <td>{formatHours(event.human_hours_spent)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -530,13 +534,6 @@ export default function Home() {
               >
                 Add PR Pair
               </button>
-              <button
-                className="btn btn-ghost btn-primary btn-lg"
-                disabled={isComputingRework}
-                onClick={computeRework}
-              >
-                {isComputingRework ? "Computing..." : "Compute Rework"}
-              </button>
             </section>
 
             <div className={`modal ${addPrModalOpen ? "modal-open" : ""}`}>
@@ -544,7 +541,8 @@ export default function Home() {
                 <h2 className="text-lg font-semibold">Add PR Pair</h2>
                 <p className="mt-1 text-sm text-base-content/70">
                   Create a source PR and a follow-up PR. Add at least one file
-                  path for each PR, then run Compute Rework.
+                  path for each PR. Rework detection runs automatically after
+                  the pair is created.
                 </p>
 
                 {addPrError && (
@@ -666,13 +664,12 @@ export default function Home() {
                       />
                     </label>
 
-                    <label className="flex cursor-pointer items-center gap-3">
+                    <label className="flex items-center gap-3">
                       <input
-                        checked={sourcePrAIGenerated}
+                        checked
                         className="checkbox checkbox-primary"
-                        onChange={(event) =>
-                          setSourcePrAIGenerated(event.target.checked)
-                        }
+                        disabled
+                        readOnly
                         type="checkbox"
                       />
                       <span className="text-sm">AI-generated</span>
@@ -791,13 +788,12 @@ export default function Home() {
                       />
                     </label>
 
-                    <label className="flex cursor-pointer items-center gap-3">
+                    <label className="flex items-center gap-3">
                       <input
-                        checked={followupPrAIGenerated}
+                        checked={false}
                         className="checkbox checkbox-primary"
-                        onChange={(event) =>
-                          setFollowupPrAIGenerated(event.target.checked)
-                        }
+                        disabled
+                        readOnly
                         type="checkbox"
                       />
                       <span className="text-sm">AI-generated</span>
@@ -817,7 +813,9 @@ export default function Home() {
                     disabled={isAddingPrPair}
                     onClick={addPullRequestPair}
                   >
-                    {isAddingPrPair ? "Creating..." : "Create PR Pair"}
+                    {isAddingPrPair
+                      ? "Creating and detecting..."
+                      : "Create PR Pair"}
                   </button>
                 </div>
               </div>

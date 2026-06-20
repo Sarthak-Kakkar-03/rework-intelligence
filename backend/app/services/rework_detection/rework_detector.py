@@ -16,6 +16,7 @@ from app.services.rework_detection.signals import (
     is_followup_after_source,
 )
 from app.queries import (
+    get_rework_events,
     get_pull_requests_ordered_by_closed_at,
     get_pull_request_files_by_pr_id,
 )
@@ -86,12 +87,19 @@ def get_rework_signals(
 def generate_rework_candidates() -> list[ReworkCandidate]:
     pr_list: list[PullRequest] = get_pull_requests_ordered_by_closed_at()
     files_by_pr_id: dict[int, list[PullRequestFile]] = {}
-    used_source_pr_ids: set[int] = set()
+    used_pr_ids: set[int] = set()
+    for rework_event in get_rework_events():
+        used_pr_ids.add(rework_event.source_pr_id)
+        used_pr_ids.add(rework_event.followup_pr_id)
+
     result: list[ReworkCandidate] = []
     for followup_idx, followup_pr in enumerate(pr_list):
+        if followup_pr.id in used_pr_ids:
+            continue
+
         for source_idx in range(followup_idx - 1, -1, -1):
             source_pr = pr_list[source_idx]
-            if source_pr.id in used_source_pr_ids:
+            if source_pr.id in used_pr_ids:
                 continue
             if is_possible_rework_candidate(
                 source_pr=source_pr, followup_pr=followup_pr
@@ -156,6 +164,7 @@ def generate_rework_candidates() -> list[ReworkCandidate]:
                             ),
                         )
                     )
-                    used_source_pr_ids.add(source_pr.id)
+                    used_pr_ids.add(source_pr.id)
+                    used_pr_ids.add(followup_pr.id)
                     break
     return result

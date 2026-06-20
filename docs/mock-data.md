@@ -56,28 +56,6 @@ In a production version, those fields could come from GitHub/GitLab, issue
 trackers, agentic coding workflow metadata, or a Faros-style normalized data
 model.
 
-## Rework Examples
-
-The seeded PRs are intentionally small but cover the important detector cases.
-
-Positive cases include:
-
-- Same repo, AI-generated source PR, non-AI follow-up PR within 14 days,
-  overlapping files, and fix language.
-- Same repo follow-up with `#rework`, which acts as an explicit override.
-- Same repo follow-up outside 14 days that still has overlapping files and
-  rework language.
-
-Negative cases include:
-
-- Different repos, even when titles or file names look related.
-- Same repo pairs with only one weak signal.
-- Non-`#rework` pairs that do not share changed files.
-
-For demo predictability, the detector currently keeps pairing conservative: one
-source PR and one follow-up PR should not create repeated duplicate rework
-events.
-
 ## Context Artifacts
 
 Context artifacts are not generated fixes. They are human-curated knowledge
@@ -103,3 +81,6 @@ future work.
 - The detector is intentionally rule-based so it is explainable.
 - The seed data is small by design; it exists to show the loop, not to benchmark
   model quality.
+
+See [Detection And Estimates](detection-and-estimates.md) for the detector
+signals, demo defaults, and human-hour formulas.
