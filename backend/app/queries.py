@@ -425,7 +425,7 @@ def insert_rework_candidates(rework_candidates: list[ReworkCandidate]) -> None:
 
 def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
     """
-    Upserts detected rework events and removes stale events without artifacts.
+    Upserts newly detected rework events.
     """
     sql = """
         INSERT INTO rework_events (
@@ -470,34 +470,6 @@ def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
 
     with closing(get_connection()) as conn:
         try:
-            candidate_ids = [
-                _rework_candidate_id(candidate) for candidate in rework_candidates
-            ]
-
-            if candidate_ids:
-                placeholders = ", ".join("?" for _ in candidate_ids)
-                conn.execute(
-                    f"""
-                    DELETE FROM rework_events
-                    WHERE id NOT IN ({placeholders})
-                      AND id NOT IN (
-                        SELECT rework_event_id
-                        FROM context_artifacts
-                      )
-                    """,
-                    candidate_ids,
-                )
-            else:
-                conn.execute(
-                    """
-                    DELETE FROM rework_events
-                    WHERE id NOT IN (
-                      SELECT rework_event_id
-                      FROM context_artifacts
-                    )
-                    """
-                )
-
             conn.executemany(sql, values)
             conn.commit()
         except Exception:
