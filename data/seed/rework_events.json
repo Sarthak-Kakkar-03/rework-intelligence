@@ -18,7 +18,7 @@
     "detected_from": "detector",
     "rework_type": "computed_rework",
     "severity": "low",
-    "days_after_merge": 16,
+    "days_after_merge": 5,
     "human_hours_spent": 1.8,
     "root_cause_label": "missing_environment_context",
     "summary": "PR 58 was followed by PR 59 in repo-github-ingest-service; matched signals: Rework Override Indicated."
@@ -30,7 +30,7 @@
     "detected_from": "detector",
     "rework_type": "computed_rework",
     "severity": "low",
-    "days_after_merge": 17,
+    "days_after_merge": 6,
     "human_hours_spent": 2.8,
     "root_cause_label": "schema_contract_drift",
     "summary": "PR 51 was followed by PR 52 in repo-deployment-risk-api; matched signals: Detected Overlapping files, Followup has rework language."
