@@ -85,7 +85,6 @@ export default function Home() {
   const [sourcePrAuthorLogin, setSourcePrAuthorLogin] = useState("");
   const [sourcePrMergedByLogin, setSourcePrMergedByLogin] = useState("");
   const [sourcePrHeadBranch, setSourcePrHeadBranch] = useState("");
-  const [sourcePrAIGenerated, setSourcePrAIGenerated] = useState(true);
   const [sourcePrFiles, setSourcePrFiles] = useState("");
   const [followupPrTitle, setFollowupPrTitle] = useState("");
   const [followupPrBody, setFollowupPrBody] = useState("");
@@ -93,7 +92,6 @@ export default function Home() {
   const [followupPrAuthorLogin, setFollowupPrAuthorLogin] = useState("");
   const [followupPrMergedByLogin, setFollowupPrMergedByLogin] = useState("");
   const [followupPrHeadBranch, setFollowupPrHeadBranch] = useState("");
-  const [followupPrAIGenerated, setFollowupPrAIGenerated] = useState(false);
   const [followupPrFiles, setFollowupPrFiles] = useState("");
 
   async function loadDashboardData() {
@@ -166,7 +164,6 @@ export default function Home() {
     setSourcePrAuthorLogin("maya-chen");
     setSourcePrMergedByLogin("alex-rivera");
     setSourcePrHeadBranch("maya/billing-sync-retry");
-    setSourcePrAIGenerated(true);
     setSourcePrFiles(
       "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py",
     );
@@ -178,7 +175,6 @@ export default function Home() {
     setFollowupPrAuthorLogin("alex-rivera");
     setFollowupPrMergedByLogin("maya-chen");
     setFollowupPrHeadBranch("alex/fix-billing-retry");
-    setFollowupPrAIGenerated(false);
     setFollowupPrFiles(
       "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py",
     );
@@ -264,7 +260,7 @@ export default function Home() {
           author_login: sourcePrAuthorLogin,
           merged_by_login: sourcePrMergedByLogin,
           head_branch: sourcePrHeadBranch,
-          ai_generated: sourcePrAIGenerated,
+          ai_generated: true,
           repo_id: sourcePrRepoId,
           closed_at: sourceClosedAt.toISOString(),
         },
@@ -278,7 +274,7 @@ export default function Home() {
           author_login: followupPrAuthorLogin,
           merged_by_login: followupPrMergedByLogin,
           head_branch: followupPrHeadBranch,
-          ai_generated: followupPrAIGenerated,
+          ai_generated: false,
           repo_id: followupPrRepoId,
           closed_at: followupClosedAt.toISOString(),
         },
@@ -629,13 +625,12 @@ export default function Home() {
                       />
                     </label>
 
-                    <label className="flex cursor-pointer items-center gap-3">
+                    <label className="flex items-center gap-3">
                       <input
-                        checked={sourcePrAIGenerated}
+                        checked
                         className="checkbox checkbox-primary"
-                        onChange={(event) =>
-                          setSourcePrAIGenerated(event.target.checked)
-                        }
+                        disabled
+                        readOnly
                         type="checkbox"
                       />
                       <span className="text-sm">AI-generated</span>
@@ -754,13 +749,12 @@ export default function Home() {
                       />
                     </label>
 
-                    <label className="flex cursor-pointer items-center gap-3">
+                    <label className="flex items-center gap-3">
                       <input
-                        checked={followupPrAIGenerated}
+                        checked={false}
                         className="checkbox checkbox-primary"
-                        onChange={(event) =>
-                          setFollowupPrAIGenerated(event.target.checked)
-                        }
+                        disabled
+                        readOnly
                         type="checkbox"
                       />
                       <span className="text-sm">AI-generated</span>
