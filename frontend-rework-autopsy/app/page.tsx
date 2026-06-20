@@ -9,7 +9,6 @@ import type {
   PullRequest,
   Repo,
   ReworkEvent,
-  ReworkRecomputeResult,
 } from "@/types";
 
 const API_BASE_URL =
@@ -56,12 +55,16 @@ function parseFilePaths(filePathText: string): string[] {
     .filter((filePath) => filePath.length > 0);
 }
 
+function formatHours(hours: number | undefined): string {
+  return (hours ?? 0).toFixed(2);
+}
+
 /**
  * Main dashboard for rework analysis and context artifact generation.
  *
  * Displays summary statistics, rework events, root cause breakdown, and
  * context artifacts. Provides controls to add pull request pairs for analysis
- * and to recompute rework event metrics.
+ * and automatically recomputes rework after demo PR pairs are created.
  */
 export default function Home() {
   const [summary, setSummary] = useState<AutopsySummary | null>(null);
@@ -72,13 +75,6 @@ export default function Home() {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isComputingRework, setIsComputingRework] = useState(false);
-  const [computeReworkMessage, setComputeReworkMessage] = useState<
-    string | null
-  >(null);
-  const [computeReworkError, setComputeReworkError] = useState<string | null>(
-    null,
-  );
 
   const [addPrModalOpen, setAddPrModalOpen] = useState(false);
   const [addPrError, setAddPrError] = useState<string | null>(null);
@@ -289,11 +285,12 @@ export default function Home() {
         followupFilePaths,
       );
 
+      await computeRework();
       setAddPrModalOpen(false);
       await loadDashboardData();
     } catch {
       setAddPrError(
-        "Unable to create PR pair. Check the selected repos and make sure the backend is working.",
+        "Unable to create PR pair and compute rework. Check the selected repos and make sure the backend is working.",
       );
     } finally {
       setIsAddingPrPair(false);
@@ -301,31 +298,15 @@ export default function Home() {
   }
 
   async function computeRework() {
-    try {
-      setIsComputingRework(true);
-      setComputeReworkMessage(null);
-      setComputeReworkError(null);
+    const response = await fetch(
+      `${API_BASE_URL}/api/ingest/rework-events/recompute`,
+      {
+        method: "POST",
+      },
+    );
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/ingest/rework-events/recompute`,
-        {
-          method: "POST",
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Rework recompute request failed.");
-      }
-
-      const result = (await response.json()) as ReworkRecomputeResult;
-      setComputeReworkMessage(result.message);
-      await loadDashboardData();
-    } catch {
-      setComputeReworkError(
-        `Unable to compute rework events. Make sure the backend is running on ${API_BASE_URL}.`,
-      );
-    } finally {
-      setIsComputingRework(false);
+    if (!response.ok) {
+      throw new Error("Rework recompute request failed.");
     }
   }
 
@@ -351,18 +332,6 @@ export default function Home() {
         {error && (
           <div className="alert alert-error">
             <span>{error}</span>
-          </div>
-        )}
-
-        {computeReworkMessage && (
-          <div className="alert alert-success">
-            <span>{computeReworkMessage}</span>
-          </div>
-        )}
-
-        {computeReworkError && (
-          <div className="alert alert-error">
-            <span>{computeReworkError}</span>
           </div>
         )}
 
@@ -404,7 +373,7 @@ export default function Home() {
               <div className="stat">
                 <div className="stat-title">Estimated Human Hours Lost</div>
                 <div className="stat-value text-2xl">
-                  {summary?.total_rework_hours ?? 0}
+                  {formatHours(summary?.total_rework_hours)}
                 </div>
               </div>
 
@@ -459,7 +428,7 @@ export default function Home() {
                               </span>
                             </td>
                             <td>{event.days_after_merge}</td>
-                            <td>{event.human_hours_spent}</td>
+                            <td>{formatHours(event.human_hours_spent)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -530,13 +499,6 @@ export default function Home() {
               >
                 Add PR Pair
               </button>
-              <button
-                className="btn btn-ghost btn-primary btn-lg"
-                disabled={isComputingRework}
-                onClick={computeRework}
-              >
-                {isComputingRework ? "Computing..." : "Compute Rework"}
-              </button>
             </section>
 
             <div className={`modal ${addPrModalOpen ? "modal-open" : ""}`}>
@@ -544,7 +506,8 @@ export default function Home() {
                 <h2 className="text-lg font-semibold">Add PR Pair</h2>
                 <p className="mt-1 text-sm text-base-content/70">
                   Create a source PR and a follow-up PR. Add at least one file
-                  path for each PR, then run Compute Rework.
+                  path for each PR. Rework detection runs automatically after
+                  the pair is created.
                 </p>
 
                 {addPrError && (
@@ -817,7 +780,9 @@ export default function Home() {
                     disabled={isAddingPrPair}
                     onClick={addPullRequestPair}
                   >
-                    {isAddingPrPair ? "Creating..." : "Create PR Pair"}
+                    {isAddingPrPair
+                      ? "Creating and detecting..."
+                      : "Create PR Pair"}
                   </button>
                 </div>
               </div>
