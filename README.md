@@ -31,7 +31,8 @@ Start the backend:
 ```bash
 ./scripts/reset_db.sh
 cd backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uv sync
+uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 Start the frontend in another terminal:
