@@ -112,11 +112,7 @@ export default function Home() {
           fetch(`${API_BASE_URL}/api/context-artifacts`),
         ]);
 
-      if (
-        !summaryResponse.ok ||
-        !eventsResponse.ok ||
-        !artifactsResponse.ok
-      ) {
+      if (!summaryResponse.ok || !eventsResponse.ok || !artifactsResponse.ok) {
         throw new Error("One or more dashboard requests failed.");
       }
 

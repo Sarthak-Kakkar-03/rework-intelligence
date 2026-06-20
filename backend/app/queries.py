@@ -193,7 +193,7 @@ def get_pull_requests() -> list[PullRequest]:
 def get_pull_requests_ordered_by_closed_at() -> list[PullRequest]:
     """
     Retrieve all pull requests ordered by closure time.
-    
+
     Returns:
         A list of PullRequest objects.
     """
