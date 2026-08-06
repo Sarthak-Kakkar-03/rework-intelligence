@@ -3,7 +3,17 @@ from datetime import timedelta
 import re
 
 REWORK_LANGUAGE_PATTERN = re.compile(
-    r"(#rework\b|\bfix(?:es|ed)?\b|\bpatch(?:es|ed)?\b|\brestore(?:s|d)?\b)",
+    r"(#rework\b"
+    r"|\bfix(?:es|ed)?\b"
+    r"|\bpatch(?:es|ed)?\b"
+    r"|\brestore(?:s|d)?\b"
+    r"|\bbug\b"
+    r"|\bregression\b"
+    r"|\bclean[- ]?up\b"
+    r"|\bcorrect(?:s|ed|ing|ion)?\b"
+    r"|\bhotfix(?:es)?\b"
+    r"|\badjust(?:s|ed|ing|ment)?\b"
+    r"|\bbroken\b)",
     re.IGNORECASE,
 )
 
