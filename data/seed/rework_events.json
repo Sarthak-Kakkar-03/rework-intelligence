@@ -9,6 +9,7 @@
     "days_after_merge": 3,
     "human_hours_spent": 4.8,
     "root_cause_label": "missing_domain_constraint",
+    "disposition": "confirmed_rework",
     "summary": "PR 41 was followed by PR 42 in repo-jira-sync-worker; matched signals: Non AI PR within 2 weeks, Detected Overlapping files, Followup has rework language."
   },
   {
@@ -21,6 +22,7 @@
     "days_after_merge": 5,
     "human_hours_spent": 1.8,
     "root_cause_label": "missing_environment_context",
+    "disposition": "unreviewed",
     "summary": "PR 58 was followed by PR 59 in repo-github-ingest-service; matched signals: Rework Override Indicated."
   },
   {
@@ -33,6 +35,7 @@
     "days_after_merge": 6,
     "human_hours_spent": 2.8,
     "root_cause_label": "schema_contract_drift",
+    "disposition": "related_expected",
     "summary": "PR 51 was followed by PR 52 in repo-deployment-risk-api; matched signals: Detected Overlapping files, Followup has rework language."
   }
 ]

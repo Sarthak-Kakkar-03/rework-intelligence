@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import type { ContextArtifact, ReworkEventDetail } from "@/types";
+import type { ContextArtifact, ReworkDisposition, ReworkEventDetail } from "@/types";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
@@ -24,6 +24,22 @@ function formatLabel(label: string | undefined): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+
+const DISPOSITION_OPTIONS: { value: ReworkDisposition; label: string }[] = [
+  { value: "unreviewed", label: "Unreviewed" },
+  { value: "confirmed_rework", label: "Confirmed Rework" },
+  { value: "partial_rework", label: "Partial Rework" },
+  { value: "related_expected", label: "Related but Expected Follow-Up" },
+  { value: "unrelated", label: "Unrelated / False Positive" },
+];
+
+const DISPOSITION_BADGE_CLASS: Record<ReworkDisposition, string> = {
+  unreviewed: "badge-ghost",
+  confirmed_rework: "badge-error",
+  partial_rework: "badge-warning",
+  related_expected: "badge-info",
+  unrelated: "badge-neutral",
+};
 
 /**
  * Renders detailed information about a rework event identified by the `reworkId` URL parameter.
@@ -46,6 +62,12 @@ export default function ReworkEventDetailPage() {
   const [rootCauseInput, setRootCauseInput] = useState("");
   const [isUpdatingRootCause, setIsUpdatingRootCause] = useState(false);
   const [rootCauseError, setRootCauseError] = useState<string | null>(null);
+  const [dispositionInput, setDispositionInput] =
+    useState<ReworkDisposition>("unreviewed");
+  const [isUpdatingDisposition, setIsUpdatingDisposition] = useState(false);
+  const [dispositionError, setDispositionError] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     async function loadReworkEventDetail() {
@@ -65,6 +87,7 @@ export default function ReworkEventDetailPage() {
 
         setDetail(data);
         setRootCauseInput(data.rework_event.root_cause_label);
+        setDispositionInput(data.rework_event.disposition);
       } catch {
         setError(
           `Unable to load rework event ${reworkId}. Make sure the backend is running on ${API_BASE_URL}.`,
@@ -175,6 +198,41 @@ export default function ReworkEventDetailPage() {
     }
   }
 
+  async function updateDisposition() {
+    if (isUpdatingDisposition) return;
+    setIsUpdatingDisposition(true);
+    setDispositionError(null);
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/ingest/${encodeURIComponent(reworkId)}/disposition`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            disposition: dispositionInput,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Update disposition request failed.");
+      }
+
+      const updatedDetail = (await response.json()) as ReworkEventDetail;
+      setDetail(updatedDetail);
+      setDispositionInput(updatedDetail.rework_event.disposition);
+    } catch {
+      setDispositionError(
+        `Unable to update disposition. Make sure the backend is running on ${API_BASE_URL}.`,
+      );
+    } finally {
+      setIsUpdatingDisposition(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-base-200 px-4 py-8 text-base-content">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -216,6 +274,16 @@ export default function ReworkEventDetailPage() {
                   <span className="badge badge-neutral">
                     {formatLabel(detail.rework_event.root_cause_label)}
                   </span>
+                  <span
+                    className={`badge whitespace-nowrap ${DISPOSITION_BADGE_CLASS[detail.rework_event.disposition]}`}
+                  >
+                    {
+                      DISPOSITION_OPTIONS.find(
+                        (option) =>
+                          option.value === detail.rework_event.disposition,
+                      )?.label
+                    }
+                  </span>
                 </div>
                 <h2 className="text-xl font-semibold">
                   {detail.rework_event.summary}
@@ -247,6 +315,43 @@ export default function ReworkEventDetailPage() {
                 {rootCauseError && (
                   <div className="alert alert-error">
                     <span>{rootCauseError}</span>
+                  </div>
+                )}
+                <div className="flex flex-col gap-3 md:flex-row md:items-end">
+                  <label className="form-control flex-1">
+                    <span className="label mb-1">
+                      <span className="label-text">Reviewer Disposition</span>
+                    </span>
+                    <select
+                      className="select select-bordered"
+                      onChange={(event) =>
+                        setDispositionInput(
+                          event.target.value as ReworkDisposition,
+                        )
+                      }
+                      value={dispositionInput}
+                    >
+                      {DISPOSITION_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <button
+                    className="btn btn-primary"
+                    disabled={
+                      isUpdatingDisposition ||
+                      dispositionInput === detail.rework_event.disposition
+                    }
+                    onClick={updateDisposition}
+                  >
+                    {isUpdatingDisposition ? "Saving..." : "Save Disposition"}
+                  </button>
+                </div>
+                {dispositionError && (
+                  <div className="alert alert-error">
+                    <span>{dispositionError}</span>
                   </div>
                 )}
                 <div className="stats stats-vertical bg-base-200 lg:stats-horizontal">

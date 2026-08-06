@@ -1,5 +1,12 @@
 export type IsoDateTime = string;
 
+export type ReworkDisposition =
+  | "unreviewed"
+  | "confirmed_rework"
+  | "partial_rework"
+  | "related_expected"
+  | "unrelated";
+
 export type PullRequest = {
   id: number;
   number: number;
@@ -52,6 +59,7 @@ export type ReworkEvent = {
   days_after_merge: number;
   human_hours_spent: number;
   root_cause_label: string;
+  disposition: ReworkDisposition;
   summary: string;
 };
 
@@ -91,6 +99,7 @@ export type ReworkEventDetailEvent = {
   id: string;
   severity: string;
   root_cause_label: string;
+  disposition: ReworkDisposition;
   days_after_merge: number;
   human_hours_spent: number;
   summary: string;

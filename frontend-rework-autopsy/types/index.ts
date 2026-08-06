@@ -5,6 +5,7 @@ export type {
   PullRequest,
   PullRequestFile,
   Repo,
+  ReworkDisposition,
   ReworkEvent,
   ReworkEventDetail,
   ReworkEventDetailContextArtifact,

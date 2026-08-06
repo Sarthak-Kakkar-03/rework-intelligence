@@ -16,6 +16,7 @@ from app.api.models import (
     ReworkRecomputeResult,
     ReworkEventDetail,
     ReworkRootCause,
+    ReworkDisposition,
 )
 
 from app.queries import (
@@ -27,6 +28,7 @@ from app.queries import (
     insert_pull_request_with_files,
     replace_rework_events,
     change_rework_root_cause_by_id,
+    change_rework_disposition_by_id,
 )
 from app.services.rework_detection.rework_detector import generate_rework_candidates
 
@@ -219,6 +221,22 @@ def add_root_cause(
     updated_rework = change_rework_root_cause_by_id(
         rework_id=rework_id,
         root_cause=root_cause.root_cause,
+    )
+
+    if updated_rework is None:
+        raise HTTPException(status_code=404, detail="Rework event not found")
+
+    return updated_rework
+
+
+@router.post("/ingest/{rework_id}/disposition", response_model=ReworkEventDetail)
+def add_disposition(
+    rework_id: str,
+    disposition: ReworkDisposition,
+) -> ReworkEventDetail:
+    updated_rework = change_rework_disposition_by_id(
+        rework_id=rework_id,
+        disposition=disposition.disposition,
     )
 
     if updated_rework is None:
