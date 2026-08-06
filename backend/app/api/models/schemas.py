@@ -1,6 +1,15 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, Field
+
+ReworkDispositionValue = Literal[
+    "unreviewed",
+    "confirmed_rework",
+    "partial_rework",
+    "related_expected",
+    "unrelated",
+]
 
 
 class Repo(BaseModel):
@@ -73,6 +82,7 @@ class ReworkEvent(BaseModel):
     days_after_merge: int = Field(ge=0)
     human_hours_spent: float = Field(ge=0)
     root_cause_label: str
+    disposition: ReworkDispositionValue = "unreviewed"
     summary: str
 
 
@@ -108,6 +118,7 @@ class ReworkEventDetailEvent(BaseModel):
     id: str
     severity: str
     root_cause_label: str
+    disposition: ReworkDispositionValue = "unreviewed"
     days_after_merge: int = Field(ge=0)
     human_hours_spent: float = Field(ge=0)
     summary: str
@@ -142,3 +153,7 @@ class ReworkRecomputeResult(BaseModel):
 
 class ReworkRootCause(BaseModel):
     root_cause: str
+
+
+class ReworkDisposition(BaseModel):
+    disposition: ReworkDispositionValue

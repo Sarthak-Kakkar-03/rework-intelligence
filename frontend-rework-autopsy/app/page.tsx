@@ -8,6 +8,7 @@ import type {
   ContextArtifact,
   PullRequest,
   Repo,
+  ReworkDisposition,
   ReworkEvent,
 } from "@/types";
 
@@ -26,6 +27,22 @@ function formatLabel(label: string | undefined): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+
+const DISPOSITION_LABELS: Record<ReworkDisposition, string> = {
+  unreviewed: "Unreviewed",
+  confirmed_rework: "Confirmed Rework",
+  partial_rework: "Partial Rework",
+  related_expected: "Related but Expected",
+  unrelated: "Unrelated",
+};
+
+const DISPOSITION_BADGE_CLASS: Record<ReworkDisposition, string> = {
+  unreviewed: "badge-ghost",
+  confirmed_rework: "badge-error",
+  partial_rework: "badge-warning",
+  related_expected: "badge-info",
+  unrelated: "badge-neutral",
+};
 
 function getRootCauseCounts(reworkEvents: ReworkEvent[]) {
   const counts: Record<string, number> = {};
@@ -433,6 +450,7 @@ export default function Home() {
                           <th>Follow-up PR</th>
                           <th>Root Cause</th>
                           <th>Severity</th>
+                          <th>Disposition</th>
                           <th>Days After Merge</th>
                           <th>Human Hours</th>
                         </tr>
@@ -460,6 +478,13 @@ export default function Home() {
                             <td>
                               <span className="badge badge-outline">
                                 {formatLabel(event.severity)}
+                              </span>
+                            </td>
+                            <td>
+                              <span
+                                className={`badge whitespace-nowrap ${DISPOSITION_BADGE_CLASS[event.disposition]}`}
+                              >
+                                {DISPOSITION_LABELS[event.disposition]}
                               </span>
                             </td>
                             <td>{event.days_after_merge}</td>

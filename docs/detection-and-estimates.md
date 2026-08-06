@@ -75,3 +75,19 @@ medium: otherwise
 ```
 
 This is a ranking heuristic, not time tracking or causal proof.
+
+## Reviewer Disposition
+
+Every rework event carries a human-set `disposition`, independent of the
+detector's own `severity`/`confidence` output:
+
+- `unreviewed` (default) — no human has looked at it yet.
+- `confirmed_rework` — a reviewer agrees this is genuine rework.
+- `partial_rework` — some of the follow-up is rework, some is unrelated.
+- `related_expected` — a legitimate, expected follow-up (not rework).
+- `unrelated` — false positive; the pair should not have been flagged.
+
+Set via `POST /api/ingest/{rework_id}/disposition`. A `disposition` is
+preserved across `POST /api/ingest/rework-events/recompute` the same way
+`root_cause_label` is — recompute never overwrites a human's review. This is
+the ground-truth label a future ML classifier would train against.

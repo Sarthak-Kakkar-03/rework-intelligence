@@ -341,6 +341,7 @@ def get_rework_events() -> list[ReworkEvent]:
           days_after_merge,
           human_hours_spent,
           root_cause_label,
+          disposition,
           summary
         FROM rework_events
         ORDER BY source_pr_id ASC, followup_pr_id ASC
@@ -359,6 +360,7 @@ def get_rework_events() -> list[ReworkEvent]:
                 days_after_merge=row["days_after_merge"],
                 human_hours_spent=row["human_hours_spent"],
                 root_cause_label=row["root_cause_label"],
+                disposition=row["disposition"],
                 summary=row["summary"],
             )
             for row in rows
@@ -805,6 +807,7 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
           re.id AS rework_event_id,
           re.severity,
           re.root_cause_label,
+          re.disposition,
           re.days_after_merge,
           re.human_hours_spent,
           re.summary,
@@ -863,6 +866,7 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
             id=row["rework_event_id"],
             severity=row["severity"],
             root_cause_label=row["root_cause_label"],
+            disposition=row["disposition"],
             days_after_merge=row["days_after_merge"],
             human_hours_spent=row["human_hours_spent"],
             summary=row["summary"],
@@ -896,6 +900,26 @@ def change_rework_root_cause_by_id(
 
     with closing(get_connection()) as conn:
         cursor = conn.execute(sql, (root_cause, rework_id))
+        conn.commit()
+
+    if cursor.rowcount == 0:
+        return None
+
+    return get_rework_event_detail(rework_event_id=rework_id)
+
+
+def change_rework_disposition_by_id(
+    rework_id: str,
+    disposition: str,
+) -> ReworkEventDetail | None:
+    sql = """
+        UPDATE rework_events
+        SET disposition = ?
+        WHERE id = ?
+    """
+
+    with closing(get_connection()) as conn:
+        cursor = conn.execute(sql, (disposition, rework_id))
         conn.commit()
 
     if cursor.rowcount == 0:

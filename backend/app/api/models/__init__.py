@@ -15,6 +15,7 @@ from app.api.models.schemas import (
     ReworkRecomputeResult,
     PullRequestCreate,
     ReworkRootCause,
+    ReworkDisposition,
 )
 
 
@@ -35,4 +36,5 @@ __all__ = [
     "ReworkRecomputeResult",
     "PullRequestCreate",
     "ReworkRootCause",
+    "ReworkDisposition",
 ]

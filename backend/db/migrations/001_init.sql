@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS rework_events (
   human_hours_spent REAL NOT NULL,
 
   root_cause_label TEXT NOT NULL,
+  disposition TEXT NOT NULL DEFAULT 'unreviewed',
   summary TEXT NOT NULL,
 
   FOREIGN KEY (source_pr_id) REFERENCES pull_requests(id),
