@@ -31,12 +31,18 @@ def test_has_followup_rework_language_matches_original_keywords():
 
 def test_has_followup_rework_language_matches_widened_keywords():
     assert has_followup_rework_language(make_pr(body="Handles a rare bug.")) is True
-    assert has_followup_rework_language(make_pr(title="Fix regression in parser")) is True
+    assert (
+        has_followup_rework_language(make_pr(title="Fix regression in parser")) is True
+    )
     assert has_followup_rework_language(make_pr(title="Cleanup pass")) is True
     assert has_followup_rework_language(make_pr(title="Clean-up pass")) is True
-    assert has_followup_rework_language(make_pr(body="Correct the helper names.")) is True
+    assert (
+        has_followup_rework_language(make_pr(body="Correct the helper names.")) is True
+    )
     assert has_followup_rework_language(make_pr(title="Hotfix for staging")) is True
-    assert has_followup_rework_language(make_pr(body="Adjust the timeout value.")) is True
+    assert (
+        has_followup_rework_language(make_pr(body="Adjust the timeout value.")) is True
+    )
     assert has_followup_rework_language(make_pr(body="The build was broken.")) is True
 
 

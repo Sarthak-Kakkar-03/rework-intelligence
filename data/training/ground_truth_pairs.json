@@ -1,0 +1,320 @@
+[
+  {
+    "source_pr_id": 2,
+    "followup_pr_id": 10,
+    "repo_id": "repo-checkout-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 26,
+    "followup_pr_id": 28,
+    "repo_id": "repo-checkout-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 29,
+    "followup_pr_id": 30,
+    "repo_id": "repo-checkout-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 31,
+    "followup_pr_id": 33,
+    "repo_id": "repo-checkout-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 38,
+    "followup_pr_id": 41,
+    "repo_id": "repo-checkout-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 54,
+    "followup_pr_id": 60,
+    "repo_id": "repo-checkout-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 56,
+    "followup_pr_id": 58,
+    "repo_id": "repo-checkout-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 74,
+    "followup_pr_id": 77,
+    "repo_id": "repo-billing-api",
+    "label": 1
+  },
+  {
+    "source_pr_id": 79,
+    "followup_pr_id": 83,
+    "repo_id": "repo-billing-api",
+    "label": 1
+  },
+  {
+    "source_pr_id": 84,
+    "followup_pr_id": 85,
+    "repo_id": "repo-billing-api",
+    "label": 1
+  },
+  {
+    "source_pr_id": 86,
+    "followup_pr_id": 89,
+    "repo_id": "repo-billing-api",
+    "label": 1
+  },
+  {
+    "source_pr_id": 101,
+    "followup_pr_id": 105,
+    "repo_id": "repo-billing-api",
+    "label": 1
+  },
+  {
+    "source_pr_id": 116,
+    "followup_pr_id": 117,
+    "repo_id": "repo-billing-api",
+    "label": 1
+  },
+  {
+    "source_pr_id": 124,
+    "followup_pr_id": 128,
+    "repo_id": "repo-auth-gateway",
+    "label": 1
+  },
+  {
+    "source_pr_id": 137,
+    "followup_pr_id": 138,
+    "repo_id": "repo-auth-gateway",
+    "label": 1
+  },
+  {
+    "source_pr_id": 153,
+    "followup_pr_id": 156,
+    "repo_id": "repo-auth-gateway",
+    "label": 1
+  },
+  {
+    "source_pr_id": 169,
+    "followup_pr_id": 171,
+    "repo_id": "repo-auth-gateway",
+    "label": 1
+  },
+  {
+    "source_pr_id": 172,
+    "followup_pr_id": 173,
+    "repo_id": "repo-auth-gateway",
+    "label": 1
+  },
+  {
+    "source_pr_id": 175,
+    "followup_pr_id": 177,
+    "repo_id": "repo-auth-gateway",
+    "label": 1
+  },
+  {
+    "source_pr_id": 178,
+    "followup_pr_id": 183,
+    "repo_id": "repo-auth-gateway",
+    "label": 1
+  },
+  {
+    "source_pr_id": 180,
+    "followup_pr_id": 182,
+    "repo_id": "repo-auth-gateway",
+    "label": 1
+  },
+  {
+    "source_pr_id": 184,
+    "followup_pr_id": 191,
+    "repo_id": "repo-auth-gateway",
+    "label": 1
+  },
+  {
+    "source_pr_id": 200,
+    "followup_pr_id": 201,
+    "repo_id": "repo-notification-worker",
+    "label": 1
+  },
+  {
+    "source_pr_id": 204,
+    "followup_pr_id": 206,
+    "repo_id": "repo-notification-worker",
+    "label": 1
+  },
+  {
+    "source_pr_id": 205,
+    "followup_pr_id": 210,
+    "repo_id": "repo-notification-worker",
+    "label": 1
+  },
+  {
+    "source_pr_id": 249,
+    "followup_pr_id": 250,
+    "repo_id": "repo-search-indexer",
+    "label": 1
+  },
+  {
+    "source_pr_id": 267,
+    "followup_pr_id": 271,
+    "repo_id": "repo-search-indexer",
+    "label": 1
+  },
+  {
+    "source_pr_id": 268,
+    "followup_pr_id": 269,
+    "repo_id": "repo-search-indexer",
+    "label": 1
+  },
+  {
+    "source_pr_id": 281,
+    "followup_pr_id": 283,
+    "repo_id": "repo-search-indexer",
+    "label": 1
+  },
+  {
+    "source_pr_id": 299,
+    "followup_pr_id": 307,
+    "repo_id": "repo-search-indexer",
+    "label": 1
+  },
+  {
+    "source_pr_id": 301,
+    "followup_pr_id": 306,
+    "repo_id": "repo-search-indexer",
+    "label": 1
+  },
+  {
+    "source_pr_id": 302,
+    "followup_pr_id": 305,
+    "repo_id": "repo-search-indexer",
+    "label": 1
+  },
+  {
+    "source_pr_id": 308,
+    "followup_pr_id": 311,
+    "repo_id": "repo-search-indexer",
+    "label": 1
+  },
+  {
+    "source_pr_id": 310,
+    "followup_pr_id": 317,
+    "repo_id": "repo-search-indexer",
+    "label": 1
+  },
+  {
+    "source_pr_id": 327,
+    "followup_pr_id": 330,
+    "repo_id": "repo-analytics-pipeline",
+    "label": 1
+  },
+  {
+    "source_pr_id": 329,
+    "followup_pr_id": 334,
+    "repo_id": "repo-analytics-pipeline",
+    "label": 1
+  },
+  {
+    "source_pr_id": 340,
+    "followup_pr_id": 343,
+    "repo_id": "repo-analytics-pipeline",
+    "label": 1
+  },
+  {
+    "source_pr_id": 347,
+    "followup_pr_id": 353,
+    "repo_id": "repo-analytics-pipeline",
+    "label": 1
+  },
+  {
+    "source_pr_id": 349,
+    "followup_pr_id": 354,
+    "repo_id": "repo-analytics-pipeline",
+    "label": 1
+  },
+  {
+    "source_pr_id": 360,
+    "followup_pr_id": 361,
+    "repo_id": "repo-analytics-pipeline",
+    "label": 1
+  },
+  {
+    "source_pr_id": 362,
+    "followup_pr_id": 367,
+    "repo_id": "repo-analytics-pipeline",
+    "label": 1
+  },
+  {
+    "source_pr_id": 364,
+    "followup_pr_id": 365,
+    "repo_id": "repo-analytics-pipeline",
+    "label": 1
+  },
+  {
+    "source_pr_id": 371,
+    "followup_pr_id": 372,
+    "repo_id": "repo-analytics-pipeline",
+    "label": 1
+  },
+  {
+    "source_pr_id": 374,
+    "followup_pr_id": 375,
+    "repo_id": "repo-analytics-pipeline",
+    "label": 1
+  },
+  {
+    "source_pr_id": 381,
+    "followup_pr_id": 385,
+    "repo_id": "repo-user-profile-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 386,
+    "followup_pr_id": 388,
+    "repo_id": "repo-user-profile-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 392,
+    "followup_pr_id": 393,
+    "repo_id": "repo-user-profile-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 419,
+    "followup_pr_id": 420,
+    "repo_id": "repo-user-profile-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 433,
+    "followup_pr_id": 434,
+    "repo_id": "repo-user-profile-service",
+    "label": 1
+  },
+  {
+    "source_pr_id": 439,
+    "followup_pr_id": 442,
+    "repo_id": "repo-referral-api",
+    "label": 1
+  },
+  {
+    "source_pr_id": 449,
+    "followup_pr_id": 453,
+    "repo_id": "repo-referral-api",
+    "label": 1
+  },
+  {
+    "source_pr_id": 450,
+    "followup_pr_id": 454,
+    "repo_id": "repo-referral-api",
+    "label": 1
+  },
+  {
+    "source_pr_id": 468,
+    "followup_pr_id": 470,
+    "repo_id": "repo-referral-api",
+    "label": 1
+  }
+]

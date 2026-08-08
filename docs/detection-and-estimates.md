@@ -45,9 +45,10 @@ are common.
 ## Feature Vector
 
 Each generated `ReworkCandidate` also carries a `features` object
-(`ReworkFeatures`, see `backend/app/services/rework_detection/features.py`) —
-a set of continuous/explainable signals meant to feed an ML classifier,
-computed but not persisted to `rework_events`:
+(`ReworkFeatures`, see `backend/app/api/models/schemas.py`) — a set of
+continuous/explainable signals meant to feed an ML classifier, computed by
+`backend/app/services/rework_detection/features.py` but not persisted to
+`rework_events`:
 
 - `shared_file_count`, `source_file_overlap_ratio`,
   `followup_file_overlap_ratio` — how much of each PR's changed-file surface

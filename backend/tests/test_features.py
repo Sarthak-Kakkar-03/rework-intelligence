@@ -188,9 +188,7 @@ def test_references_same_issue_ignores_mutual_pr_number_references():
 
 def test_compute_rework_features_returns_full_vector():
     source_pr = make_pr(1, 41, title="Add retry handling", body="Handles retries")
-    followup_pr = make_pr(
-        2, 42, title='Revert "Add retry handling"', body="Fixes #41."
-    )
+    followup_pr = make_pr(2, 42, title='Revert "Add retry handling"', body="Fixes #41.")
     source_files = [make_file(1, "a.py")]
     followup_files = [make_file(2, "a.py")]
     overlapping_files = [make_file(2, "a.py")]

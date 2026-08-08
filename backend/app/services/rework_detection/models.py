@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from app.services.rework_detection.features import ReworkFeatures
+from app.api.models import ReworkFeatures
 
 
 class ReworkCandidate(BaseModel):
