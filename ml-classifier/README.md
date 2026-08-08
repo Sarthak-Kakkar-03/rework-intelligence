@@ -12,7 +12,7 @@ can review the approach and own the integration.
 Before wiring anything in, two things were verified:
 
 1. **The trained model's expected feature order exactly matches
-   `ReworkFeatures`** in `backend/app/services/rework_detection/features.py`
+   `ReworkFeatures`** in `backend/app/api/models/schemas.py`
    (13 fields, same names). Verified by direct comparison — see
    `backend/app/services/rework_detection/artifacts/metadata.json`'s
    `feature_order` list against the `ReworkFeatures` class definition.
@@ -27,8 +27,9 @@ Before wiring anything in, two things were verified:
   human-confirmed disposition reviews (`queries.py`'s
   `get_author_historical_rework_rate` / `get_global_rework_rate`). Shipped in
   `feature/reviewer-disposition` — merged.
-- **The `ReworkFeatures` / `compute_rework_features()` code itself**
-  (`backend/app/services/rework_detection/features.py`) and the 4 new
+- **The `ReworkFeatures` response model and `compute_rework_features()` code**
+  (`backend/app/api/models/schemas.py` and
+  `backend/app/services/rework_detection/features.py`) and the 4 new
   qualifying signals wired into `rework_detector.py`. This is what the model
   was actually trained against, so it has to exist in the app before the
   model is usable at all. Shipped in `feature/rework-feature-extraction`

@@ -99,7 +99,9 @@ def get_rework_signals(
     if test_file_overlap(source_files=source_files, followup_files=followup_files):
         signals.append("Detected overlapping test files")
     if high_risk_file_overlap(source_files=source_files, followup_files=followup_files):
-        signals.append("Overlapping high-risk file (api/migration/config/model/service)")
+        signals.append(
+            "Overlapping high-risk file (api/migration/config/model/service)"
+        )
     return signals
 
 

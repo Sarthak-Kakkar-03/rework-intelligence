@@ -157,3 +157,19 @@ class ReworkRootCause(BaseModel):
 
 class ReworkDisposition(BaseModel):
     disposition: ReworkDispositionValue
+
+
+class ReworkFeatures(BaseModel):
+    shared_file_count: int
+    source_file_overlap_ratio: float
+    followup_file_overlap_ratio: float
+    semantic_similarity: float
+    has_revert_signal: bool
+    has_test_file_overlap: bool
+    has_high_risk_file_overlap: bool
+    has_explicit_pr_reference: bool
+    references_same_issue: bool
+    hours_between_merges: float
+    same_author: bool
+    source_ai_generated: bool
+    author_historical_rework_rate: float

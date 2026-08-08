@@ -19,11 +19,9 @@ from app.api.models import (
     Repo,
     ReworkEvent,
     ReworkEventDetail,
-)
-from app.services.rework_detection.features import (
     ReworkFeatures,
-    compute_rework_features,
 )
+from app.services.rework_detection.features import compute_rework_features
 from app.services.rework_detection.signals import get_overlapping_files
 
 router = APIRouter(prefix="/api", tags=["Engineering Data"])

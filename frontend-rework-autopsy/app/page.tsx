@@ -142,13 +142,12 @@ export default function Home() {
         eventsResponse,
         artifactsResponse,
         pullRequestsResponse,
-      ] =
-        await Promise.all([
-          fetch(`${API_BASE_URL}/api/autopsy/summary`),
-          fetch(`${API_BASE_URL}/api/rework-events`),
-          fetch(`${API_BASE_URL}/api/context-artifacts`),
-          fetch(`${API_BASE_URL}/api/pull-requests`),
-        ]);
+      ] = await Promise.all([
+        fetch(`${API_BASE_URL}/api/autopsy/summary`),
+        fetch(`${API_BASE_URL}/api/rework-events`),
+        fetch(`${API_BASE_URL}/api/context-artifacts`),
+        fetch(`${API_BASE_URL}/api/pull-requests`),
+      ]);
 
       if (
         !summaryResponse.ok ||

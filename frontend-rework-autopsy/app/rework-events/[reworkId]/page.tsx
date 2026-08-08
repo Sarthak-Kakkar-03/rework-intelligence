@@ -4,7 +4,11 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import type { ContextArtifact, ReworkDisposition, ReworkEventDetail } from "@/types";
+import type {
+  ContextArtifact,
+  ReworkDisposition,
+  ReworkEventDetail,
+} from "@/types";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
@@ -65,9 +69,7 @@ export default function ReworkEventDetailPage() {
   const [dispositionInput, setDispositionInput] =
     useState<ReworkDisposition>("unreviewed");
   const [isUpdatingDisposition, setIsUpdatingDisposition] = useState(false);
-  const [dispositionError, setDispositionError] = useState<string | null>(
-    null,
-  );
+  const [dispositionError, setDispositionError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadReworkEventDetail() {

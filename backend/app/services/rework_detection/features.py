@@ -2,9 +2,7 @@ import math
 import re
 from collections import Counter
 
-from pydantic import BaseModel
-
-from app.api.models import PullRequest, PullRequestFile
+from app.api.models import PullRequest, PullRequestFile, ReworkFeatures
 
 _WORD_PATTERN = re.compile(r"[a-z0-9]+")
 _REFERENCE_PATTERN = re.compile(r"#(\d+)")
@@ -135,26 +133,6 @@ def references_same_issue(source_pr: PullRequest, followup_pr: PullRequest) -> b
     source_refs = extract_referenced_numbers(source_pr) - own_numbers
     followup_refs = extract_referenced_numbers(followup_pr) - own_numbers
     return bool(source_refs & followup_refs)
-
-
-# Fixed order used both when training the classifier and when scoring a
-# live candidate — must stay in sync with classifier.py's FEATURE_ORDER, or
-# a saved model will silently score the wrong columns against the wrong
-# weights (classic train/serve skew).
-class ReworkFeatures(BaseModel):
-    shared_file_count: int
-    source_file_overlap_ratio: float
-    followup_file_overlap_ratio: float
-    semantic_similarity: float
-    has_revert_signal: bool
-    has_test_file_overlap: bool
-    has_high_risk_file_overlap: bool
-    has_explicit_pr_reference: bool
-    references_same_issue: bool
-    hours_between_merges: float
-    same_author: bool
-    source_ai_generated: bool
-    author_historical_rework_rate: float
 
 
 def compute_rework_features(
