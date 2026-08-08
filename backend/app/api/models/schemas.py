@@ -52,26 +52,6 @@ class PullRequestFile(BaseModel):
     deletions: int = Field(default=0, ge=0)
 
 
-class PullRequestFilesCreate(BaseModel):
-    file_paths: list[str]
-
-
-class PullRequestCreate(BaseModel):
-    title: str
-    body: str
-    author_login: str
-    merged_by_login: str
-    head_branch: str
-    ai_generated: bool
-    repo_id: str
-    closed_at: datetime | None = None
-
-
-class PullRequestWithFilesCreate(BaseModel):
-    pull_request: PullRequestCreate
-    file_paths: list[str]
-
-
 class ReworkEvent(BaseModel):
     id: str
     source_pr_id: int

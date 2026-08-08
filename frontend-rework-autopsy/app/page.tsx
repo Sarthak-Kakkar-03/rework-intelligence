@@ -6,16 +6,12 @@ import Link from "next/link";
 import type {
   AutopsySummary,
   ContextArtifact,
-  PullRequest,
-  Repo,
   ReworkDisposition,
   ReworkEvent,
 } from "@/types";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
-
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 function formatLabel(label: string | undefined): string {
   if (!label) {
@@ -58,50 +54,16 @@ function getRootCauseCounts(reworkEvents: ReworkEvent[]) {
   }));
 }
 
-function parseFilePaths(filePathText: string): string[] {
-  return filePathText
-    .split(/\n|,/)
-    .map((filePath) => {
-      let normalizedPath = filePath.trim().replaceAll("\\", "/");
-      while (normalizedPath.startsWith("./")) {
-        normalizedPath = normalizedPath.slice(2);
-      }
-      while (normalizedPath.includes("//")) {
-        normalizedPath = normalizedPath.replaceAll("//", "/");
-      }
-      return normalizedPath;
-    })
-    .filter((filePath) => filePath.length > 0);
-}
-
 function formatHours(hours: number | undefined): string {
   return (hours ?? 0).toFixed(2);
-}
-
-function getLatestClosedAt(pullRequests: PullRequest[]): Date | null {
-  let latestClosedAt: Date | null = null;
-
-  for (const pullRequest of pullRequests) {
-    const closedAt = new Date(pullRequest.closed_at);
-
-    if (Number.isNaN(closedAt.getTime())) {
-      continue;
-    }
-
-    if (!latestClosedAt || closedAt > latestClosedAt) {
-      latestClosedAt = closedAt;
-    }
-  }
-
-  return latestClosedAt;
 }
 
 /**
  * Main dashboard for rework analysis and context artifact generation.
  *
  * Displays summary statistics, rework events, root cause breakdown, and
- * context artifacts. Provides controls to add pull request pairs for analysis
- * and automatically recomputes rework after demo PR pairs are created.
+ * context artifacts. Provides a recompute control for refreshing detector
+ * output after upstream pull request data changes.
  */
 export default function Home() {
   const [summary, setSummary] = useState<AutopsySummary | null>(null);
@@ -109,86 +71,41 @@ export default function Home() {
   const [contextArtifacts, setContextArtifacts] = useState<ContextArtifact[]>(
     [],
   );
-  const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
-  const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const [addPrModalOpen, setAddPrModalOpen] = useState(false);
-  const [addPrError, setAddPrError] = useState<string | null>(null);
-  const [isAddingPrPair, setIsAddingPrPair] = useState(false);
-  const [sourcePrTitle, setSourcePrTitle] = useState("");
-  const [sourcePrBody, setSourcePrBody] = useState("");
-  const [sourcePrRepoId, setSourcePrRepoId] = useState("");
-  const [sourcePrAuthorLogin, setSourcePrAuthorLogin] = useState("");
-  const [sourcePrMergedByLogin, setSourcePrMergedByLogin] = useState("");
-  const [sourcePrHeadBranch, setSourcePrHeadBranch] = useState("");
-  const [sourcePrFiles, setSourcePrFiles] = useState("");
-  const [followupPrTitle, setFollowupPrTitle] = useState("");
-  const [followupPrBody, setFollowupPrBody] = useState("");
-  const [followupPrRepoId, setFollowupPrRepoId] = useState("");
-  const [followupPrAuthorLogin, setFollowupPrAuthorLogin] = useState("");
-  const [followupPrMergedByLogin, setFollowupPrMergedByLogin] = useState("");
-  const [followupPrHeadBranch, setFollowupPrHeadBranch] = useState("");
-  const [followupPrFiles, setFollowupPrFiles] = useState("");
+  const [isRecomputing, setIsRecomputing] = useState(false);
 
   async function loadDashboardData() {
     try {
       setLoading(true);
       setError(null);
 
-      const [
-        summaryResponse,
-        eventsResponse,
-        artifactsResponse,
-        pullRequestsResponse,
-      ] = await Promise.all([
-        fetch(`${API_BASE_URL}/api/autopsy/summary`),
-        fetch(`${API_BASE_URL}/api/rework-events`),
-        fetch(`${API_BASE_URL}/api/context-artifacts`),
-        fetch(`${API_BASE_URL}/api/pull-requests`),
-      ]);
+      const [summaryResponse, eventsResponse, artifactsResponse] =
+        await Promise.all([
+          fetch(`${API_BASE_URL}/api/autopsy/summary`),
+          fetch(`${API_BASE_URL}/api/rework-events`),
+          fetch(`${API_BASE_URL}/api/context-artifacts`),
+        ]);
 
-      if (
-        !summaryResponse.ok ||
-        !eventsResponse.ok ||
-        !artifactsResponse.ok ||
-        !pullRequestsResponse.ok
-      ) {
+      if (!summaryResponse.ok || !eventsResponse.ok || !artifactsResponse.ok) {
         throw new Error("One or more dashboard requests failed.");
       }
 
-      const [summaryData, eventsData, artifactsData, pullRequestsData] =
-        await Promise.all([
-          summaryResponse.json() as Promise<AutopsySummary>,
-          eventsResponse.json() as Promise<ReworkEvent[]>,
-          artifactsResponse.json() as Promise<ContextArtifact[]>,
-          pullRequestsResponse.json() as Promise<PullRequest[]>,
-        ]);
+      const [summaryData, eventsData, artifactsData] = await Promise.all([
+        summaryResponse.json() as Promise<AutopsySummary>,
+        eventsResponse.json() as Promise<ReworkEvent[]>,
+        artifactsResponse.json() as Promise<ContextArtifact[]>,
+      ]);
 
       setSummary(summaryData);
       setReworkEvents(eventsData);
       setContextArtifacts(artifactsData);
-      setPullRequests(pullRequestsData);
     } catch {
       setError(
         `Unable to load dashboard data. Make sure the backend is running on ${API_BASE_URL}.`,
       );
     } finally {
       setLoading(false);
-    }
-
-    try {
-      const reposResponse = await fetch(`${API_BASE_URL}/api/repos`);
-
-      if (!reposResponse.ok) {
-        throw new Error("Repos request failed.");
-      }
-
-      const reposData = (await reposResponse.json()) as Repo[];
-      setRepos(reposData);
-    } catch (reposError) {
-      console.error("Unable to load repos for Add PR Pair modal.", reposError);
     }
   }
 
@@ -203,151 +120,6 @@ export default function Home() {
 
   const fallbackHeadline = `Found ${summary?.rework_event_count ?? reworkEvents.length} rework events across ${summary?.pull_request_count ?? 0} pull requests, with ${summary?.context_artifact_count ?? contextArtifacts.length} context artifacts.`;
 
-  /**
-   * Opens the add PR pair modal, pre-filled with example values.
-   */
-  function openAddPrModal() {
-    setSourcePrTitle("Add retry handling for billing sync");
-    setSourcePrBody(
-      "Adds AI-generated retry behavior for transient billing sync failures.",
-    );
-    setSourcePrRepoId("repo-jira-sync-worker");
-    setSourcePrAuthorLogin("maya-chen");
-    setSourcePrMergedByLogin("alex-rivera");
-    setSourcePrHeadBranch("maya/billing-sync-retry");
-    setSourcePrFiles(
-      "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py",
-    );
-    setFollowupPrTitle("Fix duplicate billing sync retries");
-    setFollowupPrBody(
-      "Fixes duplicate writes from retry replay after the AI-generated retry change.",
-    );
-    setFollowupPrRepoId("repo-jira-sync-worker");
-    setFollowupPrAuthorLogin("alex-rivera");
-    setFollowupPrMergedByLogin("maya-chen");
-    setFollowupPrHeadBranch("alex/fix-billing-retry");
-    setFollowupPrFiles(
-      "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py",
-    );
-    setAddPrError(null);
-    setAddPrModalOpen(true);
-  }
-
-  /**
-   * Creates a pull request with the specified files.
-   *
-   * @returns The created pull request.
-   */
-  async function createPullRequestWithFiles(
-    pullRequest: {
-      title: string;
-      body: string;
-      author_login: string;
-      merged_by_login: string;
-      head_branch: string;
-      ai_generated: boolean;
-      repo_id: string;
-      closed_at: string;
-    },
-    filePaths: string[],
-  ): Promise<PullRequest> {
-    const response = await fetch(
-      `${API_BASE_URL}/api/ingest/pull-request-with-files`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          pull_request: pullRequest,
-          file_paths: filePaths,
-        }),
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error("Create PR with files request failed");
-    }
-
-    return (await response.json()) as PullRequest;
-  }
-
-  /**
-   * Creates a source pull request and a follow-up pull request from the provided form data.
-   *
-   * Validates that both source and follow-up PRs have a repo selected and at least one file path.
-   * Computes closure timestamps (source: current time, follow-up: one day later) and submits both
-   * pull requests to the backend. On success, closes the modal and refreshes the dashboard.
-   * On failure, displays an error message.
-   */
-  async function addPullRequestPair() {
-    if (isAddingPrPair) return;
-
-    try {
-      setAddPrError(null);
-      setIsAddingPrPair(true);
-
-      if (!sourcePrRepoId.trim() || !followupPrRepoId.trim()) {
-        setAddPrError("Both PRs need a repo.");
-        return;
-      }
-
-      const sourceFilePaths = parseFilePaths(sourcePrFiles);
-      const followupFilePaths = parseFilePaths(followupPrFiles);
-
-      if (sourceFilePaths.length === 0 || followupFilePaths.length === 0) {
-        setAddPrError("Add at least one file path for each PR.");
-        return;
-      }
-
-      const latestClosedAt = getLatestClosedAt(pullRequests);
-      const now = new Date();
-      const sourceClosedAt =
-        latestClosedAt && latestClosedAt > now
-          ? new Date(latestClosedAt.getTime() + ONE_DAY_MS)
-          : now;
-      const followupClosedAt = new Date(sourceClosedAt.getTime() + ONE_DAY_MS);
-
-      await createPullRequestWithFiles(
-        {
-          title: sourcePrTitle,
-          body: sourcePrBody,
-          author_login: sourcePrAuthorLogin,
-          merged_by_login: sourcePrMergedByLogin,
-          head_branch: sourcePrHeadBranch,
-          ai_generated: true,
-          repo_id: sourcePrRepoId,
-          closed_at: sourceClosedAt.toISOString(),
-        },
-        sourceFilePaths,
-      );
-
-      await createPullRequestWithFiles(
-        {
-          title: followupPrTitle,
-          body: followupPrBody,
-          author_login: followupPrAuthorLogin,
-          merged_by_login: followupPrMergedByLogin,
-          head_branch: followupPrHeadBranch,
-          ai_generated: false,
-          repo_id: followupPrRepoId,
-          closed_at: followupClosedAt.toISOString(),
-        },
-        followupFilePaths,
-      );
-
-      await computeRework();
-      setAddPrModalOpen(false);
-      await loadDashboardData();
-    } catch {
-      setAddPrError(
-        "Unable to create PR pair and compute rework. Check the selected repos and make sure the backend is working.",
-      );
-    } finally {
-      setIsAddingPrPair(false);
-    }
-  }
-
   async function computeRework() {
     const response = await fetch(
       `${API_BASE_URL}/api/ingest/rework-events/recompute`,
@@ -358,6 +130,23 @@ export default function Home() {
 
     if (!response.ok) {
       throw new Error("Rework recompute request failed.");
+    }
+  }
+
+  async function recomputeReworkEvents() {
+    if (isRecomputing) return;
+
+    try {
+      setIsRecomputing(true);
+      setError(null);
+      await computeRework();
+      await loadDashboardData();
+    } catch {
+      setError(
+        `Unable to recompute rework events. Make sure the backend is running on ${API_BASE_URL}.`,
+      );
+    } finally {
+      setIsRecomputing(false);
     }
   }
 
@@ -554,301 +343,12 @@ export default function Home() {
             <section className="flex flex-1 justify-evenly">
               <button
                 className="btn btn-ghost btn-primary btn-lg"
-                onClick={openAddPrModal}
+                disabled={isRecomputing}
+                onClick={recomputeReworkEvents}
               >
-                Add PR Pair
+                {isRecomputing ? "Recomputing..." : "Recompute Rework"}
               </button>
             </section>
-
-            <div className={`modal ${addPrModalOpen ? "modal-open" : ""}`}>
-              <div className="modal-box max-w-5xl">
-                <h2 className="text-lg font-semibold">Add PR Pair</h2>
-                <p className="mt-1 text-sm text-base-content/70">
-                  Create a source PR and a follow-up PR. Add at least one file
-                  path for each PR. Rework detection runs automatically after
-                  the pair is created.
-                </p>
-
-                {addPrError && (
-                  <div className="alert alert-error mt-4">
-                    <span>{addPrError}</span>
-                  </div>
-                )}
-
-                <div className="mt-5 grid gap-6 lg:grid-cols-2">
-                  <section className="flex flex-col gap-4">
-                    <h3 className="font-semibold">Source PR</h3>
-                    <label className="form-control">
-                      <span className="label mb-1">
-                        <span className="label-text">Title</span>
-                      </span>
-                      <input
-                        className="input input-bordered"
-                        onChange={(event) =>
-                          setSourcePrTitle(event.target.value)
-                        }
-                        placeholder="Add retry handling for billing sync"
-                        value={sourcePrTitle}
-                      />
-                    </label>
-
-                    <label className="form-control">
-                      <span className="label mb-1">
-                        <span className="label-text">Body</span>
-                      </span>
-                      <textarea
-                        className="textarea textarea-bordered min-h-24"
-                        onChange={(event) =>
-                          setSourcePrBody(event.target.value)
-                        }
-                        placeholder="Adds AI-generated retry behavior for transient billing sync failures."
-                        value={sourcePrBody}
-                      />
-                    </label>
-
-                    <label className="form-control">
-                      <span className="label mb-1">
-                        <span className="label-text">Repo</span>
-                      </span>
-                      <select
-                        className="select select-bordered"
-                        onChange={(event) =>
-                          setSourcePrRepoId(event.target.value)
-                        }
-                        value={sourcePrRepoId}
-                      >
-                        <option disabled value="">
-                          Choose repo
-                        </option>
-                        {repos.map((repo) => (
-                          <option key={repo.id} value={repo.id}>
-                            {repo.name}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <label className="form-control">
-                        <span className="label mb-1">
-                          <span className="label-text">Author</span>
-                        </span>
-                        <input
-                          className="input input-bordered"
-                          onChange={(event) =>
-                            setSourcePrAuthorLogin(event.target.value)
-                          }
-                          placeholder="maya-chen"
-                          value={sourcePrAuthorLogin}
-                        />
-                      </label>
-
-                      <label className="form-control">
-                        <span className="label mb-1">
-                          <span className="label-text">Merged By</span>
-                        </span>
-                        <input
-                          className="input input-bordered"
-                          onChange={(event) =>
-                            setSourcePrMergedByLogin(event.target.value)
-                          }
-                          placeholder="alex-rivera"
-                          value={sourcePrMergedByLogin}
-                        />
-                      </label>
-                    </div>
-
-                    <label className="form-control">
-                      <span className="label mb-1">
-                        <span className="label-text">Head Branch</span>
-                      </span>
-                      <input
-                        className="input input-bordered"
-                        onChange={(event) =>
-                          setSourcePrHeadBranch(event.target.value)
-                        }
-                        placeholder="maya/billing-sync-retry"
-                        value={sourcePrHeadBranch}
-                      />
-                    </label>
-
-                    <label className="form-control">
-                      <span className="label mb-1">
-                        <span className="label-text">File Paths</span>
-                      </span>
-                      <textarea
-                        className="textarea textarea-bordered min-h-24"
-                        onChange={(event) =>
-                          setSourcePrFiles(event.target.value)
-                        }
-                        placeholder={
-                          "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py"
-                        }
-                        value={sourcePrFiles}
-                      />
-                    </label>
-
-                    <label className="flex items-center gap-3">
-                      <input
-                        checked
-                        className="checkbox checkbox-primary"
-                        disabled
-                        readOnly
-                        type="checkbox"
-                      />
-                      <span className="text-sm">AI-generated</span>
-                    </label>
-                  </section>
-
-                  <section className="flex flex-col gap-4">
-                    <h3 className="font-semibold">Follow-up PR</h3>
-                    <label className="form-control">
-                      <span className="label mb-1">
-                        <span className="label-text">Title</span>
-                      </span>
-                      <input
-                        className="input input-bordered"
-                        onChange={(event) =>
-                          setFollowupPrTitle(event.target.value)
-                        }
-                        placeholder="Fix duplicate billing sync retries"
-                        value={followupPrTitle}
-                      />
-                    </label>
-
-                    <label className="form-control">
-                      <span className="label mb-1">
-                        <span className="label-text">Body</span>
-                      </span>
-                      <textarea
-                        className="textarea textarea-bordered min-h-24"
-                        onChange={(event) =>
-                          setFollowupPrBody(event.target.value)
-                        }
-                        placeholder="Fixes duplicate writes from retry replay after the AI-generated retry change."
-                        value={followupPrBody}
-                      />
-                    </label>
-
-                    <label className="form-control">
-                      <span className="label mb-1">
-                        <span className="label-text">Repo</span>
-                      </span>
-                      <select
-                        className="select select-bordered"
-                        onChange={(event) =>
-                          setFollowupPrRepoId(event.target.value)
-                        }
-                        value={followupPrRepoId}
-                      >
-                        <option disabled value="">
-                          Choose repo
-                        </option>
-                        {repos.map((repo) => (
-                          <option key={repo.id} value={repo.id}>
-                            {repo.name}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <label className="form-control">
-                        <span className="label mb-1">
-                          <span className="label-text">Author</span>
-                        </span>
-                        <input
-                          className="input input-bordered"
-                          onChange={(event) =>
-                            setFollowupPrAuthorLogin(event.target.value)
-                          }
-                          placeholder="alex-rivera"
-                          value={followupPrAuthorLogin}
-                        />
-                      </label>
-
-                      <label className="form-control">
-                        <span className="label mb-1">
-                          <span className="label-text">Merged By</span>
-                        </span>
-                        <input
-                          className="input input-bordered"
-                          onChange={(event) =>
-                            setFollowupPrMergedByLogin(event.target.value)
-                          }
-                          placeholder="maya-chen"
-                          value={followupPrMergedByLogin}
-                        />
-                      </label>
-                    </div>
-
-                    <label className="form-control">
-                      <span className="label mb-1">
-                        <span className="label-text">Head Branch</span>
-                      </span>
-                      <input
-                        className="input input-bordered"
-                        onChange={(event) =>
-                          setFollowupPrHeadBranch(event.target.value)
-                        }
-                        placeholder="alex/fix-billing-retry"
-                        value={followupPrHeadBranch}
-                      />
-                    </label>
-
-                    <label className="form-control">
-                      <span className="label mb-1">
-                        <span className="label-text">File Paths</span>
-                      </span>
-                      <textarea
-                        className="textarea textarea-bordered min-h-24"
-                        onChange={(event) =>
-                          setFollowupPrFiles(event.target.value)
-                        }
-                        placeholder={
-                          "src/billing_sync/retry_worker.py\ntests/test_billing_retry.py"
-                        }
-                        value={followupPrFiles}
-                      />
-                    </label>
-
-                    <label className="flex items-center gap-3">
-                      <input
-                        checked={false}
-                        className="checkbox checkbox-primary"
-                        disabled
-                        readOnly
-                        type="checkbox"
-                      />
-                      <span className="text-sm">AI-generated</span>
-                    </label>
-                  </section>
-                </div>
-
-                <div className="modal-action">
-                  <button
-                    className="btn btn-ghost"
-                    onClick={() => setAddPrModalOpen(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    disabled={isAddingPrPair}
-                    onClick={addPullRequestPair}
-                  >
-                    {isAddingPrPair
-                      ? "Creating and detecting..."
-                      : "Create PR Pair"}
-                  </button>
-                </div>
-              </div>
-              <button
-                aria-label="Close add pull request modal"
-                className="modal-backdrop"
-                onClick={() => setAddPrModalOpen(false)}
-              />
-            </div>
           </>
         )}
       </div>
