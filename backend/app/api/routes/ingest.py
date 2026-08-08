@@ -1,18 +1,11 @@
 import uuid
-import sqlite3
-import logging
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException
 
 from app.api.models import (
     ContextArtifact,
     ContextArtifactCreate,
-    PullRequest,
-    PullRequestCreate,
-    PullRequestFile,
-    PullRequestFilesCreate,
-    PullRequestWithFilesCreate,
     ReworkRecomputeResult,
     ReworkEventDetail,
     ReworkRootCause,
@@ -20,86 +13,16 @@ from app.api.models import (
 )
 
 from app.queries import (
-    get_next_pull_request_number,
     get_rework_event_repo_team_ids,
     insert_context_artifact,
-    insert_pull_request,
-    insert_pull_request_files,
-    insert_pull_request_with_files,
     replace_rework_events,
     change_rework_root_cause_by_id,
     change_rework_disposition_by_id,
 )
 from app.services.rework_detection.rework_detector import generate_rework_candidates
 
-from random import randint
 
 router = APIRouter(prefix="/api", tags=["Ingest"])
-logger = logging.getLogger(__name__)
-MAX_PULL_REQUEST_CREATE_ATTEMPTS = 3
-
-
-def _clean_file_paths(file_paths: list[str]) -> list[str]:
-    clean_file_paths = []
-    seen_file_paths = set()
-
-    for file_path in file_paths:
-        clean_file_path = file_path.strip().replace("\\", "/")
-        while clean_file_path.startswith("./"):
-            clean_file_path = clean_file_path[2:]
-        while "//" in clean_file_path:
-            clean_file_path = clean_file_path.replace("//", "/")
-
-        if clean_file_path and clean_file_path not in seen_file_paths:
-            clean_file_paths.append(clean_file_path)
-            seen_file_paths.add(clean_file_path)
-
-    return clean_file_paths
-
-
-def _build_pull_request(
-    pull_request: PullRequestCreate,
-    pull_request_number: int,
-    changed_files: int = 0,
-) -> PullRequest:
-    """
-    Builds a pull request object from creation data.
-
-    Constructs a PullRequest with derived timestamp fields based on a closed_at value, which defaults to the current UTC time if not provided in the input. The created_at, updated_at, and merged_at fields are calculated relative to closed_at (15 hours, 10 hours, and 0 hours prior respectively). Random numeric metrics are generated for code changes and review activity.
-
-    Parameters:
-        pull_request (PullRequestCreate): The pull request creation data
-        pull_request_number (int): The pull request number to assign
-
-    Returns:
-        PullRequest: A fully constructed pull request object with synthetic metrics and derived timestamps
-    """
-    closed_at = pull_request.closed_at or datetime.now(timezone.utc)
-    return PullRequest(
-        id=randint(1_000_000, 9_999_999),
-        number=pull_request_number,
-        repo_id=pull_request.repo_id,
-        title=pull_request.title,
-        body=pull_request.body,
-        state="closed",
-        draft=0,
-        created_at=closed_at - timedelta(hours=15),
-        updated_at=closed_at - timedelta(hours=10),
-        closed_at=closed_at,
-        merged_at=closed_at,
-        merged=1,
-        author_login=pull_request.author_login,
-        merged_by_login=pull_request.merged_by_login,
-        base_branch="main",
-        head_branch=pull_request.head_branch,
-        additions=240,
-        deletions=60,
-        changed_files=changed_files,
-        commits=3,
-        comments=6,
-        review_comments=6,
-        ai_generated=pull_request.ai_generated,
-    )
 
 
 @router.post("/ingest/context-artifact/{rework_id}", response_model=ContextArtifact)
@@ -124,82 +47,6 @@ def ingest_context_artifact(
     )
 
     return insert_context_artifact(context_artifact)
-
-
-@router.post("/ingest/pull-request", response_model=PullRequest)
-def ingest_pull_request(pull_request: PullRequestCreate) -> PullRequest:
-    last_error: sqlite3.IntegrityError | None = None
-
-    for _ in range(MAX_PULL_REQUEST_CREATE_ATTEMPTS):
-        pull_request_number = get_next_pull_request_number(repo_id=pull_request.repo_id)
-        new_pull_request = _build_pull_request(
-            pull_request=pull_request,
-            pull_request_number=pull_request_number,
-        )
-
-        try:
-            return insert_pull_request(pull_request=new_pull_request)
-        except sqlite3.IntegrityError as exc:
-            last_error = exc
-            logger.exception("Pull request could not be created")
-
-    raise HTTPException(
-        status_code=400,
-        detail="Pull request could not be created",
-    ) from last_error
-
-
-@router.post(
-    "/ingest/pull-request/{pull_request_id}/files",
-    response_model=list[PullRequestFile],
-)
-def ingest_pull_request_files(
-    pull_request_id: int,
-    files: PullRequestFilesCreate,
-) -> list[PullRequestFile]:
-    try:
-        return insert_pull_request_files(
-            pull_request_id=pull_request_id,
-            file_paths=files.file_paths,
-        )
-    except sqlite3.IntegrityError as exc:
-        logger.exception("Pull request files could not be created")
-        raise HTTPException(
-            status_code=400,
-            detail="Pull request files could not be created",
-        ) from exc
-
-
-@router.post("/ingest/pull-request-with-files", response_model=PullRequest)
-def ingest_pull_request_with_files(
-    request: PullRequestWithFilesCreate,
-) -> PullRequest:
-    last_error: sqlite3.IntegrityError | None = None
-    clean_file_paths = _clean_file_paths(request.file_paths)
-
-    for _ in range(MAX_PULL_REQUEST_CREATE_ATTEMPTS):
-        pull_request_number = get_next_pull_request_number(
-            repo_id=request.pull_request.repo_id
-        )
-        pull_request = _build_pull_request(
-            pull_request=request.pull_request,
-            pull_request_number=pull_request_number,
-            changed_files=len(clean_file_paths),
-        )
-
-        try:
-            return insert_pull_request_with_files(
-                pull_request=pull_request,
-                file_paths=clean_file_paths,
-            )
-        except sqlite3.IntegrityError as exc:
-            last_error = exc
-            logger.exception("Pull request with files could not be created")
-
-    raise HTTPException(
-        status_code=400,
-        detail="Pull request with files could not be created",
-    ) from last_error
 
 
 @router.post("/ingest/rework-events/recompute", response_model=ReworkRecomputeResult)
