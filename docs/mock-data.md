@@ -1,8 +1,8 @@
 # Mock Data Notes
 
-This prototype uses local JSON seed data instead of live GitHub, Jira, or Faros
-data. The goal is not to make the data look large. The goal is to make the
-product loop easy to inspect:
+This prototype uses local JSON seed data instead of live GitHub, Jira, or other
+engineering-system data. The goal is not to make the data look large. The goal
+is to make the product loop easy to inspect:
 
 ```text
 AI-assisted PR
@@ -53,7 +53,7 @@ The prototype assumes a few fields are already available:
 - Whether a follow-up PR title/body contains explicit rework language.
 
 In a production version, those fields could come from GitHub/GitLab, issue
-trackers, agentic coding workflow metadata, or a Faros-style normalized data
+trackers, agentic coding workflow metadata, or a normalized engineering data
 model.
 
 ## Context Artifacts

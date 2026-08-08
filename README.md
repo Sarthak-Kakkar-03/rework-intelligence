@@ -150,8 +150,8 @@ The prototype assumes:
 - A human can decide what context is worth preserving
 - Root cause labels can be reviewed and edited by a human
 
-In a production version, this data would likely come from GitHub, Faros-style
-normalized engineering data, or another source of PR metadata.
+In a production version, this data would likely come from GitHub, normalized
+engineering data, or another source of PR metadata.
 
 ---
 
@@ -212,8 +212,8 @@ positive. That feedback is important because not every follow-up PR is bad
 rework, and the system should learn from human judgment instead of treating
 every detection as final.
 
-I would also replace the seed data with GitHub or Faros-style normalized PR data
-so the loop could run on a real repository.
+I would also replace the seed data with GitHub or normalized PR data so the
+loop could run on a real repository.
 
 If code diffs were available, I would add an LLM-assisted layer to summarize
 what changed between the AI PR and the follow-up PR. I would still keep the
@@ -289,13 +289,10 @@ product shape.
 
 ---
 
-## Why This Is Faros-Shaped
+## Why This Product Shape
 
-Faros helps engineering organizations understand how work happens across tools,
-teams, code, delivery, and outcomes.
-
-Rework Autopsy fits that shape because it connects engineering activity data to
-a practical operating question:
+Rework Autopsy connects engineering activity data to a practical operating
+question:
 
 > Is AI-assisted development creating downstream human cleanup, and what should
 > we change in the engineering system to improve it?
