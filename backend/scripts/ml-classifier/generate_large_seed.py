@@ -30,8 +30,8 @@ files, no adapter needed:
       the new corpus on the next `./scripts/reset_db.sh` or reseed.
 
 Usage:
-    cd ml-classifier
-    ../backend/.venv/bin/python generate_large_seed.py --seed 7
+    cd backend
+    uv run python scripts/ml-classifier/generate_large_seed.py --seed 7
 """
 
 from __future__ import annotations
@@ -44,7 +44,7 @@ from pathlib import Path
 
 import numpy as np
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT / "backend"))
 
 from app.services.rework_detection.features import classify_file_risk, is_test_file  # noqa: E402
@@ -59,18 +59,38 @@ TRAINING_DIR = REPO_ROOT / "data" / "training"
 # ---------------------------------------------------------------------------
 
 COMPONENTS = [
-    "the checkout flow", "the webhook handler", "the retry worker",
-    "the auth middleware", "the notification dispatcher", "the rate limiter",
-    "the pagination logic", "the currency conversion step", "the cache layer",
-    "the search indexer", "the session store", "the export pipeline",
-    "the audit logger", "the feature flag resolver", "the queue consumer",
+    "the checkout flow",
+    "the webhook handler",
+    "the retry worker",
+    "the auth middleware",
+    "the notification dispatcher",
+    "the rate limiter",
+    "the pagination logic",
+    "the currency conversion step",
+    "the cache layer",
+    "the search indexer",
+    "the session store",
+    "the export pipeline",
+    "the audit logger",
+    "the feature flag resolver",
+    "the queue consumer",
 ]
 
 FEATURES = [
-    "retry handling", "idempotency keys", "pagination", "rate limiting",
-    "webhook signature verification", "currency rounding", "cache invalidation",
-    "session expiry", "audit logging", "feature flag rollout", "batch export",
-    "queue backpressure", "duplicate detection", "timeout handling",
+    "retry handling",
+    "idempotency keys",
+    "pagination",
+    "rate limiting",
+    "webhook signature verification",
+    "currency rounding",
+    "cache invalidation",
+    "session expiry",
+    "audit logging",
+    "feature flag rollout",
+    "batch export",
+    "queue backpressure",
+    "duplicate detection",
+    "timeout handling",
 ]
 
 FAILURE_DESCRIPTIONS = [
@@ -87,18 +107,42 @@ FAILURE_DESCRIPTIONS = [
 ]
 
 REWORK_KEYWORD_TEMPLATES = {
-    "fix": ["Fix {failure} in {component}", "Fixes an issue where {component} would {failure}"],
+    "fix": [
+        "Fix {failure} in {component}",
+        "Fixes an issue where {component} would {failure}",
+    ],
     "bug": ["Bug: {component} would {failure}", "Fix a bug in {component}"],
-    "regression": ["Fix regression in {component}", "Address a regression where {component} would {failure}"],
-    "cleanup": ["Cleanup pass on {component}", "Cleanup {component} after the earlier change"],
-    "correct": ["Correct {component} behavior after the prior update", "Correct handling in {component}"],
+    "regression": [
+        "Fix regression in {component}",
+        "Address a regression where {component} would {failure}",
+    ],
+    "cleanup": [
+        "Cleanup pass on {component}",
+        "Cleanup {component} after the earlier change",
+    ],
+    "correct": [
+        "Correct {component} behavior after the prior update",
+        "Correct handling in {component}",
+    ],
     "hotfix": ["Hotfix for {component}", "Hotfix: {component} would {failure}"],
-    "adjust": ["Adjust {component} after the earlier change", "Adjust timeout handling in {component}"],
-    "broken": ["{component} was broken after the earlier change", "Restore {component} after it broke"],
+    "adjust": [
+        "Adjust {component} after the earlier change",
+        "Adjust timeout handling in {component}",
+    ],
+    "broken": [
+        "{component} was broken after the earlier change",
+        "Restore {component} after it broke",
+    ],
     "revert": ['Revert "{original_title}"', "Revert problematic change to {component}"],
     "patch": ["Patch {component} for {failure}", "Small patch to {component}"],
-    "refactor": ["Refactor {component} to fix {failure}", "Refactor cleanup in {component}"],
-    "security": ["Security fix for {component}", "Security patch: {component} would {failure}"],
+    "refactor": [
+        "Refactor {component} to fix {failure}",
+        "Refactor cleanup in {component}",
+    ],
+    "security": [
+        "Security fix for {component}",
+        "Security patch: {component} would {failure}",
+    ],
 }
 
 TEAMS = [
@@ -109,24 +153,70 @@ TEAMS = [
 ]
 
 REPOS = [
-    {"id": "repo-checkout-service", "name": "checkout-service", "team_id": "team-payments"},
+    {
+        "id": "repo-checkout-service",
+        "name": "checkout-service",
+        "team_id": "team-payments",
+    },
     {"id": "repo-billing-api", "name": "billing-api", "team_id": "team-payments"},
     {"id": "repo-auth-gateway", "name": "auth-gateway", "team_id": "team-platform"},
-    {"id": "repo-notification-worker", "name": "notification-worker", "team_id": "team-platform"},
+    {
+        "id": "repo-notification-worker",
+        "name": "notification-worker",
+        "team_id": "team-platform",
+    },
     {"id": "repo-search-indexer", "name": "search-indexer", "team_id": "team-data"},
-    {"id": "repo-analytics-pipeline", "name": "analytics-pipeline", "team_id": "team-data"},
-    {"id": "repo-user-profile-service", "name": "user-profile-service", "team_id": "team-growth"},
+    {
+        "id": "repo-analytics-pipeline",
+        "name": "analytics-pipeline",
+        "team_id": "team-data",
+    },
+    {
+        "id": "repo-user-profile-service",
+        "name": "user-profile-service",
+        "team_id": "team-growth",
+    },
     {"id": "repo-referral-api", "name": "referral-api", "team_id": "team-growth"},
 ]
 
 FIRST_NAMES = [
-    "maya", "alex", "samir", "nina", "lena", "jordan", "priya", "omar",
-    "casey", "ravi", "elena", "marcus", "yuki", "diego", "hana", "leo",
-    "sofia", "tariq", "ines", "kwame",
+    "maya",
+    "alex",
+    "samir",
+    "nina",
+    "lena",
+    "jordan",
+    "priya",
+    "omar",
+    "casey",
+    "ravi",
+    "elena",
+    "marcus",
+    "yuki",
+    "diego",
+    "hana",
+    "leo",
+    "sofia",
+    "tariq",
+    "ines",
+    "kwame",
 ]
 LAST_NAMES = [
-    "chen", "rivera", "patel", "kapoor", "wu", "kim", "singh", "hassan",
-    "nakamura", "silva", "novak", "reyes", "okafor", "lindqvist", "tanaka",
+    "chen",
+    "rivera",
+    "patel",
+    "kapoor",
+    "wu",
+    "kim",
+    "singh",
+    "hassan",
+    "nakamura",
+    "silva",
+    "novak",
+    "reyes",
+    "okafor",
+    "lindqvist",
+    "tanaka",
 ]
 
 N_AUTHORS = 32
@@ -184,7 +274,9 @@ def build_file_pool(rng: np.random.Generator, repo_id: str) -> list[dict]:
             path = FILE_CATEGORY_PATH_TEMPLATES[category].format(
                 seq=seq, feature_slug=feature_slug
             )
-            files.append({"path": path, "category": category, "feature_slug": feature_slug})
+            files.append(
+                {"path": path, "category": category, "feature_slug": feature_slug}
+            )
             # Give roughly half of non-migration files a paired test file.
             if category != "migration" and rng.random() < 0.6:
                 files.append(
@@ -207,7 +299,9 @@ def verify_file_pool(files: list[dict]) -> None:
         if f["category"] == "test":
             assert is_test, f"Expected test path to be classified as test: {f['path']}"
         elif f["category"] == "generic":
-            assert risk is None, f"Expected generic path to be non-high-risk: {f['path']}"
+            assert risk is None, (
+                f"Expected generic path to be non-high-risk: {f['path']}"
+            )
         else:
             assert risk == f["category"], (
                 f"Path {f['path']} expected risk category {f['category']!r}, got {risk!r}"
@@ -226,13 +320,17 @@ def choose_rework_title_body(
     # with also describing an unrelated partial fix in the same PR, so it
     # never gets combined with a second keyword.
     if n_keywords > 1 and primary != "revert":
-        secondary_pool = [k for k in REWORK_KEYWORD_TEMPLATES if k not in (primary, "revert")]
+        secondary_pool = [
+            k for k in REWORK_KEYWORD_TEMPLATES if k not in (primary, "revert")
+        ]
         extra = rng.choice(secondary_pool, size=n_keywords - 1, replace=False)
         keywords = [primary] + list(extra)
     else:
         keywords = [primary]
     template = rng.choice(REWORK_KEYWORD_TEMPLATES[primary])
-    title = template.format(component=component, failure=failure, original_title=original_title)
+    title = template.format(
+        component=component, failure=failure, original_title=original_title
+    )
     title = title[0].upper() + title[1:]
 
     body_sentences = [
@@ -313,7 +411,8 @@ def generate_repo_prs(
             (
                 f
                 for f in file_pool
-                if f["category"] == "test" and f["feature_slug"] == topic_file["feature_slug"]
+                if f["category"] == "test"
+                and f["feature_slug"] == topic_file["feature_slug"]
             ),
             None,
         )
@@ -321,7 +420,9 @@ def generate_repo_prs(
             touched.append(paired_test)
         # 0-2 extra, mostly unrelated files (multi-file PRs happen).
         n_extra = rng.choice([0, 1, 2], p=[0.55, 0.30, 0.15])
-        extras = rng.choice(non_test_files, size=min(n_extra, len(non_test_files)), replace=False)
+        extras = rng.choice(
+            non_test_files, size=min(n_extra, len(non_test_files)), replace=False
+        )
         for extra in extras:
             if extra["path"] not in {t["path"] for t in touched}:
                 touched.append(extra)
@@ -362,7 +463,9 @@ def generate_repo_prs(
             continue
 
         author = author_by_login[author_login]
-        touched_categories = {classify_file_risk(f["path"]) for f in touched_files} - {None}
+        touched_categories = {classify_file_risk(f["path"]) for f in touched_files} - {
+            None
+        }
         rework_p = BASE_REWORK_PROBABILITY
         if touched_categories:
             rework_p += HIGH_RISK_TOUCH_BOOST
@@ -374,17 +477,29 @@ def generate_repo_prs(
 
         # Genuine rework follow-up.
         gap_followup_days = float(np.clip(rng.exponential(scale=3.0), 0.2, 20))
-        followup_created_at = source_draft["closed_at"] + timedelta(days=gap_followup_days)
+        followup_created_at = source_draft["closed_at"] + timedelta(
+            days=gap_followup_days
+        )
 
-        followup_author = str(rng.choice([l for l in login_pool if l != author_login] or login_pool))
+        followup_author = str(
+            rng.choice(
+                [login for login in login_pool if login != author_login] or login_pool
+            )
+        )
         failure = rng.choice(FAILURE_DESCRIPTIONS)
         n_keywords = int(rng.choice([1, 2], p=[0.7, 0.3]))
         followup_title, followup_body, _keywords = choose_rework_title_body(
-            rng, component=component, failure=failure, original_title=title, n_keywords=n_keywords
+            rng,
+            component=component,
+            failure=failure,
+            original_title=title,
+            n_keywords=n_keywords,
         )
 
         # Follow-up files: overlap with source (favor the high-risk one if present).
-        high_risk_touched = [f for f in touched_files if classify_file_risk(f["path"]) is not None]
+        high_risk_touched = [
+            f for f in touched_files if classify_file_risk(f["path"]) is not None
+        ]
         overlap_pool = high_risk_touched if high_risk_touched else touched_files
         n_overlap = min(len(overlap_pool), int(rng.integers(1, len(overlap_pool) + 1)))
         followup_files = list(rng.choice(overlap_pool, size=n_overlap, replace=False))
@@ -418,7 +533,10 @@ def generate_repo_prs(
 
         drafts.append(followup_draft)
         ground_truth_pairs.append(
-            {"source_temp_id": source_draft["temp_id"], "followup_temp_id": followup_draft["temp_id"]}
+            {
+                "source_temp_id": source_draft["temp_id"],
+                "followup_temp_id": followup_draft["temp_id"],
+            }
         )
 
     return drafts
@@ -431,7 +549,9 @@ def generate_repo_prs(
 # ---------------------------------------------------------------------------
 
 
-def finalize_repo(drafts: list[dict], id_counter_start: int) -> tuple[list[dict], list[dict], int]:
+def finalize_repo(
+    drafts: list[dict], id_counter_start: int
+) -> tuple[list[dict], list[dict], int]:
     drafts_sorted = sorted(drafts, key=lambda d: d["created_at"])
     number_by_temp_id = {d["temp_id"]: idx + 1 for idx, d in enumerate(drafts_sorted)}
 
@@ -473,7 +593,9 @@ def finalize_repo(drafts: list[dict], id_counter_start: int) -> tuple[list[dict]
                 "additions": additions,
                 "deletions": deletions,
                 "changed_files": len(draft["touched_files"]),
-                "commits": int(np.clip(np.random.default_rng(pr_id + 2).poisson(3), 1, 15)),
+                "commits": int(
+                    np.clip(np.random.default_rng(pr_id + 2).poisson(3), 1, 15)
+                ),
                 "comments": int(np.random.default_rng(pr_id + 3).poisson(4)),
                 "review_comments": int(np.random.default_rng(pr_id + 4).poisson(5)),
                 "ai_generated": 1 if draft["ai_generated"] else 0,
@@ -485,8 +607,12 @@ def finalize_repo(drafts: list[dict], id_counter_start: int) -> tuple[list[dict]
                     "id": f"PRF-{pr_id}-{file_idx:03d}",
                     "pull_request_id": pr_id,
                     "file_path": f["path"],
-                    "additions": int(np.random.default_rng(pr_id * 10 + file_idx).integers(2, 80)),
-                    "deletions": int(np.random.default_rng(pr_id * 10 + file_idx + 1).integers(0, 40)),
+                    "additions": int(
+                        np.random.default_rng(pr_id * 10 + file_idx).integers(2, 80)
+                    ),
+                    "deletions": int(
+                        np.random.default_rng(pr_id * 10 + file_idx + 1).integers(0, 40)
+                    ),
                 }
             )
 
@@ -500,7 +626,6 @@ def main() -> None:
 
     rng = np.random.default_rng(args.seed)
     authors = build_author_pool(rng)
-    author_by_login = {a["login"]: a for a in authors}
 
     all_pull_requests: list[dict] = []
     all_pull_request_files: list[dict] = []
@@ -535,11 +660,17 @@ def main() -> None:
 
     (SEED_DIR / "teams.json").write_text(json.dumps(TEAMS, indent=2))
     (SEED_DIR / "repos.json").write_text(json.dumps(REPOS, indent=2))
-    (SEED_DIR / "pull_requests.json").write_text(json.dumps(all_pull_requests, indent=2))
-    (SEED_DIR / "pull_request_files.json").write_text(json.dumps(all_pull_request_files, indent=2))
+    (SEED_DIR / "pull_requests.json").write_text(
+        json.dumps(all_pull_requests, indent=2)
+    )
+    (SEED_DIR / "pull_request_files.json").write_text(
+        json.dumps(all_pull_request_files, indent=2)
+    )
     (SEED_DIR / "rework_events.json").write_text(json.dumps([], indent=2))
     (SEED_DIR / "context_artifacts.json").write_text(json.dumps([], indent=2))
-    (TRAINING_DIR / "ground_truth_pairs.json").write_text(json.dumps(ground_truth_output, indent=2))
+    (TRAINING_DIR / "ground_truth_pairs.json").write_text(
+        json.dumps(ground_truth_output, indent=2)
+    )
     (TRAINING_DIR / "authors.json").write_text(
         json.dumps([{"login": a["login"]} for a in authors], indent=2)
     )

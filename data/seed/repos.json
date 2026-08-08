@@ -1,27 +1,42 @@
 [
   {
-    "id": "repo-jira-sync-worker",
-    "name": "jira-sync-worker",
-    "team_id": "team-data-integrations"
+    "id": "repo-checkout-service",
+    "name": "checkout-service",
+    "team_id": "team-payments"
   },
   {
-    "id": "repo-github-ingest-service",
-    "name": "github-ingest-service",
-    "team_id": "team-data-integrations"
+    "id": "repo-billing-api",
+    "name": "billing-api",
+    "team_id": "team-payments"
   },
   {
-    "id": "repo-deployment-risk-api",
-    "name": "deployment-risk-api",
+    "id": "repo-auth-gateway",
+    "name": "auth-gateway",
     "team_id": "team-platform"
   },
   {
-    "id": "repo-metrics-dashboard",
-    "name": "metrics-dashboard",
-    "team_id": "team-devex"
+    "id": "repo-notification-worker",
+    "name": "notification-worker",
+    "team_id": "team-platform"
   },
   {
-    "id": "repo-docs-site",
-    "name": "docs-site",
-    "team_id": "team-devex"
+    "id": "repo-search-indexer",
+    "name": "search-indexer",
+    "team_id": "team-data"
+  },
+  {
+    "id": "repo-analytics-pipeline",
+    "name": "analytics-pipeline",
+    "team_id": "team-data"
+  },
+  {
+    "id": "repo-user-profile-service",
+    "name": "user-profile-service",
+    "team_id": "team-growth"
+  },
+  {
+    "id": "repo-referral-api",
+    "name": "referral-api",
+    "team_id": "team-growth"
   }
 ]

@@ -4,7 +4,7 @@ Single consolidated reference for slides/presentation — everything about the
 detection pipeline, the ML classifier, the dataset, and the results in one
 place. For deeper narrative detail, see:
 - [`detection-and-estimates.md`](detection-and-estimates.md) — the rule engine, in full
-- [`../ml-classifier/README.md`](../ml-classifier/README.md) — dataset construction, limitations, wiring instructions
+- [`../backend/scripts/ml-classifier/README.md`](../backend/scripts/ml-classifier/README.md) — dataset construction, limitations, wiring instructions
 - [`ml-classifier/README.md`](ml-classifier/README.md) — this doc's source figures + raw numbers
 
 ## The pipeline, in one picture
@@ -91,7 +91,7 @@ Where:
 | — of those, genuinely real | 53 (0.38%) |
 | Train / test split | 9,871 pairs (44 real) / 4,081 pairs (9 real), grouped by source PR |
 
-Built from a causal generation process (not random labels) using the app's *real* `PullRequest`/`PullRequestFile` models — every file path was validated against the real detector logic, not a parallel simulation. Full methodology and honest limitations (templated text, invented author-skill trait, shared vocabulary across repos, no line/diff data) in [`../ml-classifier/README.md`](../ml-classifier/README.md).
+Built from a causal generation process (not random labels) using the app's *real* `PullRequest`/`PullRequestFile` models — every file path was validated against the real detector logic, not a parallel simulation. Full methodology and honest limitations (templated text, invented author-skill trait, shared vocabulary across repos, no line/diff data) in [`../backend/scripts/ml-classifier/README.md`](../backend/scripts/ml-classifier/README.md).
 
 ## Models trained and results
 
@@ -142,8 +142,8 @@ While testing the expanded signal set at realistic repo density, the original ca
 |---|---|
 | Reviewer disposition (ground-truth labeling) | Shipped — `feature/reviewer-disposition` |
 | Expanded rule signals + feature vector + matching bug fix | Shipped — `feature/rework-feature-extraction` |
-| Dataset generation, model training, evaluation, this report | Done — `ml-classifier/` + this doc |
-| Classifier wired into the live app (`classifier.py`, `ml_rework_probability`, frontend badge) | **Reference implementation exists, not yet its own clean PR** — see "Wiring it in" in [`../ml-classifier/README.md`](../ml-classifier/README.md) for exactly what's already built and where |
+| Dataset generation, model training, evaluation, this report | Done — `backend/scripts/ml-classifier/` + this doc |
+| Classifier wired into the live app (`classifier.py`, `ml_rework_probability`, frontend badge) | **Reference implementation exists, not yet its own clean PR** — see "Wiring it in" in [`../backend/scripts/ml-classifier/README.md`](../backend/scripts/ml-classifier/README.md) for exactly what's already built and where |
 | Root-cause taxonomy (fixed categories instead of free text) | Not started |
 
 ## Known limitations (say these out loud, don't let a question catch you off guard)

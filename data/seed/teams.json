@@ -1,14 +1,18 @@
 [
   {
-    "id": "team-data-integrations",
-    "name": "Data Integrations"
-  },
-  {
     "id": "team-platform",
     "name": "Platform Engineering"
   },
   {
-    "id": "team-devex",
-    "name": "Developer Experience"
+    "id": "team-payments",
+    "name": "Payments"
+  },
+  {
+    "id": "team-data",
+    "name": "Data Infrastructure"
+  },
+  {
+    "id": "team-growth",
+    "name": "Growth"
   }
 ]

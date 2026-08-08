@@ -33,8 +33,8 @@ have before the trained model is usable:
       first, always.
 
 Usage:
-    cd ml-classifier
-    ../backend/.venv/bin/python train_classifier.py
+    cd backend
+    uv run python scripts/ml-classifier/train_classifier.py
 """
 
 from __future__ import annotations
@@ -45,10 +45,9 @@ from collections import defaultdict
 from datetime import timedelta
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT / "backend"))
 
 from app.api.models import PullRequest, PullRequestFile  # noqa: E402
@@ -85,7 +84,9 @@ def build_author_history_index(prs: list[PullRequest]) -> dict[str, list[tuple]]
     by_author: dict[str, list[dict]] = defaultdict(list)
     for pr in prs:
         if pr.ai_generated:
-            by_author[pr.author_login].append({"pr_id": pr.id, "closed_at": pr.closed_at, "is_rework": False})
+            by_author[pr.author_login].append(
+                {"pr_id": pr.id, "closed_at": pr.closed_at, "is_rework": False}
+            )
     for entries in by_author.values():
         entries.sort(key=lambda e: e["closed_at"])
     return by_author
@@ -116,7 +117,9 @@ def main() -> None:
     for entries in author_history.values():
         for entry in entries:
             entry["is_rework"] = entry["pr_id"] in rework_source_ids
-    overall_prior = len(rework_source_ids) / max(sum(1 for pr in prs if pr.ai_generated), 1)
+    overall_prior = len(rework_source_ids) / max(
+        sum(1 for pr in prs if pr.ai_generated), 1
+    )
 
     rows = []
     window = timedelta(days=CANDIDATE_WINDOW_DAYS)
@@ -131,7 +134,9 @@ def main() -> None:
                     break  # repo_prs is time-sorted, so nothing earlier will be closer
                 if not (
                     has_same_repo(source_pr=source_pr, followup_pr=followup_pr)
-                    and is_followup_after_source(source_pr=source_pr, followup_pr=followup_pr)
+                    and is_followup_after_source(
+                        source_pr=source_pr, followup_pr=followup_pr
+                    )
                 ):
                     continue
 
@@ -157,7 +162,9 @@ def main() -> None:
                 row = features.model_dump()
                 row["source_pr_id"] = source_pr.id
                 row["followup_pr_id"] = followup_pr.id
-                row["is_rework"] = int((source_pr.id, followup_pr.id) in ground_truth_set)
+                row["is_rework"] = int(
+                    (source_pr.id, followup_pr.id) in ground_truth_set
+                )
                 rows.append(row)
 
     df = pd.DataFrame(rows)
