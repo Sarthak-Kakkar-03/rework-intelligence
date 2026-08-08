@@ -1,4 +1,5 @@
 from contextlib import closing
+from datetime import datetime
 import hashlib
 
 from app.api.models import (
@@ -256,6 +257,91 @@ def get_pull_requests_ordered_by_closed_at() -> list[PullRequest]:
             )
             for row in rows
         ]
+
+
+def get_pull_request_by_id(pull_request_id: int) -> PullRequest | None:
+    """
+    Retrieves a single pull request by id.
+    """
+    sql = """
+        SELECT
+          id,
+          number,
+          repo_id,
+          title,
+          body,
+          state,
+          draft,
+          created_at,
+          updated_at,
+          closed_at,
+          merged_at,
+          merged,
+          author_login,
+          merged_by_login,
+          base_branch,
+          head_branch,
+          additions,
+          deletions,
+          changed_files,
+          commits,
+          comments,
+          review_comments,
+          ai_generated
+        FROM pull_requests
+        WHERE id = ?
+    """
+
+    with closing(get_connection()) as conn:
+        row = conn.execute(sql, (pull_request_id,)).fetchone()
+
+    if row is None:
+        return None
+
+    return PullRequest(
+        id=row["id"],
+        number=row["number"],
+        repo_id=row["repo_id"],
+        title=row["title"],
+        body=row["body"],
+        state=row["state"],
+        draft=bool(row["draft"]),
+        created_at=row["created_at"],
+        updated_at=row["updated_at"],
+        closed_at=row["closed_at"],
+        merged_at=row["merged_at"],
+        merged=bool(row["merged"]),
+        author_login=row["author_login"],
+        merged_by_login=row["merged_by_login"],
+        base_branch=row["base_branch"],
+        head_branch=row["head_branch"],
+        additions=row["additions"],
+        deletions=row["deletions"],
+        changed_files=row["changed_files"],
+        commits=row["commits"],
+        comments=row["comments"],
+        review_comments=row["review_comments"],
+        ai_generated=bool(row["ai_generated"]),
+    )
+
+
+def get_rework_event_pr_ids(rework_event_id: str) -> tuple[int, int] | None:
+    """
+    Retrieves the source and follow-up pull request ids for a rework event.
+    """
+    sql = """
+        SELECT source_pr_id, followup_pr_id
+        FROM rework_events
+        WHERE id = ?
+    """
+
+    with closing(get_connection()) as conn:
+        row = conn.execute(sql, (rework_event_id,)).fetchone()
+
+    if row is None:
+        return None
+
+    return row["source_pr_id"], row["followup_pr_id"]
 
 
 def get_pull_request_files() -> list[PullRequestFile]:
@@ -906,6 +992,64 @@ def change_rework_root_cause_by_id(
         return None
 
     return get_rework_event_detail(rework_event_id=rework_id)
+
+
+def get_global_rework_rate() -> float:
+    """
+    Fraction of all AI-generated pull requests that have been human-confirmed
+    (via disposition) as the source of real rework. Used as the fallback
+    prior for authors with no reviewed history yet.
+    """
+    sql = """
+        SELECT
+          (SELECT COUNT(*) FROM pull_requests WHERE ai_generated = 1) AS total_ai_prs,
+          (SELECT COUNT(DISTINCT re.source_pr_id) FROM rework_events re
+             WHERE re.disposition IN ('confirmed_rework', 'partial_rework')) AS confirmed_rework_prs
+    """
+
+    with closing(get_connection()) as conn:
+        row = conn.execute(sql).fetchone()
+
+    if not row["total_ai_prs"]:
+        return 0.1
+
+    return row["confirmed_rework_prs"] / row["total_ai_prs"]
+
+
+def get_author_historical_rework_rate(
+    author_login: str,
+    before: datetime,
+    prior: float,
+) -> float:
+    """
+    Fraction of this author's AI-generated pull requests, closed strictly
+    before `before`, that were human-confirmed (via disposition) as real
+    rework sources. Falls back to `prior` if the author has no reviewed
+    history yet at that point in time. Time-ordered by construction, so this
+    never looks at outcomes that hadn't happened yet.
+    """
+    sql = """
+        SELECT
+          (SELECT COUNT(*) FROM pull_requests
+             WHERE author_login = ? AND ai_generated = 1
+               AND datetime(closed_at) < datetime(?)) AS total_ai_prs,
+          (SELECT COUNT(DISTINCT re.source_pr_id)
+             FROM rework_events re
+             JOIN pull_requests pr ON pr.id = re.source_pr_id
+             WHERE pr.author_login = ? AND pr.ai_generated = 1
+               AND datetime(pr.closed_at) < datetime(?)
+               AND re.disposition IN ('confirmed_rework', 'partial_rework')) AS confirmed_rework_prs
+    """
+
+    with closing(get_connection()) as conn:
+        row = conn.execute(
+            sql, (author_login, before.isoformat(), author_login, before.isoformat())
+        ).fetchone()
+
+    if not row["total_ai_prs"]:
+        return prior
+
+    return row["confirmed_rework_prs"] / row["total_ai_prs"]
 
 
 def change_rework_disposition_by_id(

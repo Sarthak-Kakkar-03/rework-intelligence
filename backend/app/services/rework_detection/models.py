@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+from app.services.rework_detection.features import ReworkFeatures
+
 
 class ReworkCandidate(BaseModel):
     source_pr_id: int
@@ -13,3 +15,4 @@ class ReworkCandidate(BaseModel):
     human_hours_spent: float
     root_cause_label: str = "Placeholder Root Cause Label"
     summary: str
+    features: ReworkFeatures
