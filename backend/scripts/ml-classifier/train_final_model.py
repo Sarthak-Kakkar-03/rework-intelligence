@@ -31,8 +31,8 @@ package, no copy/paste step needed:
       just this training script.
 
 Usage:
-    cd ml-classifier
-    ../backend/.venv/bin/python train_final_model.py
+    cd backend
+    uv run python scripts/ml-classifier/train_final_model.py
 """
 
 from __future__ import annotations
@@ -44,7 +44,7 @@ import joblib
 import pandas as pd
 from sklearn.ensemble import GradientBoostingClassifier
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 DATA_PATH = REPO_ROOT / "data" / "training" / "real_candidate_features.csv"
 ARTIFACT_DIR = (
     REPO_ROOT / "backend" / "app" / "services" / "rework_detection" / "artifacts"

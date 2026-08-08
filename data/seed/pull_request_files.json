@@ -1,121 +1,6043 @@
 [
   {
-    "id": "PRF-1001-001",
-    "pull_request_id": 1001,
-    "file_path": "src/jira_sync/retry_worker.py",
-    "additions": 72,
-    "deletions": 14
+    "id": "PRF-1-001",
+    "pull_request_id": 1,
+    "file_path": "db/migrations/001_currency_rounding_1.sql",
+    "additions": 12,
+    "deletions": 24
   },
   {
-    "id": "PRF-1001-002",
-    "pull_request_id": 1001,
-    "file_path": "src/jira_sync/idempotency.py",
-    "additions": 31,
-    "deletions": 6
+    "id": "PRF-2-001",
+    "pull_request_id": 2,
+    "file_path": "app/api/routes/retry_handling_7.py",
+    "additions": 25,
+    "deletions": 30
   },
   {
-    "id": "PRF-1001-003",
-    "pull_request_id": 1001,
-    "file_path": "tests/test_retry_worker.py",
-    "additions": 43,
-    "deletions": 5
+    "id": "PRF-3-001",
+    "pull_request_id": 3,
+    "file_path": "app/api/routes/timeout_handling_6.py",
+    "additions": 44,
+    "deletions": 35
   },
   {
-    "id": "PRF-1002-001",
-    "pull_request_id": 1002,
-    "file_path": "src/jira_sync/retry_worker.py",
-    "additions": 36,
-    "deletions": 12
-  },
-  {
-    "id": "PRF-1002-002",
-    "pull_request_id": 1002,
-    "file_path": "src/jira_sync/idempotency.py",
-    "additions": 28,
-    "deletions": 7
-  },
-  {
-    "id": "PRF-1002-003",
-    "pull_request_id": 1002,
-    "file_path": "tests/test_retry_worker.py",
-    "additions": 22,
+    "id": "PRF-4-001",
+    "pull_request_id": 4,
+    "file_path": "app/config/webhook_signature_verification_8.py",
+    "additions": 53,
     "deletions": 3
   },
   {
-    "id": "PRF-1003-001",
-    "pull_request_id": 1003,
-    "file_path": "src/github_ingest/auth.py",
-    "additions": 45,
-    "deletions": 2
+    "id": "PRF-5-001",
+    "pull_request_id": 5,
+    "file_path": "app/utils/audit_logging_17.py",
+    "additions": 31,
+    "deletions": 38
   },
   {
-    "id": "PRF-1003-002",
-    "pull_request_id": 1003,
-    "file_path": "tests/test_github_auth.py",
-    "additions": 92,
-    "deletions": 4
+    "id": "PRF-6-001",
+    "pull_request_id": 6,
+    "file_path": "app/models/duplicate_detection_12.py",
+    "additions": 34,
+    "deletions": 17
   },
   {
-    "id": "PRF-1005-001",
-    "pull_request_id": 1005,
-    "file_path": "src/deployment_risk/api.py",
-    "additions": 24,
+    "id": "PRF-7-001",
+    "pull_request_id": 7,
+    "file_path": "app/utils/audit_logging_17.py",
+    "additions": 76,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-7-002",
+    "pull_request_id": 7,
+    "file_path": "tests/test_audit_logging_17.py",
+    "additions": 76,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-8-001",
+    "pull_request_id": 8,
+    "file_path": "app/services/retry_handling_15.py",
+    "additions": 6,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-9-001",
+    "pull_request_id": 9,
+    "file_path": "app/services/retry_handling_15.py",
+    "additions": 59,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-9-002",
+    "pull_request_id": 9,
+    "file_path": "app/models/idempotency_keys_10.py",
+    "additions": 37,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-10-001",
+    "pull_request_id": 10,
+    "file_path": "app/api/routes/retry_handling_7.py",
+    "additions": 26,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-10-002",
+    "pull_request_id": 10,
+    "file_path": "app/utils/pagination_19.py",
+    "additions": 36,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-11-001",
+    "pull_request_id": 11,
+    "file_path": "app/utils/session_expiry_18.py",
+    "additions": 38,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-11-002",
+    "pull_request_id": 11,
+    "file_path": "tests/test_session_expiry_18.py",
+    "additions": 17,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-12-001",
+    "pull_request_id": 12,
+    "file_path": "db/migrations/001_currency_rounding_1.sql",
+    "additions": 23,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-12-002",
+    "pull_request_id": 12,
+    "file_path": "db/migrations/003_retry_handling_3.sql",
+    "additions": 69,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-13-001",
+    "pull_request_id": 13,
+    "file_path": "app/utils/session_expiry_18.py",
+    "additions": 38,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-13-002",
+    "pull_request_id": 13,
+    "file_path": "app/api/routes/timeout_handling_6.py",
+    "additions": 68,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-14-001",
+    "pull_request_id": 14,
+    "file_path": "db/migrations/002_rate_limiting_2.sql",
+    "additions": 32,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-15-001",
+    "pull_request_id": 15,
+    "file_path": "app/models/idempotency_keys_10.py",
+    "additions": 58,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-16-001",
+    "pull_request_id": 16,
+    "file_path": "db/migrations/003_retry_handling_3.sql",
+    "additions": 79,
     "deletions": 21
   },
   {
-    "id": "PRF-1005-002",
-    "pull_request_id": 1005,
-    "file_path": "src/deployment_risk/schema.py",
+    "id": "PRF-16-002",
+    "pull_request_id": 16,
+    "file_path": "db/migrations/002_rate_limiting_2.sql",
+    "additions": 43,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-17-001",
+    "pull_request_id": 17,
+    "file_path": "app/utils/rate_limiting_20.py",
+    "additions": 64,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-18-001",
+    "pull_request_id": 18,
+    "file_path": "app/api/routes/currency_rounding_4.py",
+    "additions": 56,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-18-002",
+    "pull_request_id": 18,
+    "file_path": "tests/test_currency_rounding_4.py",
+    "additions": 63,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-18-003",
+    "pull_request_id": 18,
+    "file_path": "app/api/routes/timeout_handling_6.py",
+    "additions": 77,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-19-001",
+    "pull_request_id": 19,
+    "file_path": "app/api/routes/retry_handling_7.py",
+    "additions": 10,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-20-001",
+    "pull_request_id": 20,
+    "file_path": "db/migrations/002_rate_limiting_2.sql",
+    "additions": 25,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-20-002",
+    "pull_request_id": 20,
+    "file_path": "app/utils/rate_limiting_20.py",
+    "additions": 16,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-21-001",
+    "pull_request_id": 21,
+    "file_path": "app/utils/pagination_19.py",
+    "additions": 14,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-22-001",
+    "pull_request_id": 22,
+    "file_path": "app/models/duplicate_detection_12.py",
+    "additions": 29,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-23-001",
+    "pull_request_id": 23,
+    "file_path": "app/models/duplicate_detection_12.py",
+    "additions": 18,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-23-002",
+    "pull_request_id": 23,
+    "file_path": "db/migrations/003_retry_handling_3.sql",
+    "additions": 52,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-24-001",
+    "pull_request_id": 24,
+    "file_path": "app/utils/session_expiry_18.py",
+    "additions": 37,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-24-002",
+    "pull_request_id": 24,
+    "file_path": "tests/test_session_expiry_18.py",
+    "additions": 59,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-24-003",
+    "pull_request_id": 24,
+    "file_path": "app/api/routes/currency_rounding_5.py",
+    "additions": 72,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-25-001",
+    "pull_request_id": 25,
+    "file_path": "app/models/idempotency_keys_10.py",
+    "additions": 9,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-26-001",
+    "pull_request_id": 26,
+    "file_path": "app/api/routes/timeout_handling_6.py",
+    "additions": 39,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-27-001",
+    "pull_request_id": 27,
+    "file_path": "app/utils/audit_logging_17.py",
+    "additions": 78,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-28-001",
+    "pull_request_id": 28,
+    "file_path": "app/api/routes/timeout_handling_6.py",
+    "additions": 41,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-28-002",
+    "pull_request_id": 28,
+    "file_path": "app/services/retry_handling_15.py",
+    "additions": 62,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-29-001",
+    "pull_request_id": 29,
+    "file_path": "db/migrations/002_rate_limiting_2.sql",
+    "additions": 5,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-29-002",
+    "pull_request_id": 29,
+    "file_path": "app/utils/rate_limiting_20.py",
+    "additions": 79,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-29-003",
+    "pull_request_id": 29,
+    "file_path": "app/api/routes/retry_handling_7.py",
+    "additions": 9,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-30-001",
+    "pull_request_id": 30,
+    "file_path": "app/api/routes/retry_handling_7.py",
+    "additions": 20,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-31-001",
+    "pull_request_id": 31,
+    "file_path": "app/services/pagination_16.py",
+    "additions": 29,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-32-001",
+    "pull_request_id": 32,
+    "file_path": "app/services/pagination_14.py",
+    "additions": 31,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-32-002",
+    "pull_request_id": 32,
+    "file_path": "tests/test_pagination_14.py",
+    "additions": 9,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-33-001",
+    "pull_request_id": 33,
+    "file_path": "app/services/pagination_16.py",
+    "additions": 9,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-33-002",
+    "pull_request_id": 33,
+    "file_path": "app/services/retry_handling_15.py",
+    "additions": 35,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-34-001",
+    "pull_request_id": 34,
+    "file_path": "app/services/pagination_16.py",
+    "additions": 75,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-34-002",
+    "pull_request_id": 34,
+    "file_path": "app/services/retry_handling_15.py",
+    "additions": 63,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-35-001",
+    "pull_request_id": 35,
+    "file_path": "app/utils/cache_invalidation_22.py",
+    "additions": 48,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-36-001",
+    "pull_request_id": 36,
+    "file_path": "app/api/routes/retry_handling_7.py",
+    "additions": 58,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-36-002",
+    "pull_request_id": 36,
+    "file_path": "app/models/audit_logging_11.py",
+    "additions": 60,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-37-001",
+    "pull_request_id": 37,
+    "file_path": "app/utils/pagination_19.py",
+    "additions": 75,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-37-002",
+    "pull_request_id": 37,
+    "file_path": "tests/test_pagination_19.py",
+    "additions": 48,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-37-003",
+    "pull_request_id": 37,
+    "file_path": "app/models/idempotency_keys_10.py",
+    "additions": 47,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-38-001",
+    "pull_request_id": 38,
+    "file_path": "app/utils/cache_invalidation_22.py",
+    "additions": 63,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-38-002",
+    "pull_request_id": 38,
+    "file_path": "tests/test_cache_invalidation_22.py",
+    "additions": 3,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-39-001",
+    "pull_request_id": 39,
+    "file_path": "app/utils/audit_logging_17.py",
+    "additions": 15,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-39-002",
+    "pull_request_id": 39,
+    "file_path": "app/models/idempotency_keys_10.py",
+    "additions": 73,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-40-001",
+    "pull_request_id": 40,
+    "file_path": "app/services/retry_handling_15.py",
+    "additions": 35,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-41-001",
+    "pull_request_id": 41,
+    "file_path": "app/utils/cache_invalidation_22.py",
+    "additions": 18,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-42-001",
+    "pull_request_id": 42,
+    "file_path": "app/utils/audit_logging_17.py",
+    "additions": 13,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-42-002",
+    "pull_request_id": 42,
+    "file_path": "tests/test_audit_logging_17.py",
+    "additions": 21,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-43-001",
+    "pull_request_id": 43,
+    "file_path": "app/services/pagination_16.py",
+    "additions": 62,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-43-002",
+    "pull_request_id": 43,
+    "file_path": "app/config/session_expiry_9.py",
+    "additions": 60,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-43-003",
+    "pull_request_id": 43,
+    "file_path": "app/api/routes/retry_handling_7.py",
+    "additions": 23,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-44-001",
+    "pull_request_id": 44,
+    "file_path": "app/config/webhook_signature_verification_8.py",
+    "additions": 48,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-45-001",
+    "pull_request_id": 45,
+    "file_path": "app/utils/rate_limiting_20.py",
+    "additions": 60,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-46-001",
+    "pull_request_id": 46,
+    "file_path": "app/api/routes/currency_rounding_5.py",
+    "additions": 79,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-46-002",
+    "pull_request_id": 46,
+    "file_path": "tests/test_currency_rounding_5.py",
+    "additions": 53,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-47-001",
+    "pull_request_id": 47,
+    "file_path": "app/config/session_expiry_9.py",
+    "additions": 23,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-48-001",
+    "pull_request_id": 48,
+    "file_path": "app/models/audit_logging_11.py",
+    "additions": 45,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-48-002",
+    "pull_request_id": 48,
+    "file_path": "tests/test_audit_logging_11.py",
+    "additions": 3,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-48-003",
+    "pull_request_id": 48,
+    "file_path": "app/models/idempotency_keys_10.py",
+    "additions": 16,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-49-001",
+    "pull_request_id": 49,
+    "file_path": "app/api/routes/currency_rounding_5.py",
+    "additions": 29,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-50-001",
+    "pull_request_id": 50,
+    "file_path": "app/utils/audit_logging_17.py",
+    "additions": 72,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-51-001",
+    "pull_request_id": 51,
+    "file_path": "app/utils/session_expiry_18.py",
+    "additions": 61,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-52-001",
+    "pull_request_id": 52,
+    "file_path": "app/services/retry_handling_15.py",
+    "additions": 13,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-53-001",
+    "pull_request_id": 53,
+    "file_path": "app/utils/cache_invalidation_22.py",
+    "additions": 43,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-53-002",
+    "pull_request_id": 53,
+    "file_path": "tests/test_cache_invalidation_22.py",
+    "additions": 64,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-54-001",
+    "pull_request_id": 54,
+    "file_path": "app/models/idempotency_keys_10.py",
+    "additions": 28,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-54-002",
+    "pull_request_id": 54,
+    "file_path": "app/services/retry_handling_15.py",
+    "additions": 76,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-55-001",
+    "pull_request_id": 55,
+    "file_path": "app/services/pagination_14.py",
+    "additions": 16,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-55-002",
+    "pull_request_id": 55,
+    "file_path": "app/config/session_expiry_9.py",
+    "additions": 6,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-56-001",
+    "pull_request_id": 56,
+    "file_path": "app/services/pagination_16.py",
+    "additions": 18,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-56-002",
+    "pull_request_id": 56,
+    "file_path": "app/services/pagination_14.py",
+    "additions": 24,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-57-001",
+    "pull_request_id": 57,
+    "file_path": "app/api/routes/timeout_handling_6.py",
+    "additions": 77,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-58-001",
+    "pull_request_id": 58,
+    "file_path": "app/services/pagination_14.py",
+    "additions": 8,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-58-002",
+    "pull_request_id": 58,
+    "file_path": "app/utils/session_expiry_21.py",
+    "additions": 56,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-59-001",
+    "pull_request_id": 59,
+    "file_path": "app/services/pagination_16.py",
+    "additions": 2,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-60-001",
+    "pull_request_id": 60,
+    "file_path": "app/services/retry_handling_15.py",
+    "additions": 24,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-61-001",
+    "pull_request_id": 61,
+    "file_path": "app/api/routes/retry_handling_7.py",
+    "additions": 68,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-61-002",
+    "pull_request_id": 61,
+    "file_path": "app/utils/pagination_19.py",
+    "additions": 55,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-62-001",
+    "pull_request_id": 62,
+    "file_path": "app/services/pagination_14.py",
+    "additions": 24,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-63-001",
+    "pull_request_id": 63,
+    "file_path": "app/api/routes/timeout_handling_6.py",
+    "additions": 15,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-63-002",
+    "pull_request_id": 63,
+    "file_path": "app/api/routes/currency_rounding_5.py",
+    "additions": 30,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-64-001",
+    "pull_request_id": 64,
+    "file_path": "app/utils/batch_export_22.py",
+    "additions": 61,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-64-002",
+    "pull_request_id": 64,
+    "file_path": "tests/test_batch_export_22.py",
+    "additions": 20,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-65-001",
+    "pull_request_id": 65,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 71,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-65-002",
+    "pull_request_id": 65,
+    "file_path": "app/config/pagination_8.py",
+    "additions": 43,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-66-001",
+    "pull_request_id": 66,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 3,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-67-001",
+    "pull_request_id": 67,
+    "file_path": "app/api/routes/idempotency_keys_6.py",
+    "additions": 23,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-67-002",
+    "pull_request_id": 67,
+    "file_path": "tests/test_idempotency_keys_6.py",
+    "additions": 70,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-68-001",
+    "pull_request_id": 68,
+    "file_path": "app/services/cache_invalidation_16.py",
+    "additions": 54,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-68-002",
+    "pull_request_id": 68,
+    "file_path": "app/api/routes/webhook_signature_verification_4.py",
+    "additions": 63,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-69-001",
+    "pull_request_id": 69,
+    "file_path": "app/utils/batch_export_22.py",
+    "additions": 24,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-70-001",
+    "pull_request_id": 70,
+    "file_path": "app/api/routes/pagination_7.py",
+    "additions": 8,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-71-001",
+    "pull_request_id": 71,
+    "file_path": "app/models/audit_logging_11.py",
+    "additions": 29,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-71-002",
+    "pull_request_id": 71,
+    "file_path": "tests/test_audit_logging_11.py",
+    "additions": 11,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-72-001",
+    "pull_request_id": 72,
+    "file_path": "app/api/routes/pagination_7.py",
+    "additions": 48,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-72-002",
+    "pull_request_id": 72,
+    "file_path": "tests/test_pagination_7.py",
+    "additions": 33,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-73-001",
+    "pull_request_id": 73,
+    "file_path": "app/models/rate_limiting_12.py",
+    "additions": 50,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-73-002",
+    "pull_request_id": 73,
+    "file_path": "tests/test_rate_limiting_12.py",
+    "additions": 11,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-73-003",
+    "pull_request_id": 73,
+    "file_path": "app/utils/session_expiry_21.py",
+    "additions": 66,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-74-001",
+    "pull_request_id": 74,
+    "file_path": "app/utils/retry_handling_19.py",
+    "additions": 41,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-74-002",
+    "pull_request_id": 74,
+    "file_path": "tests/test_retry_handling_19.py",
+    "additions": 37,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-74-003",
+    "pull_request_id": 74,
+    "file_path": "app/models/rate_limiting_10.py",
+    "additions": 44,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-74-004",
+    "pull_request_id": 74,
+    "file_path": "app/api/routes/session_expiry_5.py",
+    "additions": 76,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-75-001",
+    "pull_request_id": 75,
+    "file_path": "app/utils/session_expiry_21.py",
+    "additions": 75,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-75-002",
+    "pull_request_id": 75,
+    "file_path": "tests/test_session_expiry_21.py",
+    "additions": 28,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-75-003",
+    "pull_request_id": 75,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 23,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-76-001",
+    "pull_request_id": 76,
+    "file_path": "app/services/queue_backpressure_15.py",
+    "additions": 59,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-76-002",
+    "pull_request_id": 76,
+    "file_path": "app/config/pagination_8.py",
+    "additions": 34,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-77-001",
+    "pull_request_id": 77,
+    "file_path": "app/api/routes/session_expiry_5.py",
+    "additions": 44,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-77-002",
+    "pull_request_id": 77,
+    "file_path": "app/models/audit_logging_11.py",
+    "additions": 9,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-78-001",
+    "pull_request_id": 78,
+    "file_path": "app/utils/queue_backpressure_17.py",
+    "additions": 61,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-79-001",
+    "pull_request_id": 79,
+    "file_path": "app/api/routes/pagination_7.py",
+    "additions": 7,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-79-002",
+    "pull_request_id": 79,
+    "file_path": "tests/test_pagination_7.py",
+    "additions": 64,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-79-003",
+    "pull_request_id": 79,
+    "file_path": "app/services/cache_invalidation_16.py",
+    "additions": 46,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-80-001",
+    "pull_request_id": 80,
+    "file_path": "app/services/cache_invalidation_16.py",
+    "additions": 39,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-80-002",
+    "pull_request_id": 80,
+    "file_path": "tests/test_cache_invalidation_16.py",
+    "additions": 32,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-80-003",
+    "pull_request_id": 80,
+    "file_path": "app/api/routes/pagination_7.py",
+    "additions": 68,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-80-004",
+    "pull_request_id": 80,
+    "file_path": "app/api/routes/session_expiry_5.py",
+    "additions": 35,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-81-001",
+    "pull_request_id": 81,
+    "file_path": "db/migrations/001_currency_rounding_1.sql",
+    "additions": 11,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-82-001",
+    "pull_request_id": 82,
+    "file_path": "app/services/cache_invalidation_16.py",
+    "additions": 20,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-82-002",
+    "pull_request_id": 82,
+    "file_path": "tests/test_cache_invalidation_16.py",
+    "additions": 58,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-83-001",
+    "pull_request_id": 83,
+    "file_path": "app/services/cache_invalidation_16.py",
+    "additions": 15,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-83-002",
+    "pull_request_id": 83,
+    "file_path": "app/api/routes/pagination_7.py",
+    "additions": 56,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-84-001",
+    "pull_request_id": 84,
+    "file_path": "app/services/cache_invalidation_16.py",
+    "additions": 69,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-84-002",
+    "pull_request_id": 84,
+    "file_path": "tests/test_cache_invalidation_16.py",
+    "additions": 33,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-85-001",
+    "pull_request_id": 85,
+    "file_path": "app/services/cache_invalidation_16.py",
+    "additions": 24,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-85-002",
+    "pull_request_id": 85,
+    "file_path": "app/services/queue_backpressure_15.py",
+    "additions": 18,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-86-001",
+    "pull_request_id": 86,
+    "file_path": "app/services/queue_backpressure_15.py",
+    "additions": 67,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-86-002",
+    "pull_request_id": 86,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 69,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-87-001",
+    "pull_request_id": 87,
+    "file_path": "app/models/rate_limiting_10.py",
+    "additions": 2,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-88-001",
+    "pull_request_id": 88,
+    "file_path": "app/utils/retry_handling_20.py",
+    "additions": 29,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-88-002",
+    "pull_request_id": 88,
+    "file_path": "tests/test_retry_handling_20.py",
+    "additions": 37,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-89-001",
+    "pull_request_id": 89,
+    "file_path": "app/services/queue_backpressure_15.py",
+    "additions": 57,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-89-002",
+    "pull_request_id": 89,
+    "file_path": "app/models/rate_limiting_12.py",
+    "additions": 53,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-90-001",
+    "pull_request_id": 90,
+    "file_path": "app/utils/retry_handling_20.py",
+    "additions": 52,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-90-002",
+    "pull_request_id": 90,
+    "file_path": "tests/test_retry_handling_20.py",
+    "additions": 60,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-91-001",
+    "pull_request_id": 91,
+    "file_path": "app/utils/queue_backpressure_17.py",
+    "additions": 58,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-92-001",
+    "pull_request_id": 92,
+    "file_path": "app/api/routes/webhook_signature_verification_4.py",
+    "additions": 21,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-92-002",
+    "pull_request_id": 92,
+    "file_path": "tests/test_webhook_signature_verification_4.py",
+    "additions": 75,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-92-003",
+    "pull_request_id": 92,
+    "file_path": "app/utils/retry_handling_20.py",
+    "additions": 61,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-93-001",
+    "pull_request_id": 93,
+    "file_path": "app/api/routes/session_expiry_5.py",
+    "additions": 66,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-93-002",
+    "pull_request_id": 93,
+    "file_path": "tests/test_session_expiry_5.py",
+    "additions": 18,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-93-003",
+    "pull_request_id": 93,
+    "file_path": "app/models/rate_limiting_12.py",
+    "additions": 59,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-93-004",
+    "pull_request_id": 93,
+    "file_path": "app/config/cache_invalidation_9.py",
+    "additions": 53,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-94-001",
+    "pull_request_id": 94,
+    "file_path": "app/models/rate_limiting_12.py",
+    "additions": 15,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-94-002",
+    "pull_request_id": 94,
+    "file_path": "tests/test_rate_limiting_12.py",
+    "additions": 74,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-95-001",
+    "pull_request_id": 95,
+    "file_path": "app/services/queue_backpressure_15.py",
+    "additions": 66,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-96-001",
+    "pull_request_id": 96,
+    "file_path": "db/migrations/002_cache_invalidation_2.sql",
+    "additions": 14,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-96-002",
+    "pull_request_id": 96,
+    "file_path": "app/services/cache_invalidation_16.py",
+    "additions": 20,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-97-001",
+    "pull_request_id": 97,
+    "file_path": "db/migrations/003_currency_rounding_3.sql",
+    "additions": 18,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-97-002",
+    "pull_request_id": 97,
+    "file_path": "db/migrations/002_cache_invalidation_2.sql",
+    "additions": 15,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-98-001",
+    "pull_request_id": 98,
+    "file_path": "app/api/routes/session_expiry_5.py",
+    "additions": 43,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-98-002",
+    "pull_request_id": 98,
+    "file_path": "app/services/idempotency_keys_14.py",
+    "additions": 53,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-98-003",
+    "pull_request_id": 98,
+    "file_path": "db/migrations/002_cache_invalidation_2.sql",
+    "additions": 29,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-99-001",
+    "pull_request_id": 99,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 41,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-99-002",
+    "pull_request_id": 99,
+    "file_path": "app/services/cache_invalidation_16.py",
+    "additions": 3,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-99-003",
+    "pull_request_id": 99,
+    "file_path": "app/api/routes/webhook_signature_verification_4.py",
+    "additions": 48,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-100-001",
+    "pull_request_id": 100,
+    "file_path": "app/api/routes/session_expiry_5.py",
+    "additions": 72,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-101-001",
+    "pull_request_id": 101,
+    "file_path": "app/models/audit_logging_11.py",
+    "additions": 24,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-101-002",
+    "pull_request_id": 101,
+    "file_path": "tests/test_audit_logging_11.py",
+    "additions": 59,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-101-003",
+    "pull_request_id": 101,
+    "file_path": "app/config/cache_invalidation_9.py",
+    "additions": 13,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-101-004",
+    "pull_request_id": 101,
+    "file_path": "app/services/idempotency_keys_14.py",
+    "additions": 48,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-102-001",
+    "pull_request_id": 102,
+    "file_path": "app/models/audit_logging_11.py",
+    "additions": 15,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-102-002",
+    "pull_request_id": 102,
+    "file_path": "tests/test_audit_logging_11.py",
+    "additions": 70,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-102-003",
+    "pull_request_id": 102,
+    "file_path": "app/api/routes/webhook_signature_verification_4.py",
+    "additions": 22,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-103-001",
+    "pull_request_id": 103,
+    "file_path": "app/api/routes/session_expiry_5.py",
+    "additions": 71,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-104-001",
+    "pull_request_id": 104,
+    "file_path": "app/services/queue_backpressure_15.py",
+    "additions": 70,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-104-002",
+    "pull_request_id": 104,
+    "file_path": "app/utils/batch_export_22.py",
+    "additions": 60,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-105-001",
+    "pull_request_id": 105,
+    "file_path": "app/models/audit_logging_11.py",
+    "additions": 9,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-105-002",
+    "pull_request_id": 105,
+    "file_path": "app/models/rate_limiting_12.py",
+    "additions": 52,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-106-001",
+    "pull_request_id": 106,
+    "file_path": "app/services/cache_invalidation_16.py",
+    "additions": 77,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-106-002",
+    "pull_request_id": 106,
+    "file_path": "tests/test_cache_invalidation_16.py",
+    "additions": 68,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-106-003",
+    "pull_request_id": 106,
+    "file_path": "app/utils/session_expiry_21.py",
+    "additions": 35,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-106-004",
+    "pull_request_id": 106,
+    "file_path": "app/utils/retry_handling_20.py",
+    "additions": 65,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-107-001",
+    "pull_request_id": 107,
+    "file_path": "app/api/routes/session_expiry_5.py",
+    "additions": 58,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-107-002",
+    "pull_request_id": 107,
+    "file_path": "tests/test_session_expiry_5.py",
+    "additions": 63,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-108-001",
+    "pull_request_id": 108,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 47,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-108-002",
+    "pull_request_id": 108,
+    "file_path": "app/config/cache_invalidation_9.py",
+    "additions": 48,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-108-003",
+    "pull_request_id": 108,
+    "file_path": "app/config/pagination_8.py",
+    "additions": 42,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-109-001",
+    "pull_request_id": 109,
+    "file_path": "app/api/routes/idempotency_keys_6.py",
+    "additions": 49,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-110-001",
+    "pull_request_id": 110,
+    "file_path": "app/utils/retry_handling_19.py",
+    "additions": 18,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-110-002",
+    "pull_request_id": 110,
+    "file_path": "tests/test_retry_handling_19.py",
+    "additions": 31,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-110-003",
+    "pull_request_id": 110,
+    "file_path": "app/api/routes/idempotency_keys_6.py",
+    "additions": 34,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-111-001",
+    "pull_request_id": 111,
+    "file_path": "app/utils/retry_handling_20.py",
+    "additions": 67,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-111-002",
+    "pull_request_id": 111,
+    "file_path": "tests/test_retry_handling_20.py",
+    "additions": 18,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-112-001",
+    "pull_request_id": 112,
+    "file_path": "db/migrations/001_currency_rounding_1.sql",
+    "additions": 18,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-113-001",
+    "pull_request_id": 113,
+    "file_path": "db/migrations/003_currency_rounding_3.sql",
+    "additions": 31,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-113-002",
+    "pull_request_id": 113,
+    "file_path": "app/models/rate_limiting_10.py",
+    "additions": 66,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-113-003",
+    "pull_request_id": 113,
+    "file_path": "app/utils/retry_handling_19.py",
+    "additions": 77,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-114-001",
+    "pull_request_id": 114,
+    "file_path": "app/models/rate_limiting_10.py",
+    "additions": 58,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-114-002",
+    "pull_request_id": 114,
+    "file_path": "app/config/cache_invalidation_9.py",
+    "additions": 19,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-115-001",
+    "pull_request_id": 115,
+    "file_path": "app/models/rate_limiting_12.py",
+    "additions": 55,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-115-002",
+    "pull_request_id": 115,
+    "file_path": "tests/test_rate_limiting_12.py",
+    "additions": 66,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-115-003",
+    "pull_request_id": 115,
+    "file_path": "app/api/routes/pagination_7.py",
+    "additions": 3,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-116-001",
+    "pull_request_id": 116,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 30,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-117-001",
+    "pull_request_id": 117,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 73,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-118-001",
+    "pull_request_id": 118,
+    "file_path": "app/models/rate_limiting_12.py",
+    "additions": 64,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-119-001",
+    "pull_request_id": 119,
+    "file_path": "app/api/routes/webhook_signature_verification_4.py",
+    "additions": 9,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-119-002",
+    "pull_request_id": 119,
+    "file_path": "tests/test_webhook_signature_verification_4.py",
+    "additions": 7,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-119-003",
+    "pull_request_id": 119,
+    "file_path": "app/services/queue_backpressure_15.py",
+    "additions": 79,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-119-004",
+    "pull_request_id": 119,
+    "file_path": "app/models/audit_logging_11.py",
+    "additions": 75,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-120-001",
+    "pull_request_id": 120,
+    "file_path": "app/services/idempotency_keys_14.py",
+    "additions": 72,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-120-002",
+    "pull_request_id": 120,
+    "file_path": "app/utils/batch_export_22.py",
+    "additions": 55,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-121-001",
+    "pull_request_id": 121,
+    "file_path": "app/services/queue_backpressure_15.py",
+    "additions": 69,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-121-002",
+    "pull_request_id": 121,
+    "file_path": "app/config/cache_invalidation_9.py",
+    "additions": 8,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-121-003",
+    "pull_request_id": 121,
+    "file_path": "app/api/routes/session_expiry_5.py",
+    "additions": 6,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-122-001",
+    "pull_request_id": 122,
+    "file_path": "app/config/pagination_8.py",
+    "additions": 25,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-123-001",
+    "pull_request_id": 123,
+    "file_path": "app/models/audit_logging_10.py",
+    "additions": 34,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-123-002",
+    "pull_request_id": 123,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 22,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-124-001",
+    "pull_request_id": 124,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 61,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-125-001",
+    "pull_request_id": 125,
+    "file_path": "db/migrations/001_currency_rounding_1.sql",
+    "additions": 57,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-125-002",
+    "pull_request_id": 125,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 54,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-126-001",
+    "pull_request_id": 126,
+    "file_path": "app/config/retry_handling_9.py",
+    "additions": 65,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-126-002",
+    "pull_request_id": 126,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 64,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-127-001",
+    "pull_request_id": 127,
+    "file_path": "db/migrations/001_currency_rounding_1.sql",
+    "additions": 30,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-128-001",
+    "pull_request_id": 128,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 7,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-129-001",
+    "pull_request_id": 129,
+    "file_path": "app/services/feature_flag_rollout_16.py",
+    "additions": 24,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-129-002",
+    "pull_request_id": 129,
+    "file_path": "tests/test_feature_flag_rollout_16.py",
+    "additions": 51,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-129-003",
+    "pull_request_id": 129,
+    "file_path": "app/config/retry_handling_9.py",
+    "additions": 32,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-130-001",
+    "pull_request_id": 130,
+    "file_path": "app/utils/session_expiry_17.py",
+    "additions": 9,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-131-001",
+    "pull_request_id": 131,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 79,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-131-002",
+    "pull_request_id": 131,
+    "file_path": "tests/test_webhook_signature_verification_7.py",
+    "additions": 3,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-131-003",
+    "pull_request_id": 131,
+    "file_path": "app/services/duplicate_detection_15.py",
+    "additions": 54,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-132-001",
+    "pull_request_id": 132,
+    "file_path": "app/utils/timeout_handling_19.py",
+    "additions": 36,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-132-002",
+    "pull_request_id": 132,
+    "file_path": "tests/test_timeout_handling_19.py",
+    "additions": 25,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-133-001",
+    "pull_request_id": 133,
+    "file_path": "app/utils/session_expiry_20.py",
+    "additions": 26,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-134-001",
+    "pull_request_id": 134,
+    "file_path": "app/models/retry_handling_11.py",
+    "additions": 29,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-135-001",
+    "pull_request_id": 135,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 27,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-136-001",
+    "pull_request_id": 136,
+    "file_path": "app/utils/batch_export_21.py",
+    "additions": 71,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-136-002",
+    "pull_request_id": 136,
+    "file_path": "tests/test_batch_export_21.py",
+    "additions": 23,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-137-001",
+    "pull_request_id": 137,
+    "file_path": "app/services/feature_flag_rollout_16.py",
+    "additions": 71,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-137-002",
+    "pull_request_id": 137,
+    "file_path": "tests/test_feature_flag_rollout_16.py",
+    "additions": 77,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-137-003",
+    "pull_request_id": 137,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 21,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-138-001",
+    "pull_request_id": 138,
+    "file_path": "app/services/feature_flag_rollout_16.py",
+    "additions": 23,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-138-002",
+    "pull_request_id": 138,
+    "file_path": "app/models/retry_handling_11.py",
+    "additions": 79,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-139-001",
+    "pull_request_id": 139,
+    "file_path": "app/utils/timeout_handling_19.py",
+    "additions": 48,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-139-002",
+    "pull_request_id": 139,
+    "file_path": "app/models/retry_handling_11.py",
+    "additions": 33,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-140-001",
+    "pull_request_id": 140,
+    "file_path": "app/api/routes/duplicate_detection_4.py",
+    "additions": 67,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-140-002",
+    "pull_request_id": 140,
+    "file_path": "tests/test_duplicate_detection_4.py",
+    "additions": 16,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-141-001",
+    "pull_request_id": 141,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 53,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-141-002",
+    "pull_request_id": 141,
+    "file_path": "tests/test_retry_handling_12.py",
+    "additions": 64,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-141-003",
+    "pull_request_id": 141,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 27,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-141-004",
+    "pull_request_id": 141,
+    "file_path": "db/migrations/002_timeout_handling_2.sql",
+    "additions": 40,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-142-001",
+    "pull_request_id": 142,
+    "file_path": "app/utils/session_expiry_17.py",
+    "additions": 14,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-143-001",
+    "pull_request_id": 143,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 7,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-143-002",
+    "pull_request_id": 143,
+    "file_path": "app/utils/session_expiry_17.py",
+    "additions": 4,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-144-001",
+    "pull_request_id": 144,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 8,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-144-002",
+    "pull_request_id": 144,
+    "file_path": "app/models/retry_handling_11.py",
+    "additions": 26,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-145-001",
+    "pull_request_id": 145,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 33,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-145-002",
+    "pull_request_id": 145,
+    "file_path": "tests/test_queue_backpressure_5.py",
+    "additions": 16,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-145-003",
+    "pull_request_id": 145,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 49,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-146-001",
+    "pull_request_id": 146,
+    "file_path": "app/models/retry_handling_11.py",
+    "additions": 77,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-146-002",
+    "pull_request_id": 146,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 21,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-146-003",
+    "pull_request_id": 146,
+    "file_path": "app/services/currency_rounding_13.py",
+    "additions": 17,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-147-001",
+    "pull_request_id": 147,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 55,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-147-002",
+    "pull_request_id": 147,
+    "file_path": "app/services/feature_flag_rollout_16.py",
+    "additions": 74,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-147-003",
+    "pull_request_id": 147,
+    "file_path": "db/migrations/002_timeout_handling_2.sql",
+    "additions": 41,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-148-001",
+    "pull_request_id": 148,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 60,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-148-002",
+    "pull_request_id": 148,
+    "file_path": "tests/test_webhook_signature_verification_7.py",
+    "additions": 77,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-148-003",
+    "pull_request_id": 148,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 37,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-149-001",
+    "pull_request_id": 149,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 46,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-150-001",
+    "pull_request_id": 150,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 78,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-151-001",
+    "pull_request_id": 151,
+    "file_path": "db/migrations/002_timeout_handling_2.sql",
+    "additions": 13,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-152-001",
+    "pull_request_id": 152,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 35,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-152-002",
+    "pull_request_id": 152,
+    "file_path": "tests/test_retry_handling_12.py",
+    "additions": 55,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-152-003",
+    "pull_request_id": 152,
+    "file_path": "app/services/currency_rounding_13.py",
+    "additions": 36,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-152-004",
+    "pull_request_id": 152,
+    "file_path": "app/models/audit_logging_10.py",
+    "additions": 49,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-153-001",
+    "pull_request_id": 153,
+    "file_path": "app/services/feature_flag_rollout_16.py",
+    "additions": 2,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-153-002",
+    "pull_request_id": 153,
+    "file_path": "tests/test_feature_flag_rollout_16.py",
+    "additions": 4,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-154-001",
+    "pull_request_id": 154,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 76,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-154-002",
+    "pull_request_id": 154,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 6,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-154-003",
+    "pull_request_id": 154,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 63,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-155-001",
+    "pull_request_id": 155,
+    "file_path": "app/services/duplicate_detection_15.py",
+    "additions": 78,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-155-002",
+    "pull_request_id": 155,
+    "file_path": "app/utils/session_expiry_17.py",
+    "additions": 9,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-156-001",
+    "pull_request_id": 156,
+    "file_path": "app/services/feature_flag_rollout_16.py",
+    "additions": 19,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-157-001",
+    "pull_request_id": 157,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 38,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-158-001",
+    "pull_request_id": 158,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 37,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-158-002",
+    "pull_request_id": 158,
+    "file_path": "tests/test_webhook_signature_verification_7.py",
+    "additions": 65,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-158-003",
+    "pull_request_id": 158,
+    "file_path": "db/migrations/001_currency_rounding_1.sql",
+    "additions": 60,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-159-001",
+    "pull_request_id": 159,
+    "file_path": "app/utils/session_expiry_20.py",
+    "additions": 79,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-159-002",
+    "pull_request_id": 159,
+    "file_path": "app/services/retry_handling_14.py",
+    "additions": 4,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-160-001",
+    "pull_request_id": 160,
+    "file_path": "app/models/audit_logging_10.py",
+    "additions": 23,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-161-001",
+    "pull_request_id": 161,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 57,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-161-002",
+    "pull_request_id": 161,
+    "file_path": "tests/test_rate_limiting_18.py",
+    "additions": 21,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-161-003",
+    "pull_request_id": 161,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 48,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-162-001",
+    "pull_request_id": 162,
+    "file_path": "app/config/pagination_8.py",
+    "additions": 14,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-163-001",
+    "pull_request_id": 163,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 4,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-164-001",
+    "pull_request_id": 164,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 3,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-164-002",
+    "pull_request_id": 164,
+    "file_path": "tests/test_retry_handling_12.py",
+    "additions": 26,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-164-003",
+    "pull_request_id": 164,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 73,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-165-001",
+    "pull_request_id": 165,
+    "file_path": "app/utils/batch_export_21.py",
+    "additions": 19,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-166-001",
+    "pull_request_id": 166,
+    "file_path": "app/services/feature_flag_rollout_16.py",
+    "additions": 26,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-166-002",
+    "pull_request_id": 166,
+    "file_path": "tests/test_feature_flag_rollout_16.py",
+    "additions": 46,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-167-001",
+    "pull_request_id": 167,
+    "file_path": "db/migrations/002_timeout_handling_2.sql",
+    "additions": 78,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-167-002",
+    "pull_request_id": 167,
+    "file_path": "app/api/routes/webhook_signature_verification_6.py",
+    "additions": 50,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-167-003",
+    "pull_request_id": 167,
+    "file_path": "app/utils/batch_export_21.py",
+    "additions": 53,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-168-001",
+    "pull_request_id": 168,
+    "file_path": "app/services/duplicate_detection_15.py",
+    "additions": 26,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-169-001",
+    "pull_request_id": 169,
+    "file_path": "db/migrations/002_timeout_handling_2.sql",
+    "additions": 46,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-170-001",
+    "pull_request_id": 170,
+    "file_path": "app/api/routes/webhook_signature_verification_6.py",
+    "additions": 72,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-171-001",
+    "pull_request_id": 171,
+    "file_path": "db/migrations/002_timeout_handling_2.sql",
+    "additions": 32,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-171-002",
+    "pull_request_id": 171,
+    "file_path": "app/utils/timeout_handling_19.py",
+    "additions": 36,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-172-001",
+    "pull_request_id": 172,
+    "file_path": "app/config/pagination_8.py",
+    "additions": 78,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-173-001",
+    "pull_request_id": 173,
+    "file_path": "app/config/pagination_8.py",
+    "additions": 45,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-174-001",
+    "pull_request_id": 174,
+    "file_path": "app/models/audit_logging_10.py",
+    "additions": 28,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-175-001",
+    "pull_request_id": 175,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 69,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-175-002",
+    "pull_request_id": 175,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 31,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-176-001",
+    "pull_request_id": 176,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 18,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-176-002",
+    "pull_request_id": 176,
+    "file_path": "tests/test_retry_handling_12.py",
+    "additions": 8,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-177-001",
+    "pull_request_id": 177,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 36,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-177-002",
+    "pull_request_id": 177,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 37,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-178-001",
+    "pull_request_id": 178,
+    "file_path": "app/utils/timeout_handling_19.py",
+    "additions": 67,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-178-002",
+    "pull_request_id": 178,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 58,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-179-001",
+    "pull_request_id": 179,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 35,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-179-002",
+    "pull_request_id": 179,
+    "file_path": "tests/test_queue_backpressure_5.py",
+    "additions": 58,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-179-003",
+    "pull_request_id": 179,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 47,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-180-001",
+    "pull_request_id": 180,
+    "file_path": "app/models/audit_logging_10.py",
+    "additions": 67,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-180-002",
+    "pull_request_id": 180,
+    "file_path": "app/services/currency_rounding_13.py",
+    "additions": 20,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-181-001",
+    "pull_request_id": 181,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 71,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-181-002",
+    "pull_request_id": 181,
+    "file_path": "app/utils/timeout_handling_19.py",
+    "additions": 47,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-182-001",
+    "pull_request_id": 182,
+    "file_path": "app/services/currency_rounding_13.py",
+    "additions": 26,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-182-002",
+    "pull_request_id": 182,
+    "file_path": "app/models/audit_logging_10.py",
+    "additions": 23,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-182-003",
+    "pull_request_id": 182,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 37,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-183-001",
+    "pull_request_id": 183,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 58,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-184-001",
+    "pull_request_id": 184,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 43,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-184-002",
+    "pull_request_id": 184,
+    "file_path": "tests/test_retry_handling_12.py",
+    "additions": 52,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-185-001",
+    "pull_request_id": 185,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 71,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-185-002",
+    "pull_request_id": 185,
+    "file_path": "tests/test_rate_limiting_18.py",
+    "additions": 22,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-185-003",
+    "pull_request_id": 185,
+    "file_path": "app/config/retry_handling_9.py",
+    "additions": 34,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-185-004",
+    "pull_request_id": 185,
+    "file_path": "db/migrations/001_currency_rounding_1.sql",
+    "additions": 39,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-186-001",
+    "pull_request_id": 186,
+    "file_path": "db/migrations/003_queue_backpressure_3.sql",
+    "additions": 29,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-186-002",
+    "pull_request_id": 186,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 49,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-186-003",
+    "pull_request_id": 186,
+    "file_path": "app/api/routes/webhook_signature_verification_6.py",
+    "additions": 73,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-187-001",
+    "pull_request_id": 187,
+    "file_path": "app/services/feature_flag_rollout_16.py",
+    "additions": 50,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-188-001",
+    "pull_request_id": 188,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 2,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-188-002",
+    "pull_request_id": 188,
+    "file_path": "tests/test_webhook_signature_verification_7.py",
+    "additions": 42,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-189-001",
+    "pull_request_id": 189,
+    "file_path": "app/models/audit_logging_10.py",
+    "additions": 51,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-189-002",
+    "pull_request_id": 189,
+    "file_path": "app/services/retry_handling_14.py",
+    "additions": 45,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-190-001",
+    "pull_request_id": 190,
+    "file_path": "app/services/currency_rounding_13.py",
+    "additions": 11,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-191-001",
+    "pull_request_id": 191,
+    "file_path": "app/models/retry_handling_12.py",
+    "additions": 19,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-192-001",
+    "pull_request_id": 192,
+    "file_path": "app/models/audit_logging_10.py",
+    "additions": 39,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-192-002",
+    "pull_request_id": 192,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 51,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-193-001",
+    "pull_request_id": 193,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 79,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-194-001",
+    "pull_request_id": 194,
+    "file_path": "db/migrations/001_audit_logging_1.sql",
+    "additions": 63,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-194-002",
+    "pull_request_id": 194,
+    "file_path": "app/api/routes/audit_logging_4.py",
+    "additions": 38,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-195-001",
+    "pull_request_id": 195,
+    "file_path": "app/utils/batch_export_17.py",
+    "additions": 75,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-196-001",
+    "pull_request_id": 196,
+    "file_path": "app/config/timeout_handling_9.py",
+    "additions": 37,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-196-002",
+    "pull_request_id": 196,
+    "file_path": "tests/test_timeout_handling_9.py",
+    "additions": 48,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-197-001",
+    "pull_request_id": 197,
+    "file_path": "app/models/duplicate_detection_10.py",
+    "additions": 75,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-198-001",
+    "pull_request_id": 198,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 7,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-198-002",
+    "pull_request_id": 198,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 39,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-199-001",
+    "pull_request_id": 199,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 39,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-199-002",
+    "pull_request_id": 199,
+    "file_path": "app/utils/webhook_signature_verification_20.py",
+    "additions": 7,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-200-001",
+    "pull_request_id": 200,
+    "file_path": "app/api/routes/currency_rounding_6.py",
+    "additions": 3,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-200-002",
+    "pull_request_id": 200,
+    "file_path": "tests/test_currency_rounding_6.py",
+    "additions": 67,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-200-003",
+    "pull_request_id": 200,
+    "file_path": "app/utils/batch_export_17.py",
+    "additions": 64,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-200-004",
+    "pull_request_id": 200,
+    "file_path": "app/models/duplicate_detection_10.py",
+    "additions": 57,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-201-001",
+    "pull_request_id": 201,
+    "file_path": "app/models/duplicate_detection_10.py",
+    "additions": 57,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-201-002",
+    "pull_request_id": 201,
+    "file_path": "app/models/webhook_signature_verification_11.py",
+    "additions": 69,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-202-001",
+    "pull_request_id": 202,
+    "file_path": "app/services/feature_flag_rollout_15.py",
+    "additions": 61,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-202-002",
+    "pull_request_id": 202,
+    "file_path": "tests/test_feature_flag_rollout_15.py",
+    "additions": 57,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-202-003",
+    "pull_request_id": 202,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 38,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-203-001",
+    "pull_request_id": 203,
+    "file_path": "db/migrations/003_feature_flag_rollout_3.sql",
+    "additions": 48,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-204-001",
+    "pull_request_id": 204,
+    "file_path": "app/services/feature_flag_rollout_15.py",
+    "additions": 42,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-204-002",
+    "pull_request_id": 204,
+    "file_path": "tests/test_feature_flag_rollout_15.py",
+    "additions": 57,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-204-003",
+    "pull_request_id": 204,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 34,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-205-001",
+    "pull_request_id": 205,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 42,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-206-001",
+    "pull_request_id": 206,
+    "file_path": "app/services/feature_flag_rollout_15.py",
+    "additions": 19,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-207-001",
+    "pull_request_id": 207,
+    "file_path": "app/models/cache_invalidation_12.py",
+    "additions": 27,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-207-002",
+    "pull_request_id": 207,
+    "file_path": "db/migrations/003_feature_flag_rollout_3.sql",
+    "additions": 54,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-208-001",
+    "pull_request_id": 208,
+    "file_path": "app/config/duplicate_detection_8.py",
+    "additions": 49,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-208-002",
+    "pull_request_id": 208,
+    "file_path": "app/utils/webhook_signature_verification_20.py",
+    "additions": 2,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-209-001",
+    "pull_request_id": 209,
+    "file_path": "app/utils/idempotency_keys_19.py",
+    "additions": 3,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-209-002",
+    "pull_request_id": 209,
+    "file_path": "tests/test_idempotency_keys_19.py",
+    "additions": 74,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-210-001",
+    "pull_request_id": 210,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 34,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-211-001",
+    "pull_request_id": 211,
+    "file_path": "db/migrations/003_feature_flag_rollout_3.sql",
+    "additions": 71,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-212-001",
+    "pull_request_id": 212,
+    "file_path": "app/utils/webhook_signature_verification_20.py",
+    "additions": 21,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-213-001",
+    "pull_request_id": 213,
+    "file_path": "app/models/cache_invalidation_12.py",
+    "additions": 34,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-214-001",
+    "pull_request_id": 214,
+    "file_path": "app/config/duplicate_detection_8.py",
+    "additions": 74,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-214-002",
+    "pull_request_id": 214,
+    "file_path": "app/api/routes/audit_logging_4.py",
+    "additions": 54,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-214-003",
+    "pull_request_id": 214,
+    "file_path": "app/models/cache_invalidation_12.py",
+    "additions": 55,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-215-001",
+    "pull_request_id": 215,
+    "file_path": "app/utils/rate_limiting_18.py",
+    "additions": 50,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-215-002",
+    "pull_request_id": 215,
+    "file_path": "tests/test_rate_limiting_18.py",
+    "additions": 43,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-215-003",
+    "pull_request_id": 215,
+    "file_path": "app/config/timeout_handling_9.py",
+    "additions": 5,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-216-001",
+    "pull_request_id": 216,
+    "file_path": "app/utils/duplicate_detection_22.py",
+    "additions": 56,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-217-001",
+    "pull_request_id": 217,
+    "file_path": "app/config/timeout_handling_9.py",
+    "additions": 38,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-217-002",
+    "pull_request_id": 217,
+    "file_path": "app/config/duplicate_detection_8.py",
     "additions": 18,
     "deletions": 32
   },
   {
-    "id": "PRF-1006-001",
-    "pull_request_id": 1006,
-    "file_path": "src/deployment_risk/schema.py",
-    "additions": 20,
+    "id": "PRF-217-003",
+    "pull_request_id": 217,
+    "file_path": "app/services/feature_flag_rollout_15.py",
+    "additions": 64,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-218-001",
+    "pull_request_id": 218,
+    "file_path": "app/api/routes/currency_rounding_6.py",
+    "additions": 18,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-218-002",
+    "pull_request_id": 218,
+    "file_path": "app/utils/audit_logging_21.py",
+    "additions": 40,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-219-001",
+    "pull_request_id": 219,
+    "file_path": "db/migrations/003_feature_flag_rollout_3.sql",
+    "additions": 29,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-220-001",
+    "pull_request_id": 220,
+    "file_path": "app/models/cache_invalidation_12.py",
+    "additions": 68,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-220-002",
+    "pull_request_id": 220,
+    "file_path": "tests/test_cache_invalidation_12.py",
+    "additions": 40,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-220-003",
+    "pull_request_id": 220,
+    "file_path": "app/utils/webhook_signature_verification_20.py",
+    "additions": 16,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-220-004",
+    "pull_request_id": 220,
+    "file_path": "db/migrations/003_feature_flag_rollout_3.sql",
+    "additions": 47,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-221-001",
+    "pull_request_id": 221,
+    "file_path": "db/migrations/001_audit_logging_1.sql",
+    "additions": 2,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-221-002",
+    "pull_request_id": 221,
+    "file_path": "app/api/routes/audit_logging_4.py",
+    "additions": 8,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-222-001",
+    "pull_request_id": 222,
+    "file_path": "app/api/routes/audit_logging_4.py",
+    "additions": 65,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-223-001",
+    "pull_request_id": 223,
+    "file_path": "app/utils/webhook_signature_verification_20.py",
+    "additions": 40,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-223-002",
+    "pull_request_id": 223,
+    "file_path": "app/models/duplicate_detection_10.py",
+    "additions": 61,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-223-003",
+    "pull_request_id": 223,
+    "file_path": "app/utils/idempotency_keys_19.py",
+    "additions": 37,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-224-001",
+    "pull_request_id": 224,
+    "file_path": "app/config/timeout_handling_9.py",
+    "additions": 60,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-224-002",
+    "pull_request_id": 224,
+    "file_path": "tests/test_timeout_handling_9.py",
+    "additions": 65,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-224-003",
+    "pull_request_id": 224,
+    "file_path": "app/utils/idempotency_keys_19.py",
+    "additions": 55,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-224-004",
+    "pull_request_id": 224,
+    "file_path": "app/utils/duplicate_detection_22.py",
+    "additions": 30,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-225-001",
+    "pull_request_id": 225,
+    "file_path": "app/api/routes/currency_rounding_6.py",
+    "additions": 54,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-225-002",
+    "pull_request_id": 225,
+    "file_path": "tests/test_currency_rounding_6.py",
+    "additions": 43,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-226-001",
+    "pull_request_id": 226,
+    "file_path": "db/migrations/002_duplicate_detection_2.sql",
+    "additions": 59,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-226-002",
+    "pull_request_id": 226,
+    "file_path": "app/api/routes/pagination_5.py",
+    "additions": 67,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-227-001",
+    "pull_request_id": 227,
+    "file_path": "app/models/duplicate_detection_10.py",
+    "additions": 53,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-227-002",
+    "pull_request_id": 227,
+    "file_path": "app/api/routes/currency_rounding_6.py",
+    "additions": 54,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-227-003",
+    "pull_request_id": 227,
+    "file_path": "app/utils/duplicate_detection_22.py",
+    "additions": 16,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-228-001",
+    "pull_request_id": 228,
+    "file_path": "app/utils/webhook_signature_verification_20.py",
+    "additions": 26,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-228-002",
+    "pull_request_id": 228,
+    "file_path": "app/api/routes/pagination_5.py",
+    "additions": 69,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-229-001",
+    "pull_request_id": 229,
+    "file_path": "app/services/cache_invalidation_14.py",
+    "additions": 62,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-229-002",
+    "pull_request_id": 229,
+    "file_path": "app/utils/idempotency_keys_19.py",
+    "additions": 48,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-230-001",
+    "pull_request_id": 230,
+    "file_path": "db/migrations/002_duplicate_detection_2.sql",
+    "additions": 29,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-231-001",
+    "pull_request_id": 231,
+    "file_path": "db/migrations/003_feature_flag_rollout_3.sql",
+    "additions": 35,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-231-002",
+    "pull_request_id": 231,
+    "file_path": "app/config/duplicate_detection_8.py",
+    "additions": 9,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-232-001",
+    "pull_request_id": 232,
+    "file_path": "db/migrations/002_duplicate_detection_2.sql",
+    "additions": 47,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-233-001",
+    "pull_request_id": 233,
+    "file_path": "app/utils/batch_export_17.py",
+    "additions": 58,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-234-001",
+    "pull_request_id": 234,
+    "file_path": "db/migrations/003_feature_flag_rollout_3.sql",
+    "additions": 31,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-235-001",
+    "pull_request_id": 235,
+    "file_path": "app/utils/idempotency_keys_19.py",
+    "additions": 4,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-235-002",
+    "pull_request_id": 235,
+    "file_path": "tests/test_idempotency_keys_19.py",
+    "additions": 72,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-236-001",
+    "pull_request_id": 236,
+    "file_path": "app/config/duplicate_detection_8.py",
+    "additions": 76,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-236-002",
+    "pull_request_id": 236,
+    "file_path": "app/api/routes/audit_logging_4.py",
+    "additions": 25,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-237-001",
+    "pull_request_id": 237,
+    "file_path": "app/models/duplicate_detection_10.py",
+    "additions": 76,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-238-001",
+    "pull_request_id": 238,
+    "file_path": "app/services/webhook_signature_verification_16.py",
+    "additions": 78,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-239-001",
+    "pull_request_id": 239,
+    "file_path": "app/models/duplicate_detection_10.py",
+    "additions": 42,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-240-001",
+    "pull_request_id": 240,
+    "file_path": "db/migrations/001_audit_logging_1.sql",
+    "additions": 53,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-241-001",
+    "pull_request_id": 241,
+    "file_path": "app/services/cache_invalidation_14.py",
+    "additions": 63,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-241-002",
+    "pull_request_id": 241,
+    "file_path": "app/api/routes/currency_rounding_6.py",
+    "additions": 73,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-242-001",
+    "pull_request_id": 242,
+    "file_path": "db/migrations/003_feature_flag_rollout_3.sql",
+    "additions": 69,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-242-002",
+    "pull_request_id": 242,
+    "file_path": "app/api/routes/webhook_signature_verification_7.py",
+    "additions": 57,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-242-003",
+    "pull_request_id": 242,
+    "file_path": "app/utils/batch_export_17.py",
+    "additions": 69,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-243-001",
+    "pull_request_id": 243,
+    "file_path": "app/api/routes/pagination_5.py",
+    "additions": 35,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-243-002",
+    "pull_request_id": 243,
+    "file_path": "app/utils/batch_export_17.py",
+    "additions": 3,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-244-001",
+    "pull_request_id": 244,
+    "file_path": "app/utils/webhook_signature_verification_20.py",
+    "additions": 35,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-244-002",
+    "pull_request_id": 244,
+    "file_path": "app/utils/batch_export_17.py",
+    "additions": 32,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-245-001",
+    "pull_request_id": 245,
+    "file_path": "app/utils/audit_logging_21.py",
+    "additions": 55,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-245-002",
+    "pull_request_id": 245,
+    "file_path": "app/services/queue_backpressure_13.py",
+    "additions": 11,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-245-003",
+    "pull_request_id": 245,
+    "file_path": "app/models/webhook_signature_verification_11.py",
+    "additions": 64,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-246-001",
+    "pull_request_id": 246,
+    "file_path": "db/migrations/003_feature_flag_rollout_3.sql",
+    "additions": 35,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-247-001",
+    "pull_request_id": 247,
+    "file_path": "app/models/duplicate_detection_10.py",
+    "additions": 48,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-247-002",
+    "pull_request_id": 247,
+    "file_path": "app/services/cache_invalidation_14.py",
+    "additions": 45,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-248-001",
+    "pull_request_id": 248,
+    "file_path": "app/api/routes/audit_logging_4.py",
+    "additions": 58,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-249-001",
+    "pull_request_id": 249,
+    "file_path": "app/api/routes/batch_export_6.py",
+    "additions": 12,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-250-001",
+    "pull_request_id": 250,
+    "file_path": "app/api/routes/batch_export_6.py",
+    "additions": 68,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-250-002",
+    "pull_request_id": 250,
+    "file_path": "app/services/currency_rounding_16.py",
+    "additions": 56,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-251-001",
+    "pull_request_id": 251,
+    "file_path": "app/services/session_expiry_14.py",
+    "additions": 3,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-252-001",
+    "pull_request_id": 252,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 50,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-253-001",
+    "pull_request_id": 253,
+    "file_path": "app/api/routes/batch_export_6.py",
+    "additions": 79,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-254-001",
+    "pull_request_id": 254,
+    "file_path": "app/services/audit_logging_15.py",
+    "additions": 70,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-254-002",
+    "pull_request_id": 254,
+    "file_path": "app/services/session_expiry_14.py",
+    "additions": 30,
     "deletions": 13
   },
   {
-    "id": "PRF-1006-002",
-    "pull_request_id": 1006,
-    "file_path": "tests/test_deployment_risk_schema.py",
-    "additions": 18,
+    "id": "PRF-255-001",
+    "pull_request_id": 255,
+    "file_path": "app/models/pagination_11.py",
+    "additions": 34,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-255-002",
+    "pull_request_id": 255,
+    "file_path": "tests/test_pagination_11.py",
+    "additions": 53,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-255-003",
+    "pull_request_id": 255,
+    "file_path": "app/services/currency_rounding_16.py",
+    "additions": 60,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-256-001",
+    "pull_request_id": 256,
+    "file_path": "db/migrations/002_session_expiry_2.sql",
+    "additions": 48,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-256-002",
+    "pull_request_id": 256,
+    "file_path": "db/migrations/003_duplicate_detection_3.sql",
+    "additions": 78,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-257-001",
+    "pull_request_id": 257,
+    "file_path": "db/migrations/001_queue_backpressure_1.sql",
+    "additions": 70,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-258-001",
+    "pull_request_id": 258,
+    "file_path": "app/api/routes/duplicate_detection_5.py",
+    "additions": 2,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-259-001",
+    "pull_request_id": 259,
+    "file_path": "app/services/session_expiry_14.py",
+    "additions": 40,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-260-001",
+    "pull_request_id": 260,
+    "file_path": "app/utils/queue_backpressure_18.py",
+    "additions": 9,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-260-002",
+    "pull_request_id": 260,
+    "file_path": "tests/test_queue_backpressure_18.py",
+    "additions": 66,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-261-001",
+    "pull_request_id": 261,
+    "file_path": "app/models/cache_invalidation_10.py",
+    "additions": 10,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-261-002",
+    "pull_request_id": 261,
+    "file_path": "app/utils/rate_limiting_17.py",
+    "additions": 30,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-262-001",
+    "pull_request_id": 262,
+    "file_path": "app/utils/queue_backpressure_18.py",
+    "additions": 6,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-262-002",
+    "pull_request_id": 262,
+    "file_path": "app/services/idempotency_keys_13.py",
+    "additions": 78,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-263-001",
+    "pull_request_id": 263,
+    "file_path": "app/utils/duplicate_detection_19.py",
+    "additions": 57,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-264-001",
+    "pull_request_id": 264,
+    "file_path": "app/api/routes/duplicate_detection_5.py",
+    "additions": 78,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-264-002",
+    "pull_request_id": 264,
+    "file_path": "tests/test_duplicate_detection_5.py",
+    "additions": 26,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-265-001",
+    "pull_request_id": 265,
+    "file_path": "app/services/currency_rounding_16.py",
+    "additions": 70,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-266-001",
+    "pull_request_id": 266,
+    "file_path": "db/migrations/002_session_expiry_2.sql",
+    "additions": 79,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-266-002",
+    "pull_request_id": 266,
+    "file_path": "app/services/audit_logging_15.py",
+    "additions": 4,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-266-003",
+    "pull_request_id": 266,
+    "file_path": "app/models/cache_invalidation_10.py",
+    "additions": 49,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-267-001",
+    "pull_request_id": 267,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 77,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-268-001",
+    "pull_request_id": 268,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 53,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-269-001",
+    "pull_request_id": 269,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 67,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-270-001",
+    "pull_request_id": 270,
+    "file_path": "app/models/cache_invalidation_10.py",
+    "additions": 51,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-271-001",
+    "pull_request_id": 271,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 33,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-272-001",
+    "pull_request_id": 272,
+    "file_path": "app/services/session_expiry_14.py",
+    "additions": 44,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-273-001",
+    "pull_request_id": 273,
+    "file_path": "app/utils/pagination_20.py",
+    "additions": 57,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-273-002",
+    "pull_request_id": 273,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 73,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-274-001",
+    "pull_request_id": 274,
+    "file_path": "app/api/routes/feature_flag_rollout_7.py",
+    "additions": 40,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-274-002",
+    "pull_request_id": 274,
+    "file_path": "app/config/session_expiry_8.py",
+    "additions": 44,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-275-001",
+    "pull_request_id": 275,
+    "file_path": "app/models/cache_invalidation_10.py",
+    "additions": 64,
     "deletions": 9
   },
   {
-    "id": "PRF-1007-001",
-    "pull_request_id": 1007,
-    "file_path": "src/shared/filter_status.ts",
+    "id": "PRF-275-002",
+    "pull_request_id": 275,
+    "file_path": "app/api/routes/feature_flag_rollout_7.py",
+    "additions": 20,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-276-001",
+    "pull_request_id": 276,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 31,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-276-002",
+    "pull_request_id": 276,
+    "file_path": "app/services/idempotency_keys_13.py",
+    "additions": 39,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-277-001",
+    "pull_request_id": 277,
+    "file_path": "app/services/currency_rounding_16.py",
+    "additions": 9,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-277-002",
+    "pull_request_id": 277,
+    "file_path": "app/models/cache_invalidation_10.py",
+    "additions": 21,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-278-001",
+    "pull_request_id": 278,
+    "file_path": "app/api/routes/session_expiry_4.py",
+    "additions": 68,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-278-002",
+    "pull_request_id": 278,
+    "file_path": "app/utils/pagination_20.py",
+    "additions": 12,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-279-001",
+    "pull_request_id": 279,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 74,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-280-001",
+    "pull_request_id": 280,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 45,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-281-001",
+    "pull_request_id": 281,
+    "file_path": "db/migrations/002_session_expiry_2.sql",
+    "additions": 41,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-282-001",
+    "pull_request_id": 282,
+    "file_path": "app/services/idempotency_keys_13.py",
+    "additions": 58,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-283-001",
+    "pull_request_id": 283,
+    "file_path": "db/migrations/002_session_expiry_2.sql",
+    "additions": 17,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-284-001",
+    "pull_request_id": 284,
+    "file_path": "app/utils/duplicate_detection_19.py",
+    "additions": 78,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-285-001",
+    "pull_request_id": 285,
+    "file_path": "app/services/currency_rounding_16.py",
+    "additions": 10,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-286-001",
+    "pull_request_id": 286,
+    "file_path": "app/api/routes/feature_flag_rollout_7.py",
+    "additions": 58,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-286-002",
+    "pull_request_id": 286,
+    "file_path": "app/utils/rate_limiting_17.py",
+    "additions": 33,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-287-001",
+    "pull_request_id": 287,
+    "file_path": "app/config/session_expiry_8.py",
+    "additions": 21,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-288-001",
+    "pull_request_id": 288,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 55,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-288-002",
+    "pull_request_id": 288,
+    "file_path": "app/models/pagination_11.py",
+    "additions": 22,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-289-001",
+    "pull_request_id": 289,
+    "file_path": "app/api/routes/batch_export_6.py",
+    "additions": 69,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-290-001",
+    "pull_request_id": 290,
+    "file_path": "app/utils/duplicate_detection_19.py",
+    "additions": 55,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-290-002",
+    "pull_request_id": 290,
+    "file_path": "db/migrations/001_queue_backpressure_1.sql",
+    "additions": 25,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-290-003",
+    "pull_request_id": 290,
+    "file_path": "app/config/session_expiry_8.py",
+    "additions": 64,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-291-001",
+    "pull_request_id": 291,
+    "file_path": "app/api/routes/duplicate_detection_5.py",
+    "additions": 44,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-291-002",
+    "pull_request_id": 291,
+    "file_path": "tests/test_duplicate_detection_5.py",
+    "additions": 56,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-292-001",
+    "pull_request_id": 292,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 32,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-292-002",
+    "pull_request_id": 292,
+    "file_path": "app/api/routes/session_expiry_4.py",
+    "additions": 14,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-293-001",
+    "pull_request_id": 293,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 71,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-293-002",
+    "pull_request_id": 293,
+    "file_path": "db/migrations/003_duplicate_detection_3.sql",
+    "additions": 54,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-293-003",
+    "pull_request_id": 293,
+    "file_path": "db/migrations/001_queue_backpressure_1.sql",
+    "additions": 35,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-294-001",
+    "pull_request_id": 294,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 39,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-295-001",
+    "pull_request_id": 295,
+    "file_path": "app/utils/batch_export_21.py",
+    "additions": 16,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-296-001",
+    "pull_request_id": 296,
+    "file_path": "app/api/routes/batch_export_6.py",
+    "additions": 7,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-296-002",
+    "pull_request_id": 296,
+    "file_path": "app/models/pagination_11.py",
+    "additions": 37,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-297-001",
+    "pull_request_id": 297,
+    "file_path": "app/api/routes/duplicate_detection_5.py",
+    "additions": 67,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-297-002",
+    "pull_request_id": 297,
+    "file_path": "db/migrations/001_queue_backpressure_1.sql",
+    "additions": 29,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-298-001",
+    "pull_request_id": 298,
+    "file_path": "db/migrations/002_session_expiry_2.sql",
+    "additions": 4,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-299-001",
+    "pull_request_id": 299,
+    "file_path": "app/models/pagination_11.py",
+    "additions": 29,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-299-002",
+    "pull_request_id": 299,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 63,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-300-001",
+    "pull_request_id": 300,
+    "file_path": "db/migrations/003_duplicate_detection_3.sql",
+    "additions": 27,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-300-002",
+    "pull_request_id": 300,
+    "file_path": "app/utils/pagination_22.py",
+    "additions": 37,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-301-001",
+    "pull_request_id": 301,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 74,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-302-001",
+    "pull_request_id": 302,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 46,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-303-001",
+    "pull_request_id": 303,
+    "file_path": "app/utils/pagination_20.py",
+    "additions": 32,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-304-001",
+    "pull_request_id": 304,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 73,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-305-001",
+    "pull_request_id": 305,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 52,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-306-001",
+    "pull_request_id": 306,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 36,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-307-001",
+    "pull_request_id": 307,
+    "file_path": "app/models/pagination_11.py",
+    "additions": 10,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-307-002",
+    "pull_request_id": 307,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 58,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-308-001",
+    "pull_request_id": 308,
+    "file_path": "app/services/audit_logging_15.py",
+    "additions": 69,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-308-002",
+    "pull_request_id": 308,
+    "file_path": "app/services/session_expiry_14.py",
+    "additions": 58,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-309-001",
+    "pull_request_id": 309,
+    "file_path": "app/api/routes/batch_export_6.py",
+    "additions": 13,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-309-002",
+    "pull_request_id": 309,
+    "file_path": "app/services/session_expiry_14.py",
+    "additions": 67,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-309-003",
+    "pull_request_id": 309,
+    "file_path": "app/models/cache_invalidation_10.py",
+    "additions": 31,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-310-001",
+    "pull_request_id": 310,
+    "file_path": "app/utils/pagination_20.py",
+    "additions": 28,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-310-002",
+    "pull_request_id": 310,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 72,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-311-001",
+    "pull_request_id": 311,
+    "file_path": "app/services/audit_logging_15.py",
+    "additions": 56,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-312-001",
+    "pull_request_id": 312,
+    "file_path": "app/utils/batch_export_21.py",
+    "additions": 51,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-313-001",
+    "pull_request_id": 313,
+    "file_path": "app/models/pagination_11.py",
+    "additions": 66,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-313-002",
+    "pull_request_id": 313,
+    "file_path": "tests/test_pagination_11.py",
+    "additions": 23,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-314-001",
+    "pull_request_id": 314,
+    "file_path": "app/utils/queue_backpressure_18.py",
+    "additions": 50,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-314-002",
+    "pull_request_id": 314,
+    "file_path": "tests/test_queue_backpressure_18.py",
+    "additions": 10,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-314-003",
+    "pull_request_id": 314,
+    "file_path": "db/migrations/002_session_expiry_2.sql",
+    "additions": 27,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-315-001",
+    "pull_request_id": 315,
+    "file_path": "app/services/audit_logging_15.py",
+    "additions": 38,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-316-001",
+    "pull_request_id": 316,
+    "file_path": "app/services/currency_rounding_16.py",
+    "additions": 61,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-317-001",
+    "pull_request_id": 317,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 67,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-318-001",
+    "pull_request_id": 318,
+    "file_path": "db/migrations/003_duplicate_detection_3.sql",
+    "additions": 58,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-318-002",
+    "pull_request_id": 318,
+    "file_path": "app/models/cache_invalidation_10.py",
+    "additions": 32,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-319-001",
+    "pull_request_id": 319,
+    "file_path": "app/services/session_expiry_14.py",
+    "additions": 71,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-320-001",
+    "pull_request_id": 320,
+    "file_path": "app/services/audit_logging_15.py",
+    "additions": 77,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-320-002",
+    "pull_request_id": 320,
+    "file_path": "app/api/routes/batch_export_6.py",
+    "additions": 69,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-320-003",
+    "pull_request_id": 320,
+    "file_path": "app/config/rate_limiting_9.py",
+    "additions": 69,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-321-001",
+    "pull_request_id": 321,
+    "file_path": "app/services/currency_rounding_16.py",
+    "additions": 28,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-321-002",
+    "pull_request_id": 321,
+    "file_path": "app/api/routes/duplicate_detection_5.py",
+    "additions": 62,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-322-001",
+    "pull_request_id": 322,
+    "file_path": "app/utils/session_expiry_21.py",
+    "additions": 58,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-323-001",
+    "pull_request_id": 323,
+    "file_path": "app/models/cache_invalidation_10.py",
+    "additions": 40,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-323-002",
+    "pull_request_id": 323,
+    "file_path": "tests/test_cache_invalidation_10.py",
+    "additions": 40,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-323-003",
+    "pull_request_id": 323,
+    "file_path": "db/migrations/001_webhook_signature_verification_1.sql",
+    "additions": 63,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-324-001",
+    "pull_request_id": 324,
+    "file_path": "app/models/session_expiry_12.py",
+    "additions": 37,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-325-001",
+    "pull_request_id": 325,
+    "file_path": "app/utils/session_expiry_21.py",
+    "additions": 74,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-326-001",
+    "pull_request_id": 326,
+    "file_path": "app/models/session_expiry_12.py",
+    "additions": 73,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-327-001",
+    "pull_request_id": 327,
+    "file_path": "app/api/routes/timeout_handling_4.py",
+    "additions": 66,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-327-002",
+    "pull_request_id": 327,
+    "file_path": "tests/test_timeout_handling_4.py",
+    "additions": 29,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-328-001",
+    "pull_request_id": 328,
+    "file_path": "app/api/routes/retry_handling_6.py",
+    "additions": 40,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-328-002",
+    "pull_request_id": 328,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 9,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-329-001",
+    "pull_request_id": 329,
+    "file_path": "app/utils/webhook_signature_verification_20.py",
+    "additions": 34,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-329-002",
+    "pull_request_id": 329,
+    "file_path": "app/services/retry_handling_13.py",
+    "additions": 40,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-330-001",
+    "pull_request_id": 330,
+    "file_path": "app/api/routes/timeout_handling_4.py",
+    "additions": 15,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-331-001",
+    "pull_request_id": 331,
+    "file_path": "app/services/duplicate_detection_16.py",
+    "additions": 52,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-331-002",
+    "pull_request_id": 331,
+    "file_path": "tests/test_duplicate_detection_16.py",
+    "additions": 47,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-331-003",
+    "pull_request_id": 331,
+    "file_path": "db/migrations/001_webhook_signature_verification_1.sql",
+    "additions": 29,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-332-001",
+    "pull_request_id": 332,
+    "file_path": "app/services/webhook_signature_verification_15.py",
+    "additions": 39,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-333-001",
+    "pull_request_id": 333,
+    "file_path": "db/migrations/002_pagination_2.sql",
+    "additions": 44,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-334-001",
+    "pull_request_id": 334,
+    "file_path": "app/services/retry_handling_13.py",
+    "additions": 21,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-335-001",
+    "pull_request_id": 335,
+    "file_path": "app/utils/cache_invalidation_19.py",
+    "additions": 60,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-336-001",
+    "pull_request_id": 336,
+    "file_path": "app/models/cache_invalidation_10.py",
+    "additions": 37,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-336-002",
+    "pull_request_id": 336,
+    "file_path": "tests/test_cache_invalidation_10.py",
+    "additions": 77,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-337-001",
+    "pull_request_id": 337,
+    "file_path": "app/services/retry_handling_13.py",
+    "additions": 67,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-337-002",
+    "pull_request_id": 337,
+    "file_path": "tests/test_retry_handling_13.py",
+    "additions": 45,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-337-003",
+    "pull_request_id": 337,
+    "file_path": "app/models/session_expiry_12.py",
+    "additions": 59,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-338-001",
+    "pull_request_id": 338,
+    "file_path": "app/api/routes/batch_export_7.py",
     "additions": 51,
     "deletions": 17
   },
   {
-    "id": "PRF-1007-002",
-    "pull_request_id": 1007,
-    "file_path": "src/dashboard/ai_generated_filter.tsx",
+    "id": "PRF-339-001",
+    "pull_request_id": 339,
+    "file_path": "app/api/routes/batch_export_7.py",
+    "additions": 20,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-340-001",
+    "pull_request_id": 340,
+    "file_path": "app/models/session_expiry_12.py",
+    "additions": 78,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-340-002",
+    "pull_request_id": 340,
+    "file_path": "tests/test_session_expiry_12.py",
+    "additions": 16,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-340-003",
+    "pull_request_id": 340,
+    "file_path": "app/services/duplicate_detection_16.py",
+    "additions": 45,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-341-001",
+    "pull_request_id": 341,
+    "file_path": "app/api/routes/batch_export_7.py",
+    "additions": 44,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-342-001",
+    "pull_request_id": 342,
+    "file_path": "app/api/routes/timeout_handling_4.py",
+    "additions": 55,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-342-002",
+    "pull_request_id": 342,
+    "file_path": "tests/test_timeout_handling_4.py",
+    "additions": 40,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-343-001",
+    "pull_request_id": 343,
+    "file_path": "app/models/session_expiry_12.py",
+    "additions": 53,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-343-002",
+    "pull_request_id": 343,
+    "file_path": "app/services/duplicate_detection_16.py",
+    "additions": 43,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-344-001",
+    "pull_request_id": 344,
+    "file_path": "app/models/currency_rounding_11.py",
+    "additions": 24,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-344-002",
+    "pull_request_id": 344,
+    "file_path": "app/utils/pagination_17.py",
+    "additions": 70,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-345-001",
+    "pull_request_id": 345,
+    "file_path": "app/api/routes/rate_limiting_5.py",
+    "additions": 50,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-345-002",
+    "pull_request_id": 345,
+    "file_path": "tests/test_rate_limiting_5.py",
+    "additions": 54,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-345-003",
+    "pull_request_id": 345,
+    "file_path": "db/migrations/003_duplicate_detection_3.sql",
+    "additions": 33,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-346-001",
+    "pull_request_id": 346,
+    "file_path": "app/services/webhook_signature_verification_15.py",
+    "additions": 72,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-346-002",
+    "pull_request_id": 346,
+    "file_path": "tests/test_webhook_signature_verification_15.py",
+    "additions": 4,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-346-003",
+    "pull_request_id": 346,
+    "file_path": "app/utils/session_expiry_21.py",
+    "additions": 78,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-347-001",
+    "pull_request_id": 347,
+    "file_path": "db/migrations/002_pagination_2.sql",
+    "additions": 35,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-347-002",
+    "pull_request_id": 347,
+    "file_path": "app/services/webhook_signature_verification_15.py",
+    "additions": 37,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-347-003",
+    "pull_request_id": 347,
+    "file_path": "app/api/routes/rate_limiting_5.py",
+    "additions": 9,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-348-001",
+    "pull_request_id": 348,
+    "file_path": "app/utils/pagination_17.py",
+    "additions": 6,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-349-001",
+    "pull_request_id": 349,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 3,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-350-001",
+    "pull_request_id": 350,
+    "file_path": "app/services/webhook_signature_verification_15.py",
+    "additions": 59,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-351-001",
+    "pull_request_id": 351,
+    "file_path": "app/services/retry_handling_13.py",
+    "additions": 20,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-351-002",
+    "pull_request_id": 351,
+    "file_path": "app/models/session_expiry_12.py",
+    "additions": 60,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-352-001",
+    "pull_request_id": 352,
+    "file_path": "app/utils/session_expiry_21.py",
+    "additions": 26,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-353-001",
+    "pull_request_id": 353,
+    "file_path": "app/services/webhook_signature_verification_15.py",
+    "additions": 41,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-353-002",
+    "pull_request_id": 353,
+    "file_path": "app/api/routes/rate_limiting_5.py",
+    "additions": 56,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-354-001",
+    "pull_request_id": 354,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 40,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-354-002",
+    "pull_request_id": 354,
+    "file_path": "app/utils/cache_invalidation_19.py",
+    "additions": 72,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-355-001",
+    "pull_request_id": 355,
+    "file_path": "app/utils/pagination_17.py",
+    "additions": 28,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-355-002",
+    "pull_request_id": 355,
+    "file_path": "tests/test_pagination_17.py",
+    "additions": 30,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-356-001",
+    "pull_request_id": 356,
+    "file_path": "app/utils/pagination_17.py",
+    "additions": 44,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-356-002",
+    "pull_request_id": 356,
+    "file_path": "tests/test_pagination_17.py",
+    "additions": 31,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-356-003",
+    "pull_request_id": 356,
+    "file_path": "app/utils/session_expiry_21.py",
+    "additions": 51,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-357-001",
+    "pull_request_id": 357,
+    "file_path": "app/config/currency_rounding_8.py",
+    "additions": 5,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-358-001",
+    "pull_request_id": 358,
+    "file_path": "db/migrations/001_webhook_signature_verification_1.sql",
+    "additions": 24,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-359-001",
+    "pull_request_id": 359,
+    "file_path": "app/api/routes/rate_limiting_5.py",
+    "additions": 25,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-359-002",
+    "pull_request_id": 359,
+    "file_path": "tests/test_rate_limiting_5.py",
+    "additions": 17,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-359-003",
+    "pull_request_id": 359,
+    "file_path": "app/services/audit_logging_14.py",
+    "additions": 68,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-360-001",
+    "pull_request_id": 360,
+    "file_path": "app/utils/pagination_17.py",
+    "additions": 29,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-360-002",
+    "pull_request_id": 360,
+    "file_path": "app/api/routes/timeout_handling_4.py",
+    "additions": 61,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-361-001",
+    "pull_request_id": 361,
+    "file_path": "app/api/routes/timeout_handling_4.py",
+    "additions": 7,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-361-002",
+    "pull_request_id": 361,
+    "file_path": "app/services/duplicate_detection_16.py",
+    "additions": 16,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-362-001",
+    "pull_request_id": 362,
+    "file_path": "app/api/routes/batch_export_7.py",
+    "additions": 63,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-362-002",
+    "pull_request_id": 362,
+    "file_path": "app/utils/webhook_signature_verification_20.py",
+    "additions": 64,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-362-003",
+    "pull_request_id": 362,
+    "file_path": "app/models/session_expiry_12.py",
+    "additions": 61,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-363-001",
+    "pull_request_id": 363,
+    "file_path": "app/utils/timeout_handling_22.py",
+    "additions": 48,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-364-001",
+    "pull_request_id": 364,
+    "file_path": "db/migrations/001_webhook_signature_verification_1.sql",
+    "additions": 58,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-364-002",
+    "pull_request_id": 364,
+    "file_path": "app/services/retry_handling_13.py",
+    "additions": 35,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-365-001",
+    "pull_request_id": 365,
+    "file_path": "app/services/retry_handling_13.py",
+    "additions": 46,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-366-001",
+    "pull_request_id": 366,
+    "file_path": "app/config/currency_rounding_8.py",
+    "additions": 72,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-367-001",
+    "pull_request_id": 367,
+    "file_path": "app/api/routes/batch_export_7.py",
+    "additions": 26,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-368-001",
+    "pull_request_id": 368,
+    "file_path": "app/models/cache_invalidation_10.py",
+    "additions": 44,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-369-001",
+    "pull_request_id": 369,
+    "file_path": "app/services/audit_logging_14.py",
+    "additions": 37,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-369-002",
+    "pull_request_id": 369,
+    "file_path": "app/services/retry_handling_13.py",
+    "additions": 28,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-369-003",
+    "pull_request_id": 369,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 53,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-370-001",
+    "pull_request_id": 370,
+    "file_path": "db/migrations/003_duplicate_detection_3.sql",
+    "additions": 20,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-371-001",
+    "pull_request_id": 371,
+    "file_path": "app/api/routes/timeout_handling_4.py",
+    "additions": 47,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-371-002",
+    "pull_request_id": 371,
+    "file_path": "tests/test_timeout_handling_4.py",
+    "additions": 16,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-372-001",
+    "pull_request_id": 372,
+    "file_path": "app/api/routes/timeout_handling_4.py",
+    "additions": 14,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-373-001",
+    "pull_request_id": 373,
+    "file_path": "db/migrations/002_pagination_2.sql",
+    "additions": 30,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-374-001",
+    "pull_request_id": 374,
+    "file_path": "app/utils/timeout_handling_22.py",
+    "additions": 13,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-374-002",
+    "pull_request_id": 374,
+    "file_path": "tests/test_timeout_handling_22.py",
+    "additions": 53,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-374-003",
+    "pull_request_id": 374,
+    "file_path": "app/api/routes/timeout_handling_4.py",
+    "additions": 30,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-375-001",
+    "pull_request_id": 375,
+    "file_path": "app/api/routes/timeout_handling_4.py",
+    "additions": 46,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-376-001",
+    "pull_request_id": 376,
+    "file_path": "app/services/retry_handling_13.py",
+    "additions": 11,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-376-002",
+    "pull_request_id": 376,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 17,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-377-001",
+    "pull_request_id": 377,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 66,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-377-002",
+    "pull_request_id": 377,
+    "file_path": "db/migrations/003_duplicate_detection_3.sql",
+    "additions": 40,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-378-001",
+    "pull_request_id": 378,
+    "file_path": "app/utils/webhook_signature_verification_18.py",
+    "additions": 48,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-378-002",
+    "pull_request_id": 378,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 9,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-379-001",
+    "pull_request_id": 379,
+    "file_path": "app/utils/currency_rounding_19.py",
+    "additions": 36,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-379-002",
+    "pull_request_id": 379,
+    "file_path": "app/utils/cache_invalidation_20.py",
+    "additions": 47,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-379-003",
+    "pull_request_id": 379,
+    "file_path": "app/config/idempotency_keys_8.py",
+    "additions": 34,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-380-001",
+    "pull_request_id": 380,
+    "file_path": "app/api/routes/batch_export_7.py",
+    "additions": 47,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-380-002",
+    "pull_request_id": 380,
+    "file_path": "tests/test_batch_export_7.py",
+    "additions": 12,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-381-001",
+    "pull_request_id": 381,
+    "file_path": "app/services/duplicate_detection_15.py",
+    "additions": 35,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-382-001",
+    "pull_request_id": 382,
+    "file_path": "app/models/feature_flag_rollout_12.py",
+    "additions": 54,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-382-002",
+    "pull_request_id": 382,
+    "file_path": "tests/test_feature_flag_rollout_12.py",
+    "additions": 28,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-382-003",
+    "pull_request_id": 382,
+    "file_path": "app/config/queue_backpressure_9.py",
+    "additions": 29,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-382-004",
+    "pull_request_id": 382,
+    "file_path": "app/utils/retry_handling_21.py",
+    "additions": 48,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-383-001",
+    "pull_request_id": 383,
+    "file_path": "db/migrations/002_timeout_handling_2.sql",
+    "additions": 67,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-384-001",
+    "pull_request_id": 384,
+    "file_path": "app/models/retry_handling_11.py",
+    "additions": 27,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-385-001",
+    "pull_request_id": 385,
+    "file_path": "app/services/duplicate_detection_15.py",
+    "additions": 27,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-386-001",
+    "pull_request_id": 386,
+    "file_path": "app/models/rate_limiting_10.py",
+    "additions": 23,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-386-002",
+    "pull_request_id": 386,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 55,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-387-001",
+    "pull_request_id": 387,
+    "file_path": "app/models/rate_limiting_10.py",
+    "additions": 15,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-387-002",
+    "pull_request_id": 387,
+    "file_path": "tests/test_rate_limiting_10.py",
+    "additions": 60,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-388-001",
+    "pull_request_id": 388,
+    "file_path": "app/models/rate_limiting_10.py",
+    "additions": 56,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-389-001",
+    "pull_request_id": 389,
+    "file_path": "app/config/idempotency_keys_8.py",
+    "additions": 54,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-389-002",
+    "pull_request_id": 389,
+    "file_path": "tests/test_idempotency_keys_8.py",
+    "additions": 63,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-389-003",
+    "pull_request_id": 389,
+    "file_path": "app/utils/currency_rounding_19.py",
+    "additions": 61,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-389-004",
+    "pull_request_id": 389,
+    "file_path": "app/services/duplicate_detection_15.py",
+    "additions": 39,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-390-001",
+    "pull_request_id": 390,
+    "file_path": "app/config/idempotency_keys_8.py",
+    "additions": 22,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-390-002",
+    "pull_request_id": 390,
+    "file_path": "tests/test_idempotency_keys_8.py",
+    "additions": 36,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-391-001",
+    "pull_request_id": 391,
+    "file_path": "app/utils/currency_rounding_17.py",
+    "additions": 23,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-391-002",
+    "pull_request_id": 391,
+    "file_path": "tests/test_currency_rounding_17.py",
+    "additions": 25,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-392-001",
+    "pull_request_id": 392,
+    "file_path": "app/config/queue_backpressure_9.py",
+    "additions": 17,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-392-002",
+    "pull_request_id": 392,
+    "file_path": "db/migrations/003_webhook_signature_verification_3.sql",
     "additions": 70,
     "deletions": 27
   },
   {
-    "id": "PRF-1008-001",
-    "pull_request_id": 1008,
-    "file_path": "src/shared/filter_status.ts",
-    "additions": 24,
+    "id": "PRF-393-001",
+    "pull_request_id": 393,
+    "file_path": "db/migrations/003_webhook_signature_verification_3.sql",
+    "additions": 31,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-393-002",
+    "pull_request_id": 393,
+    "file_path": "app/config/queue_backpressure_9.py",
+    "additions": 49,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-394-001",
+    "pull_request_id": 394,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 35,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-394-002",
+    "pull_request_id": 394,
+    "file_path": "tests/test_queue_backpressure_5.py",
+    "additions": 65,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-394-003",
+    "pull_request_id": 394,
+    "file_path": "app/services/duplicate_detection_15.py",
+    "additions": 40,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-395-001",
+    "pull_request_id": 395,
+    "file_path": "app/services/webhook_signature_verification_16.py",
+    "additions": 31,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-396-001",
+    "pull_request_id": 396,
+    "file_path": "app/services/retry_handling_14.py",
+    "additions": 18,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-396-002",
+    "pull_request_id": 396,
+    "file_path": "tests/test_retry_handling_14.py",
+    "additions": 63,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-397-001",
+    "pull_request_id": 397,
+    "file_path": "db/migrations/003_webhook_signature_verification_3.sql",
+    "additions": 27,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-397-002",
+    "pull_request_id": 397,
+    "file_path": "app/services/webhook_signature_verification_16.py",
+    "additions": 4,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-398-001",
+    "pull_request_id": 398,
+    "file_path": "app/api/routes/currency_rounding_4.py",
+    "additions": 42,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-398-002",
+    "pull_request_id": 398,
+    "file_path": "tests/test_currency_rounding_4.py",
+    "additions": 11,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-399-001",
+    "pull_request_id": 399,
+    "file_path": "app/utils/currency_rounding_22.py",
+    "additions": 31,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-400-001",
+    "pull_request_id": 400,
+    "file_path": "app/utils/currency_rounding_19.py",
+    "additions": 76,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-400-002",
+    "pull_request_id": 400,
+    "file_path": "tests/test_currency_rounding_19.py",
+    "additions": 10,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-400-003",
+    "pull_request_id": 400,
+    "file_path": "app/models/retry_handling_11.py",
+    "additions": 12,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-401-001",
+    "pull_request_id": 401,
+    "file_path": "app/services/duplicate_detection_15.py",
+    "additions": 39,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-401-002",
+    "pull_request_id": 401,
+    "file_path": "tests/test_duplicate_detection_15.py",
+    "additions": 72,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-402-001",
+    "pull_request_id": 402,
+    "file_path": "app/utils/currency_rounding_22.py",
+    "additions": 68,
     "deletions": 9
   },
   {
-    "id": "PRF-1009-001",
-    "pull_request_id": 1009,
-    "file_path": "src/jira_sync/payload_parser.py",
-    "additions": 77,
-    "deletions": 93
+    "id": "PRF-403-001",
+    "pull_request_id": 403,
+    "file_path": "db/migrations/002_timeout_handling_2.sql",
+    "additions": 10,
+    "deletions": 12
   },
   {
-    "id": "PRF-1010-001",
-    "pull_request_id": 1010,
-    "file_path": "docs/jira-parser-naming.md",
-    "additions": 21,
+    "id": "PRF-404-001",
+    "pull_request_id": 404,
+    "file_path": "app/models/rate_limiting_10.py",
+    "additions": 32,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-404-002",
+    "pull_request_id": 404,
+    "file_path": "app/api/routes/currency_rounding_4.py",
+    "additions": 65,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-405-001",
+    "pull_request_id": 405,
+    "file_path": "app/services/retry_handling_13.py",
+    "additions": 37,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-406-001",
+    "pull_request_id": 406,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 26,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-406-002",
+    "pull_request_id": 406,
+    "file_path": "app/services/retry_handling_14.py",
+    "additions": 3,
     "deletions": 13
+  },
+  {
+    "id": "PRF-407-001",
+    "pull_request_id": 407,
+    "file_path": "app/services/webhook_signature_verification_16.py",
+    "additions": 15,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-407-002",
+    "pull_request_id": 407,
+    "file_path": "app/models/retry_handling_11.py",
+    "additions": 77,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-407-003",
+    "pull_request_id": 407,
+    "file_path": "app/models/feature_flag_rollout_12.py",
+    "additions": 20,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-408-001",
+    "pull_request_id": 408,
+    "file_path": "app/config/queue_backpressure_9.py",
+    "additions": 14,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-408-002",
+    "pull_request_id": 408,
+    "file_path": "tests/test_queue_backpressure_9.py",
+    "additions": 55,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-409-001",
+    "pull_request_id": 409,
+    "file_path": "db/migrations/001_pagination_1.sql",
+    "additions": 56,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-409-002",
+    "pull_request_id": 409,
+    "file_path": "app/utils/currency_rounding_17.py",
+    "additions": 69,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-410-001",
+    "pull_request_id": 410,
+    "file_path": "app/utils/currency_rounding_19.py",
+    "additions": 31,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-410-002",
+    "pull_request_id": 410,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 63,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-411-001",
+    "pull_request_id": 411,
+    "file_path": "app/services/retry_handling_13.py",
+    "additions": 66,
+    "deletions": 35
+  },
+  {
+    "id": "PRF-412-001",
+    "pull_request_id": 412,
+    "file_path": "app/utils/cache_invalidation_20.py",
+    "additions": 16,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-413-001",
+    "pull_request_id": 413,
+    "file_path": "app/models/rate_limiting_10.py",
+    "additions": 25,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-414-001",
+    "pull_request_id": 414,
+    "file_path": "app/services/webhook_signature_verification_16.py",
+    "additions": 10,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-415-001",
+    "pull_request_id": 415,
+    "file_path": "app/services/duplicate_detection_15.py",
+    "additions": 5,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-416-001",
+    "pull_request_id": 416,
+    "file_path": "app/utils/currency_rounding_19.py",
+    "additions": 75,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-416-002",
+    "pull_request_id": 416,
+    "file_path": "app/config/queue_backpressure_9.py",
+    "additions": 21,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-417-001",
+    "pull_request_id": 417,
+    "file_path": "app/config/idempotency_keys_8.py",
+    "additions": 46,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-417-002",
+    "pull_request_id": 417,
+    "file_path": "tests/test_idempotency_keys_8.py",
+    "additions": 20,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-417-003",
+    "pull_request_id": 417,
+    "file_path": "app/config/queue_backpressure_9.py",
+    "additions": 59,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-418-001",
+    "pull_request_id": 418,
+    "file_path": "app/utils/retry_handling_21.py",
+    "additions": 54,
+    "deletions": 20
+  },
+  {
+    "id": "PRF-419-001",
+    "pull_request_id": 419,
+    "file_path": "app/config/queue_backpressure_9.py",
+    "additions": 3,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-419-002",
+    "pull_request_id": 419,
+    "file_path": "tests/test_queue_backpressure_9.py",
+    "additions": 29,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-419-003",
+    "pull_request_id": 419,
+    "file_path": "db/migrations/001_pagination_1.sql",
+    "additions": 48,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-420-001",
+    "pull_request_id": 420,
+    "file_path": "db/migrations/001_pagination_1.sql",
+    "additions": 7,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-421-001",
+    "pull_request_id": 421,
+    "file_path": "app/utils/currency_rounding_22.py",
+    "additions": 59,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-422-001",
+    "pull_request_id": 422,
+    "file_path": "app/services/retry_handling_14.py",
+    "additions": 68,
+    "deletions": 5
+  },
+  {
+    "id": "PRF-422-002",
+    "pull_request_id": 422,
+    "file_path": "tests/test_retry_handling_14.py",
+    "additions": 12,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-422-003",
+    "pull_request_id": 422,
+    "file_path": "app/models/feature_flag_rollout_12.py",
+    "additions": 53,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-422-004",
+    "pull_request_id": 422,
+    "file_path": "app/services/duplicate_detection_15.py",
+    "additions": 28,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-423-001",
+    "pull_request_id": 423,
+    "file_path": "app/utils/currency_rounding_22.py",
+    "additions": 76,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-424-001",
+    "pull_request_id": 424,
+    "file_path": "db/migrations/001_pagination_1.sql",
+    "additions": 10,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-424-002",
+    "pull_request_id": 424,
+    "file_path": "app/config/queue_backpressure_9.py",
+    "additions": 39,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-425-001",
+    "pull_request_id": 425,
+    "file_path": "app/utils/cache_invalidation_20.py",
+    "additions": 55,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-425-002",
+    "pull_request_id": 425,
+    "file_path": "tests/test_cache_invalidation_20.py",
+    "additions": 73,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-426-001",
+    "pull_request_id": 426,
+    "file_path": "app/utils/cache_invalidation_20.py",
+    "additions": 74,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-427-001",
+    "pull_request_id": 427,
+    "file_path": "app/utils/webhook_signature_verification_18.py",
+    "additions": 39,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-428-001",
+    "pull_request_id": 428,
+    "file_path": "app/models/rate_limiting_10.py",
+    "additions": 25,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-428-002",
+    "pull_request_id": 428,
+    "file_path": "app/models/feature_flag_rollout_12.py",
+    "additions": 30,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-429-001",
+    "pull_request_id": 429,
+    "file_path": "app/api/routes/batch_export_7.py",
+    "additions": 77,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-429-002",
+    "pull_request_id": 429,
+    "file_path": "tests/test_batch_export_7.py",
+    "additions": 11,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-429-003",
+    "pull_request_id": 429,
+    "file_path": "app/api/routes/batch_export_6.py",
+    "additions": 66,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-430-001",
+    "pull_request_id": 430,
+    "file_path": "app/services/webhook_signature_verification_16.py",
+    "additions": 48,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-430-002",
+    "pull_request_id": 430,
+    "file_path": "app/config/idempotency_keys_8.py",
+    "additions": 37,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-431-001",
+    "pull_request_id": 431,
+    "file_path": "app/models/retry_handling_11.py",
+    "additions": 21,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-432-001",
+    "pull_request_id": 432,
+    "file_path": "app/utils/cache_invalidation_20.py",
+    "additions": 78,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-433-001",
+    "pull_request_id": 433,
+    "file_path": "app/utils/webhook_signature_verification_18.py",
+    "additions": 57,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-433-002",
+    "pull_request_id": 433,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 72,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-434-001",
+    "pull_request_id": 434,
+    "file_path": "app/api/routes/queue_backpressure_5.py",
+    "additions": 54,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-435-001",
+    "pull_request_id": 435,
+    "file_path": "db/migrations/002_audit_logging_2.sql",
+    "additions": 28,
+    "deletions": 29
+  },
+  {
+    "id": "PRF-436-001",
+    "pull_request_id": 436,
+    "file_path": "db/migrations/001_duplicate_detection_1.sql",
+    "additions": 10,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-436-002",
+    "pull_request_id": 436,
+    "file_path": "app/config/pagination_9.py",
+    "additions": 10,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-437-001",
+    "pull_request_id": 437,
+    "file_path": "app/config/pagination_9.py",
+    "additions": 72,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-437-002",
+    "pull_request_id": 437,
+    "file_path": "tests/test_pagination_9.py",
+    "additions": 20,
+    "deletions": 18
+  },
+  {
+    "id": "PRF-438-001",
+    "pull_request_id": 438,
+    "file_path": "app/services/cache_invalidation_13.py",
+    "additions": 29,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-438-002",
+    "pull_request_id": 438,
+    "file_path": "tests/test_cache_invalidation_13.py",
+    "additions": 25,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-438-003",
+    "pull_request_id": 438,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 78,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-438-004",
+    "pull_request_id": 438,
+    "file_path": "app/models/retry_handling_10.py",
+    "additions": 34,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-439-001",
+    "pull_request_id": 439,
+    "file_path": "app/api/routes/audit_logging_6.py",
+    "additions": 44,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-439-002",
+    "pull_request_id": 439,
+    "file_path": "tests/test_audit_logging_6.py",
+    "additions": 19,
+    "deletions": 19
+  },
+  {
+    "id": "PRF-440-001",
+    "pull_request_id": 440,
+    "file_path": "app/api/routes/audit_logging_6.py",
+    "additions": 30,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-441-001",
+    "pull_request_id": 441,
+    "file_path": "app/services/timeout_handling_14.py",
+    "additions": 55,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-442-001",
+    "pull_request_id": 442,
+    "file_path": "app/api/routes/audit_logging_6.py",
+    "additions": 44,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-442-002",
+    "pull_request_id": 442,
+    "file_path": "app/utils/rate_limiting_22.py",
+    "additions": 49,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-443-001",
+    "pull_request_id": 443,
+    "file_path": "app/api/routes/idempotency_keys_4.py",
+    "additions": 41,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-444-001",
+    "pull_request_id": 444,
+    "file_path": "app/services/session_expiry_15.py",
+    "additions": 18,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-445-001",
+    "pull_request_id": 445,
+    "file_path": "db/migrations/003_retry_handling_3.sql",
+    "additions": 12,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-445-002",
+    "pull_request_id": 445,
+    "file_path": "app/services/cache_invalidation_13.py",
+    "additions": 27,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-445-003",
+    "pull_request_id": 445,
+    "file_path": "app/api/routes/feature_flag_rollout_7.py",
+    "additions": 55,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-446-001",
+    "pull_request_id": 446,
+    "file_path": "app/config/pagination_9.py",
+    "additions": 72,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-447-001",
+    "pull_request_id": 447,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 41,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-448-001",
+    "pull_request_id": 448,
+    "file_path": "app/services/cache_invalidation_13.py",
+    "additions": 43,
+    "deletions": 8
+  },
+  {
+    "id": "PRF-448-002",
+    "pull_request_id": 448,
+    "file_path": "tests/test_cache_invalidation_13.py",
+    "additions": 18,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-449-001",
+    "pull_request_id": 449,
+    "file_path": "db/migrations/001_duplicate_detection_1.sql",
+    "additions": 11,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-449-002",
+    "pull_request_id": 449,
+    "file_path": "app/api/routes/idempotency_keys_4.py",
+    "additions": 55,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-450-001",
+    "pull_request_id": 450,
+    "file_path": "app/utils/currency_rounding_19.py",
+    "additions": 42,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-451-001",
+    "pull_request_id": 451,
+    "file_path": "app/utils/audit_logging_18.py",
+    "additions": 30,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-451-002",
+    "pull_request_id": 451,
+    "file_path": "tests/test_audit_logging_18.py",
+    "additions": 23,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-452-001",
+    "pull_request_id": 452,
+    "file_path": "app/services/session_expiry_15.py",
+    "additions": 44,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-453-001",
+    "pull_request_id": 453,
+    "file_path": "app/api/routes/idempotency_keys_4.py",
+    "additions": 11,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-453-002",
+    "pull_request_id": 453,
+    "file_path": "db/migrations/001_duplicate_detection_1.sql",
+    "additions": 66,
+    "deletions": 31
+  },
+  {
+    "id": "PRF-453-003",
+    "pull_request_id": 453,
+    "file_path": "app/utils/rate_limiting_17.py",
+    "additions": 62,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-454-001",
+    "pull_request_id": 454,
+    "file_path": "app/utils/currency_rounding_19.py",
+    "additions": 31,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-455-001",
+    "pull_request_id": 455,
+    "file_path": "app/services/timeout_handling_14.py",
+    "additions": 6,
+    "deletions": 37
+  },
+  {
+    "id": "PRF-456-001",
+    "pull_request_id": 456,
+    "file_path": "app/api/routes/audit_logging_6.py",
+    "additions": 14,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-456-002",
+    "pull_request_id": 456,
+    "file_path": "tests/test_audit_logging_6.py",
+    "additions": 14,
+    "deletions": 2
+  },
+  {
+    "id": "PRF-457-001",
+    "pull_request_id": 457,
+    "file_path": "app/services/session_expiry_15.py",
+    "additions": 24,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-458-001",
+    "pull_request_id": 458,
+    "file_path": "db/migrations/002_audit_logging_2.sql",
+    "additions": 43,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-459-001",
+    "pull_request_id": 459,
+    "file_path": "app/utils/retry_handling_21.py",
+    "additions": 69,
+    "deletions": 6
+  },
+  {
+    "id": "PRF-459-002",
+    "pull_request_id": 459,
+    "file_path": "app/api/routes/audit_logging_6.py",
+    "additions": 13,
+    "deletions": 28
+  },
+  {
+    "id": "PRF-460-001",
+    "pull_request_id": 460,
+    "file_path": "app/services/feature_flag_rollout_16.py",
+    "additions": 3,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-461-001",
+    "pull_request_id": 461,
+    "file_path": "app/config/idempotency_keys_8.py",
+    "additions": 51,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-462-001",
+    "pull_request_id": 462,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 58,
+    "deletions": 34
+  },
+  {
+    "id": "PRF-462-002",
+    "pull_request_id": 462,
+    "file_path": "tests/test_queue_backpressure_12.py",
+    "additions": 68,
+    "deletions": 10
+  },
+  {
+    "id": "PRF-463-001",
+    "pull_request_id": 463,
+    "file_path": "app/services/feature_flag_rollout_16.py",
+    "additions": 23,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-464-001",
+    "pull_request_id": 464,
+    "file_path": "app/utils/retry_handling_21.py",
+    "additions": 31,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-464-002",
+    "pull_request_id": 464,
+    "file_path": "tests/test_retry_handling_21.py",
+    "additions": 35,
+    "deletions": 32
+  },
+  {
+    "id": "PRF-465-001",
+    "pull_request_id": 465,
+    "file_path": "app/models/retry_handling_10.py",
+    "additions": 73,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-466-001",
+    "pull_request_id": 466,
+    "file_path": "db/migrations/002_audit_logging_2.sql",
+    "additions": 70,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-467-001",
+    "pull_request_id": 467,
+    "file_path": "app/api/routes/idempotency_keys_4.py",
+    "additions": 22,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-468-001",
+    "pull_request_id": 468,
+    "file_path": "app/utils/feature_flag_rollout_20.py",
+    "additions": 47,
+    "deletions": 25
+  },
+  {
+    "id": "PRF-468-002",
+    "pull_request_id": 468,
+    "file_path": "app/utils/rate_limiting_17.py",
+    "additions": 51,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-468-003",
+    "pull_request_id": 468,
+    "file_path": "app/utils/currency_rounding_19.py",
+    "additions": 73,
+    "deletions": 3
+  },
+  {
+    "id": "PRF-469-001",
+    "pull_request_id": 469,
+    "file_path": "db/migrations/001_duplicate_detection_1.sql",
+    "additions": 70,
+    "deletions": 26
+  },
+  {
+    "id": "PRF-470-001",
+    "pull_request_id": 470,
+    "file_path": "app/utils/rate_limiting_17.py",
+    "additions": 74,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-471-001",
+    "pull_request_id": 471,
+    "file_path": "db/migrations/003_retry_handling_3.sql",
+    "additions": 35,
+    "deletions": 22
+  },
+  {
+    "id": "PRF-472-001",
+    "pull_request_id": 472,
+    "file_path": "app/utils/rate_limiting_17.py",
+    "additions": 61,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-472-002",
+    "pull_request_id": 472,
+    "file_path": "tests/test_rate_limiting_17.py",
+    "additions": 17,
+    "deletions": 27
+  },
+  {
+    "id": "PRF-472-003",
+    "pull_request_id": 472,
+    "file_path": "app/api/routes/audit_logging_6.py",
+    "additions": 55,
+    "deletions": 0
+  },
+  {
+    "id": "PRF-472-004",
+    "pull_request_id": 472,
+    "file_path": "app/services/cache_invalidation_13.py",
+    "additions": 2,
+    "deletions": 38
+  },
+  {
+    "id": "PRF-473-001",
+    "pull_request_id": 473,
+    "file_path": "app/services/session_expiry_15.py",
+    "additions": 54,
+    "deletions": 14
+  },
+  {
+    "id": "PRF-474-001",
+    "pull_request_id": 474,
+    "file_path": "app/utils/currency_rounding_19.py",
+    "additions": 21,
+    "deletions": 23
+  },
+  {
+    "id": "PRF-475-001",
+    "pull_request_id": 475,
+    "file_path": "app/utils/rate_limiting_17.py",
+    "additions": 20,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-475-002",
+    "pull_request_id": 475,
+    "file_path": "tests/test_rate_limiting_17.py",
+    "additions": 33,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-475-003",
+    "pull_request_id": 475,
+    "file_path": "app/utils/retry_handling_21.py",
+    "additions": 72,
+    "deletions": 30
+  },
+  {
+    "id": "PRF-476-001",
+    "pull_request_id": 476,
+    "file_path": "app/utils/rate_limiting_22.py",
+    "additions": 8,
+    "deletions": 12
+  },
+  {
+    "id": "PRF-477-001",
+    "pull_request_id": 477,
+    "file_path": "db/migrations/003_retry_handling_3.sql",
+    "additions": 7,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-477-002",
+    "pull_request_id": 477,
+    "file_path": "app/api/routes/idempotency_keys_4.py",
+    "additions": 9,
+    "deletions": 15
+  },
+  {
+    "id": "PRF-477-003",
+    "pull_request_id": 477,
+    "file_path": "app/utils/feature_flag_rollout_20.py",
+    "additions": 31,
+    "deletions": 13
+  },
+  {
+    "id": "PRF-478-001",
+    "pull_request_id": 478,
+    "file_path": "app/utils/rate_limiting_22.py",
+    "additions": 59,
+    "deletions": 16
+  },
+  {
+    "id": "PRF-478-002",
+    "pull_request_id": 478,
+    "file_path": "tests/test_rate_limiting_22.py",
+    "additions": 34,
+    "deletions": 11
+  },
+  {
+    "id": "PRF-478-003",
+    "pull_request_id": 478,
+    "file_path": "app/api/routes/feature_flag_rollout_7.py",
+    "additions": 23,
+    "deletions": 7
+  },
+  {
+    "id": "PRF-479-001",
+    "pull_request_id": 479,
+    "file_path": "app/models/queue_backpressure_12.py",
+    "additions": 54,
+    "deletions": 39
+  },
+  {
+    "id": "PRF-479-002",
+    "pull_request_id": 479,
+    "file_path": "app/services/session_expiry_15.py",
+    "additions": 78,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-480-001",
+    "pull_request_id": 480,
+    "file_path": "app/config/idempotency_keys_8.py",
+    "additions": 30,
+    "deletions": 17
+  },
+  {
+    "id": "PRF-480-002",
+    "pull_request_id": 480,
+    "file_path": "tests/test_idempotency_keys_8.py",
+    "additions": 37,
+    "deletions": 21
+  },
+  {
+    "id": "PRF-480-003",
+    "pull_request_id": 480,
+    "file_path": "app/api/routes/feature_flag_rollout_7.py",
+    "additions": 43,
+    "deletions": 4
+  },
+  {
+    "id": "PRF-481-001",
+    "pull_request_id": 481,
+    "file_path": "app/utils/currency_rounding_19.py",
+    "additions": 76,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-482-001",
+    "pull_request_id": 482,
+    "file_path": "app/utils/feature_flag_rollout_20.py",
+    "additions": 20,
+    "deletions": 33
+  },
+  {
+    "id": "PRF-483-001",
+    "pull_request_id": 483,
+    "file_path": "app/services/session_expiry_15.py",
+    "additions": 26,
+    "deletions": 9
+  },
+  {
+    "id": "PRF-483-002",
+    "pull_request_id": 483,
+    "file_path": "db/migrations/001_duplicate_detection_1.sql",
+    "additions": 20,
+    "deletions": 24
+  },
+  {
+    "id": "PRF-483-003",
+    "pull_request_id": 483,
+    "file_path": "app/services/timeout_handling_14.py",
+    "additions": 50,
+    "deletions": 36
+  },
+  {
+    "id": "PRF-484-001",
+    "pull_request_id": 484,
+    "file_path": "app/utils/retry_handling_21.py",
+    "additions": 53,
+    "deletions": 1
+  },
+  {
+    "id": "PRF-484-002",
+    "pull_request_id": 484,
+    "file_path": "tests/test_retry_handling_21.py",
+    "additions": 5,
+    "deletions": 10
   }
 ]

@@ -23,8 +23,8 @@ instead — it runs the same comparison but saves images + a markdown report
 to `docs/ml-classifier/`.
 
 Usage:
-    cd ml-classifier
-    ../backend/.venv/bin/python evaluate_classifier.py
+    cd backend
+    uv run python scripts/ml-classifier/evaluate_classifier.py
 """
 
 from __future__ import annotations
@@ -45,7 +45,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 DATA_PATH = REPO_ROOT / "data" / "training" / "real_candidate_features.csv"
 
 NON_FEATURE_COLUMNS = {"source_pr_id", "followup_pr_id", "is_rework"}
@@ -72,9 +72,17 @@ def evaluate(name: str, model, X_train, X_test, y_train, y_test) -> None:
 
     print(f"\n=== {name} ===")
     print("ROC-AUC:", round(roc_auc_score(y_test, proba), 4))
-    print("Average Precision (PR-AUC):", round(average_precision_score(y_test, proba), 4))
-    print(f"Of the top {top_n} highest-scored pairs: {positives_in_top_n}/{total_positives} true positives captured")
-    print(classification_report(y_test, (proba >= 0.5).astype(int), digits=3, zero_division=0))
+    print(
+        "Average Precision (PR-AUC):", round(average_precision_score(y_test, proba), 4)
+    )
+    print(
+        f"Of the top {top_n} highest-scored pairs: {positives_in_top_n}/{total_positives} true positives captured"
+    )
+    print(
+        classification_report(
+            y_test, (proba >= 0.5).astype(int), digits=3, zero_division=0
+        )
+    )
 
 
 def main() -> None:
@@ -96,19 +104,32 @@ def main() -> None:
                 ("clf", LogisticRegression(max_iter=2000, class_weight="balanced")),
             ]
         ),
-        X_train, X_test, y_train, y_test,
+        X_train,
+        X_test,
+        y_train,
+        y_test,
     )
 
     evaluate(
         "Random Forest (class_weight=balanced)",
-        RandomForestClassifier(n_estimators=200, class_weight="balanced", random_state=0),
-        X_train, X_test, y_train, y_test,
+        RandomForestClassifier(
+            n_estimators=200, class_weight="balanced", random_state=0
+        ),
+        X_train,
+        X_test,
+        y_train,
+        y_test,
     )
 
     evaluate(
         "Gradient Boosting",
-        GradientBoostingClassifier(n_estimators=200, max_depth=3, learning_rate=0.05, random_state=0),
-        X_train, X_test, y_train, y_test,
+        GradientBoostingClassifier(
+            n_estimators=200, max_depth=3, learning_rate=0.05, random_state=0
+        ),
+        X_train,
+        X_test,
+        y_train,
+        y_test,
     )
 
     evaluate(
@@ -127,12 +148,19 @@ def main() -> None:
                 ),
             ]
         ),
-        X_train, X_test, y_train, y_test,
+        X_train,
+        X_test,
+        y_train,
+        y_test,
     )
 
-    gb = GradientBoostingClassifier(n_estimators=200, max_depth=3, learning_rate=0.05, random_state=0)
+    gb = GradientBoostingClassifier(
+        n_estimators=200, max_depth=3, learning_rate=0.05, random_state=0
+    )
     gb.fit(X_train, y_train)
-    importances = pd.Series(gb.feature_importances_, index=X.columns).sort_values(ascending=False)
+    importances = pd.Series(gb.feature_importances_, index=X.columns).sort_values(
+        ascending=False
+    )
     print("\n=== Gradient Boosting feature importances ===")
     print(importances.to_string())
 
