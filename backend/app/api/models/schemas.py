@@ -61,6 +61,7 @@ class ReworkEvent(BaseModel):
     severity: str
     days_after_merge: int = Field(ge=0)
     human_hours_spent: float = Field(ge=0)
+    ml_rework_probability: float = Field(default=0.0, ge=0, le=1)
     root_cause_label: str
     disposition: ReworkDispositionValue = "unreviewed"
     summary: str
@@ -101,6 +102,7 @@ class ReworkEventDetailEvent(BaseModel):
     disposition: ReworkDispositionValue = "unreviewed"
     days_after_merge: int = Field(ge=0)
     human_hours_spent: float = Field(ge=0)
+    ml_rework_probability: float = Field(default=0.0, ge=0, le=1)
     summary: str
 
 

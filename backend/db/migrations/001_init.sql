@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS rework_events (
 
   days_after_merge INTEGER NOT NULL,
   human_hours_spent REAL NOT NULL,
+  ml_rework_probability REAL NOT NULL DEFAULT 0,
 
   root_cause_label TEXT NOT NULL,
   disposition TEXT NOT NULL DEFAULT 'unreviewed',

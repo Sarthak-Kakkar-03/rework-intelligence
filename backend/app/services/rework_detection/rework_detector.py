@@ -1,4 +1,9 @@
-from app.api.models import PullRequest, PullRequestFile
+import json
+from pathlib import Path
+
+import joblib
+
+from app.api.models import PullRequest, PullRequestFile, ReworkFeatures
 from app.services.rework_detection.models import ReworkCandidate
 from app.services.rework_detection.estimates import (
     build_summary,
@@ -33,6 +38,47 @@ from app.queries import (
 
 
 class ReworkDetector:
+    def __init__(self):
+        artifact_dir = Path(__file__).resolve().parent / "artifacts"
+        self.model_path = artifact_dir / "rework_classifier.joblib"
+        self.metadata_path = artifact_dir / "metadata.json"
+        self.backup_model = "rule_classifier"
+        self.model_name = self.backup_model
+        self.model = None
+        self.feature_order: list[str] = []
+        self._load_gradient_boosting_model()
+
+    def _load_gradient_boosting_model(self) -> None:
+        if not (self.model_path.exists() and self.metadata_path.exists()):
+            return
+
+        try:
+            metadata = json.loads(self.metadata_path.read_text())
+            feature_order = metadata["feature_order"]
+            schema_order = list(ReworkFeatures.model_fields)
+            if feature_order != schema_order:
+                raise ValueError(
+                    "Model feature order does not match ReworkFeatures schema"
+                )
+
+            self.model = joblib.load(self.model_path)
+            self.feature_order = feature_order
+            self.model_name = metadata.get("model_type", "GradientBoostingClassifier")
+        except Exception as exc:
+            print(
+                "Could not load Gradient Boosting classifier, defaulting to "
+                f"rule-based classifier: {exc}"
+            )
+            self.model_name = self.backup_model
+
+    def predict_rework_probability(self, features: ReworkFeatures) -> float:
+        if self.model is None:
+            return 0.0
+
+        values = features.model_dump()
+        row = [[values[feature_name] for feature_name in self.feature_order]]
+        return round(float(self.model.predict_proba(row)[0][1]), 4)
+
     def is_possible_rework_candidate(
         self,
         source_pr: PullRequest, followup_pr: PullRequest
@@ -191,7 +237,7 @@ class ReworkDetector:
             days_after_merge,
         )
 
-    def generate_rework_candidates(self) -> list[ReworkCandidate]:
+    def generate_rule_based_rework_candidates(self) -> list[ReworkCandidate]:
         pr_list: list[PullRequest] = get_pull_requests_ordered_by_closed_at()
         used_pr_ids: set[int] = set()
         for rework_event in get_rework_events():
@@ -251,6 +297,7 @@ class ReworkDetector:
                     confidence=estimate_confidence(matched_signals=matched_signals),
                     severity=estimate_severity(human_hours_spent=human_hours_spent),
                     human_hours_spent=human_hours_spent,
+                    ml_rework_probability=self.predict_rework_probability(features),
                     root_cause_label="placeholder",
                     features=features,
                     summary=build_summary(
@@ -264,3 +311,6 @@ class ReworkDetector:
             used_pr_ids.add(followup_pr.id)
 
         return result
+
+    def generate_rework_candidates(self) -> list[ReworkCandidate]:
+        return self.generate_rule_based_rework_candidates()

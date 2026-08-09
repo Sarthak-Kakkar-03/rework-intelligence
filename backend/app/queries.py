@@ -426,6 +426,7 @@ def get_rework_events() -> list[ReworkEvent]:
           severity,
           days_after_merge,
           human_hours_spent,
+          ml_rework_probability,
           root_cause_label,
           disposition,
           summary
@@ -445,6 +446,7 @@ def get_rework_events() -> list[ReworkEvent]:
                 severity=row["severity"],
                 days_after_merge=row["days_after_merge"],
                 human_hours_spent=row["human_hours_spent"],
+                ml_rework_probability=row["ml_rework_probability"],
                 root_cause_label=row["root_cause_label"],
                 disposition=row["disposition"],
                 summary=row["summary"],
@@ -484,10 +486,11 @@ def insert_rework_candidates(rework_candidates: list[ReworkCandidate]) -> None:
           severity,
           days_after_merge,
           human_hours_spent,
+          ml_rework_probability,
           root_cause_label,
           summary
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
 
     values = [
@@ -500,6 +503,7 @@ def insert_rework_candidates(rework_candidates: list[ReworkCandidate]) -> None:
             candidate.severity,
             candidate.days_after_merge,
             candidate.human_hours_spent,
+            candidate.ml_rework_probability,
             candidate.root_cause_label,
             candidate.summary,
         )
@@ -525,10 +529,11 @@ def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
           severity,
           days_after_merge,
           human_hours_spent,
+          ml_rework_probability,
           root_cause_label,
           summary
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           source_pr_id = excluded.source_pr_id,
           followup_pr_id = excluded.followup_pr_id,
@@ -537,6 +542,7 @@ def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
           severity = excluded.severity,
           days_after_merge = excluded.days_after_merge,
           human_hours_spent = excluded.human_hours_spent,
+          ml_rework_probability = excluded.ml_rework_probability,
           summary = excluded.summary
     """
 
@@ -550,6 +556,7 @@ def replace_rework_events(rework_candidates: list[ReworkCandidate]) -> None:
             candidate.severity,
             candidate.days_after_merge,
             candidate.human_hours_spent,
+            candidate.ml_rework_probability,
             candidate.root_cause_label,
             candidate.summary,
         )
@@ -896,6 +903,7 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
           re.disposition,
           re.days_after_merge,
           re.human_hours_spent,
+          re.ml_rework_probability,
           re.summary,
 
           source_pr.id AS source_pr_id,
@@ -955,6 +963,7 @@ def get_rework_event_detail(rework_event_id: str) -> ReworkEventDetail | None:
             disposition=row["disposition"],
             days_after_merge=row["days_after_merge"],
             human_hours_spent=row["human_hours_spent"],
+            ml_rework_probability=row["ml_rework_probability"],
             summary=row["summary"],
         ),
         source_pr=ReworkEventDetailPullRequest(

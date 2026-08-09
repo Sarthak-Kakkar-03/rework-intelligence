@@ -50,10 +50,12 @@ def ingest_context_artifact(
 
 @router.post("/ingest/rework-events/recompute", response_model=ReworkRecomputeResult)
 def recompute_rework_events(request: Request) -> ReworkRecomputeResult:
-    rework_candidates = request.app.state.rework_detector.generate_rework_candidates()
+    detector = request.app.state.rework_detector
+    rework_candidates = detector.generate_rework_candidates()
     replace_rework_events(rework_candidates)
 
     return ReworkRecomputeResult(
+        model_used=detector.model_name,
         rework_event_count=len(rework_candidates),
         message=f"Recomputed and inserted {len(rework_candidates)} rework events.",
     )

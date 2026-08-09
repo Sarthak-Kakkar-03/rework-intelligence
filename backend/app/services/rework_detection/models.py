@@ -13,6 +13,7 @@ class ReworkCandidate(BaseModel):
     confidence: str
     severity: str
     human_hours_spent: float
+    ml_rework_probability: float = 0.0
     root_cause_label: str = "Placeholder Root Cause Label"
     summary: str
     features: ReworkFeatures

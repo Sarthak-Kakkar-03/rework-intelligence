@@ -58,6 +58,7 @@ export type ReworkEvent = {
   severity: string;
   days_after_merge: number;
   human_hours_spent: number;
+  ml_rework_probability: number;
   root_cause_label: string;
   disposition: ReworkDisposition;
   summary: string;
@@ -103,6 +104,7 @@ export type ReworkEventDetailEvent = {
   disposition: ReworkDisposition;
   days_after_merge: number;
   human_hours_spent: number;
+  ml_rework_probability: number;
   summary: string;
 };
 
