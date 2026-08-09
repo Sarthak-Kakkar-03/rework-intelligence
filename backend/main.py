@@ -1,9 +1,11 @@
 import os
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import router
+from app.services.rework_detection.rework_detector import ReworkDetector
 
 
 def get_cors_allowed_origins() -> list[str]:
@@ -15,7 +17,13 @@ def get_cors_allowed_origins() -> list[str]:
     return [origin.strip() for origin in origins.split(",") if origin.strip()]
 
 
-app = FastAPI(title="Rework Autopsy API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.rework_detector = ReworkDetector()
+    yield
+
+
+app = FastAPI(title="Rework Autopsy API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

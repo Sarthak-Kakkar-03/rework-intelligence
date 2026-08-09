@@ -619,7 +619,7 @@ def finalize_repo(
     return pull_requests, pull_request_files, next_id
 
 
-def main() -> None:
+def generate_seed_data() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seed", type=int, default=7)
     args = parser.parse_args()
@@ -682,4 +682,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    generate_seed_data()

@@ -225,15 +225,21 @@ export default function Home() {
               </div>
             </section>
 
-            <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+            <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
               <div className="card bg-base-100 shadow-sm">
                 <div className="card-body">
                   <h2 className="card-title text-lg">Rework Events</h2>
-                  <div className="overflow-x-auto">
-                    <table className="table table-zebra">
+                  <div
+                    aria-label="Rework events table"
+                    className="h-96 w-full overflow-x-auto focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-primary"
+                    tabIndex={0}
+                  >
+                    <table className="table table-zebra table-pin-rows">
                       <thead>
                         <tr>
-                          <th>Rework ID</th>
+                          <th className="sticky left-0 z-20 bg-base-100">
+                            Rework ID
+                          </th>
                           <th>Source PR</th>
                           <th>Follow-up PR</th>
                           <th>Root Cause</th>
@@ -246,14 +252,17 @@ export default function Home() {
                       <tbody>
                         {reworkEvents.map((event) => (
                           <tr key={event.id}>
-                            <td className="font-medium">
+                            <th
+                              className="sticky left-0 z-10 bg-base-100 font-medium"
+                              scope="row"
+                            >
                               <Link
                                 className="link link-primary"
                                 href={`/rework-events/${encodeURIComponent(event.id)}`}
                               >
                                 {event.id}
                               </Link>
-                            </td>
+                            </th>
                             <td>
                               {event.source_pr_title ||
                                 `PR ${event.source_pr_id}`}

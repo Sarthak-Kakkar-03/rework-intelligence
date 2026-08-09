@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
 from app.api.models import (
     ContextArtifact,
@@ -19,7 +19,6 @@ from app.queries import (
     change_rework_root_cause_by_id,
     change_rework_disposition_by_id,
 )
-from app.services.rework_detection.rework_detector import generate_rework_candidates
 
 
 router = APIRouter(prefix="/api", tags=["Ingest"])
@@ -50,11 +49,13 @@ def ingest_context_artifact(
 
 
 @router.post("/ingest/rework-events/recompute", response_model=ReworkRecomputeResult)
-def recompute_rework_events() -> ReworkRecomputeResult:
-    rework_candidates = generate_rework_candidates()
+def recompute_rework_events(request: Request) -> ReworkRecomputeResult:
+    detector = request.app.state.rework_detector
+    rework_candidates = detector.generate_rework_candidates()
     replace_rework_events(rework_candidates)
 
     return ReworkRecomputeResult(
+        model_used=detector.model_name,
         rework_event_count=len(rework_candidates),
         message=f"Recomputed and inserted {len(rework_candidates)} rework events.",
     )
