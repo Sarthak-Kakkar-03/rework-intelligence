@@ -225,12 +225,12 @@ export default function Home() {
               </div>
             </section>
 
-            <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+            <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
               <div className="card bg-base-100 shadow-sm">
                 <div className="card-body">
                   <h2 className="card-title text-lg">Rework Events</h2>
-                  <div className="overflow-x-auto">
-                    <table className="table table-zebra">
+                  <div className="overflow-x-auto h-96 w-full">
+                    <table className="table table-zebra table-pin-rows table-pin-cols">
                       <thead>
                         <tr>
                           <th>Rework ID</th>

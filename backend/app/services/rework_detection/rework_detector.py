@@ -36,6 +36,9 @@ from app.queries import (
     get_pull_request_files_by_pr_id,
 )
 
+MODEL_REWORK_THRESHOLD = 0.5
+DEDUPLICATE_MODEL_CANDIDATES_BY_SOURCE = True
+
 
 class ReworkDetector:
     def __init__(self):
@@ -80,8 +83,7 @@ class ReworkDetector:
         return round(float(self.model.predict_proba(row)[0][1]), 4)
 
     def is_possible_rework_candidate(
-        self,
-        source_pr: PullRequest, followup_pr: PullRequest
+        self, source_pr: PullRequest, followup_pr: PullRequest
     ) -> bool:
         if not (
             has_same_repo(source_pr=source_pr, followup_pr=followup_pr)
@@ -89,6 +91,15 @@ class ReworkDetector:
         ):
             return False
         return True
+
+    def is_model_candidate_pair(
+        self,
+        source_pr: PullRequest,
+        followup_pr: PullRequest,
+    ) -> bool:
+        return has_same_repo(
+            source_pr=source_pr, followup_pr=followup_pr
+        ) and is_followup_after_source(source_pr=source_pr, followup_pr=followup_pr)
 
     def is_rework_candidate(
         self,
@@ -136,9 +147,7 @@ class ReworkDetector:
 
         signals = []
 
-        if is_ai_to_non_ai_within_14_days(
-            source_pr=source_pr, followup_pr=followup_pr
-        ):
+        if is_ai_to_non_ai_within_14_days(source_pr=source_pr, followup_pr=followup_pr):
             signals.append("Non AI PR within 2 weeks")
         if get_overlapping_files(
             source_files=source_files, followup_files=followup_files
@@ -223,6 +232,50 @@ class ReworkDetector:
 
         return candidates
 
+    def _find_all_model_candidate_pairs(
+        self,
+        pr_list: list[PullRequest],
+    ) -> list[dict]:
+        """
+        Finds ordered same-repo PR pairs for model scoring. The rule detector
+        is not used as a gate here; the model decides which pairs become rework.
+        """
+        files_by_pr_id: dict[int, list[PullRequestFile]] = {}
+
+        def get_files(pr_id: int) -> list[PullRequestFile]:
+            if pr_id not in files_by_pr_id:
+                files_by_pr_id[pr_id] = get_pull_request_files_by_pr_id(pr_id)
+            return files_by_pr_id[pr_id]
+
+        candidates: list[dict] = []
+        for followup_idx, followup_pr in enumerate(pr_list):
+            for source_idx in range(followup_idx - 1, -1, -1):
+                source_pr = pr_list[source_idx]
+                if not self.is_model_candidate_pair(
+                    source_pr=source_pr, followup_pr=followup_pr
+                ):
+                    continue
+
+                source_files = get_files(source_pr.id)
+                followup_files = get_files(followup_pr.id)
+                candidates.append(
+                    {
+                        "source_pr": source_pr,
+                        "followup_pr": followup_pr,
+                        "source_files": source_files,
+                        "followup_files": followup_files,
+                        "matched_signals": self.get_rework_signals(
+                            source_pr=source_pr,
+                            followup_pr=followup_pr,
+                            source_files=source_files,
+                            followup_files=followup_files,
+                        ),
+                        "is_override": has_rework_override(followup_pr=followup_pr),
+                    }
+                )
+
+        return candidates
+
     @staticmethod
     def _candidate_priority(candidate: dict) -> tuple[int, int, int]:
         # Sorted ascending, so: overrides first, then most matched signals,
@@ -236,6 +289,20 @@ class ReworkDetector:
             -len(candidate["matched_signals"]),
             days_after_merge,
         )
+
+    @staticmethod
+    def _deduplicate_model_candidates_by_source(candidates: list[dict]) -> list[dict]:
+        used_source_pr_ids: set[int] = set()
+        result: list[dict] = []
+        for candidate in candidates:
+            source_pr = candidate["source_pr"]
+            if source_pr.id in used_source_pr_ids:
+                continue
+
+            result.append(candidate)
+            used_source_pr_ids.add(source_pr.id)
+
+        return result
 
     def generate_rule_based_rework_candidates(self) -> list[ReworkCandidate]:
         pr_list: list[PullRequest] = get_pull_requests_ordered_by_closed_at()
@@ -312,5 +379,103 @@ class ReworkDetector:
 
         return result
 
+    def generate_model_based_rework_candidates(self) -> list[ReworkCandidate]:
+        pr_list: list[PullRequest] = get_pull_requests_ordered_by_closed_at()
+
+        candidates = self._find_all_model_candidate_pairs(pr_list)
+        global_rework_rate = get_global_rework_rate()
+        scored_candidates = []
+
+        for candidate in candidates:
+            source_pr = candidate["source_pr"]
+            followup_pr = candidate["followup_pr"]
+            source_files = candidate["source_files"]
+            followup_files = candidate["followup_files"]
+            overlapping_files = get_overlapping_files(
+                source_files=source_files,
+                followup_files=followup_files,
+            )
+            author_historical_rework_rate = get_author_historical_rework_rate(
+                author_login=source_pr.author_login,
+                before=source_pr.closed_at,
+                prior=global_rework_rate,
+            )
+            features = compute_rework_features(
+                source_pr=source_pr,
+                followup_pr=followup_pr,
+                source_files=source_files,
+                followup_files=followup_files,
+                overlapping_files=overlapping_files,
+                author_historical_rework_rate=author_historical_rework_rate,
+            )
+            probability = self.predict_rework_probability(features)
+            if probability < MODEL_REWORK_THRESHOLD:
+                continue
+
+            scored_candidates.append(
+                {
+                    **candidate,
+                    "overlapping_files": overlapping_files,
+                    "features": features,
+                    "ml_rework_probability": probability,
+                }
+            )
+
+        scored_candidates = sorted(
+            scored_candidates,
+            key=lambda candidate: (
+                -candidate["ml_rework_probability"],
+                estimate_days_after_merge(
+                    candidate["source_pr"], candidate["followup_pr"]
+                ),
+            ),
+        )
+
+        if DEDUPLICATE_MODEL_CANDIDATES_BY_SOURCE:
+            scored_candidates = self._deduplicate_model_candidates_by_source(
+                scored_candidates
+            )
+
+        result: list[ReworkCandidate] = []
+        for candidate in scored_candidates:
+            source_pr = candidate["source_pr"]
+            followup_pr = candidate["followup_pr"]
+
+            matched_signals = candidate["matched_signals"]
+            overlapping_files = candidate["overlapping_files"]
+            human_hours_spent = estimate_human_hours_spent(
+                followup_pr=followup_pr,
+                overlapping_files=overlapping_files,
+            )
+            result.append(
+                ReworkCandidate(
+                    source_pr_id=source_pr.id,
+                    followup_pr_id=followup_pr.id,
+                    repo_id=source_pr.repo_id,
+                    days_after_merge=estimate_days_after_merge(
+                        source_pr=source_pr,
+                        followup_pr=followup_pr,
+                    ),
+                    overlapping_files=[file.file_path for file in overlapping_files],
+                    matched_signals=matched_signals,
+                    confidence=estimate_confidence(matched_signals=matched_signals),
+                    severity=estimate_severity(human_hours_spent=human_hours_spent),
+                    human_hours_spent=human_hours_spent,
+                    ml_rework_probability=candidate["ml_rework_probability"],
+                    root_cause_label="placeholder",
+                    features=candidate["features"],
+                    summary=build_summary(
+                        source_pr=source_pr,
+                        followup_pr=followup_pr,
+                        matched_signals=matched_signals,
+                    ),
+                )
+            )
+
+        return result
+
     def generate_rework_candidates(self) -> list[ReworkCandidate]:
+        if self.model is not None:
+            return self.generate_model_based_rework_candidates()
+
         return self.generate_rule_based_rework_candidates()

@@ -55,7 +55,7 @@ METADATA_PATH = ARTIFACT_DIR / "metadata.json"
 NON_FEATURE_COLUMNS = {"source_pr_id", "followup_pr_id", "is_rework"}
 
 
-def train_GB_model() -> None:
+def train_gradient_boosting_model() -> None:
     df = pd.read_csv(DATA_PATH)
     feature_columns = [c for c in df.columns if c not in NON_FEATURE_COLUMNS]
 
@@ -91,4 +91,4 @@ def train_GB_model() -> None:
 
 
 if __name__ == "__main__":
-    train_GB_model()
+    train_gradient_boosting_model()
