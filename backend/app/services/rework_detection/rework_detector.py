@@ -39,7 +39,6 @@ from app.queries import (
 
 MODEL_REWORK_THRESHOLD = 0.5
 MODEL_SOURCE_LOOKBACK_DAYS = 15
-DEDUPLICATE_MODEL_CANDIDATES_BY_SOURCE = True
 
 
 class ReworkDetector:
@@ -305,16 +304,18 @@ class ReworkDetector:
         )
 
     @staticmethod
-    def _deduplicate_model_candidates_by_source(candidates: list[dict]) -> list[dict]:
-        used_source_pr_ids: set[int] = set()
+    def _deduplicate_model_candidates(candidates: list[dict]) -> list[dict]:
+        used_pr_ids: set[int] = set()
         result: list[dict] = []
         for candidate in candidates:
             source_pr = candidate["source_pr"]
-            if source_pr.id in used_source_pr_ids:
+            followup_pr = candidate["followup_pr"]
+            if source_pr.id in used_pr_ids or followup_pr.id in used_pr_ids:
                 continue
 
             result.append(candidate)
-            used_source_pr_ids.add(source_pr.id)
+            used_pr_ids.add(source_pr.id)
+            used_pr_ids.add(followup_pr.id)
 
         return result
 
@@ -472,10 +473,7 @@ class ReworkDetector:
             ),
         )
 
-        if DEDUPLICATE_MODEL_CANDIDATES_BY_SOURCE:
-            passed_candidates = self._deduplicate_model_candidates_by_source(
-                passed_candidates
-            )
+        passed_candidates = self._deduplicate_model_candidates(passed_candidates)
 
         result: list[ReworkCandidate] = []
         for candidate in passed_candidates:
