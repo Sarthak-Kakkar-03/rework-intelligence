@@ -231,7 +231,7 @@ export default function Home() {
                   <h2 className="card-title text-lg">Rework Events</h2>
                   <div
                     aria-label="Rework events table"
-                    className="h-96 w-full overflow-x-auto focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-primary"
+                    className="h-96 w-full overflow-x-auto focus:outline-2 focus:outline-offset-2 focus:outline-primary"
                     tabIndex={0}
                   >
                     <table className="table table-zebra table-pin-rows">

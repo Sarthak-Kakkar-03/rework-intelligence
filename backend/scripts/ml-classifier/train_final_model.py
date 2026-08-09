@@ -1,7 +1,7 @@
 """
 Train the final, deployed Gradient Boosting rework classifier on the FULL
 real_candidate_features.csv (produced by train_classifier.py) and save it as
-a committed artifact the running app loads at request time.
+the artifact the running app loads at request time.
 
 Gradient Boosting was chosen after evaluate_classifier.py compared it
 against logistic regression on the same real, held-out data (0.998 vs 0.995
@@ -23,9 +23,8 @@ package, no copy/paste step needed:
     - Writes `backend/app/services/rework_detection/artifacts/
       rework_classifier.joblib` and `metadata.json` — the exact path
       `classifier.py`'s `predict_rework_probability()` loads from.
-    - Re-run this (after re-running train_classifier.py first) whenever the
-      underlying seed dataset changes meaningfully — there's no automatic
-      retraining pipeline, this is the manual refresh step.
+    - Docker startup and the documented local startup command run this after
+      train_classifier.py so the artifact is refreshed before the app starts.
     - Requires `scikit-learn` + `joblib` as real (non-dev) backend
       dependencies, since the running app needs them to load this file, not
       just this training script.

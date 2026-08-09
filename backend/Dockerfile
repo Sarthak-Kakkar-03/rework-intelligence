@@ -14,4 +14,4 @@ COPY scripts ./scripts
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "./scripts/reset_db.sh && cd backend && uvicorn main:app --host 0.0.0.0 --port 8000"]
+CMD ["./scripts/start_backend.sh"]

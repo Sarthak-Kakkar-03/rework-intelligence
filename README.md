@@ -29,7 +29,9 @@ Open:
 http://localhost:3000
 ```
 
-The backend container reseeds SQLite on startup, so every demo starts from the same data.
+The backend container reseeds SQLite and regenerates the Gradient Boosting
+classifier artifact on startup, so every demo starts from the same data and
+model artifact.
 
 ---
 
@@ -38,10 +40,10 @@ The backend container reseeds SQLite on startup, so every demo starts from the s
 Start the backend:
 
 ```bash
-./scripts/reset_db.sh
 cd backend
 uv sync
-uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
+cd ..
+PYTHON_CMD="uv run python" UVICORN_CMD="uv run uvicorn" ./scripts/start_backend.sh
 ```
 
 Start the frontend in another terminal:
