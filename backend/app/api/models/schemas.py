@@ -127,6 +127,7 @@ class ReworkEventDetail(BaseModel):
 
 
 class ReworkRecomputeResult(BaseModel):
+    model_used: str = Field(default="rule_classifier")
     rework_event_count: int = Field(ge=0)
     message: str
 

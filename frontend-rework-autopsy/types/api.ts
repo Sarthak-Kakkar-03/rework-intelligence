@@ -91,6 +91,7 @@ export type AutopsySummary = {
 };
 
 export type ReworkRecomputeResult = {
+  model_used: string;
   rework_event_count: number;
   message: string;
 };
