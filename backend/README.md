@@ -3,22 +3,28 @@
 FastAPI backend for the Rework Autopsy prototype.
 
 It stores synthetic engineering data in SQLite, exposes dashboard APIs, and runs
-the rule-based rework detector.
+the Gradient Boosting rework detector with rule-based fallback.
 
 ## Run
 
 From the repo root:
 
 ```bash
-./scripts/reset_db.sh
 cd backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uv sync
+cd ..
+PYTHON_CMD="uv run python" UVICORN_CMD="uv run uvicorn" ./scripts/start_backend.sh
 ```
+
+The startup script resets SQLite, rebuilds
+`data/training/real_candidate_features.csv`, regenerates
+`app/services/rework_detection/artifacts/rework_classifier.joblib`, and then
+starts Uvicorn.
 
 ## Main Responsibilities
 
 - Load local seed data into SQLite.
-- Reuse `scripts/reset_db.sh` for demo startup in Docker.
+- Reuse `scripts/start_backend.sh` for demo startup in Docker and local dev.
 - Serve pull requests, repos, rework events, context artifacts, and summary
   metrics.
 - Recompute likely rework events from PR metadata and changed files.
