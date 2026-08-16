@@ -1,6 +1,6 @@
-# Rework Autopsy
+# Rework Intelligence
 
-Rework Autopsy is a small product loop for AI-assisted engineering work.
+Rework Intelligence is a small product loop for AI-assisted engineering work.
 
 I built it to detect when an AI-generated pull request is followed by likely
 human rework, show that rework in a dashboard, and let a human add context
