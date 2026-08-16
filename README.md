@@ -11,11 +11,6 @@ The goal is not to blame AI for every follow-up PR. The goal is to help an
 engineering leader see where AI-assisted work may be creating cleanup work, and
 what missing context could reduce that next time.
 
-## Demo Video
-
-[Loom demo Video](https://www.loom.com/share/1c8f5cbbab0d422fb73d698d87fed514)
-
----
 
 ## Run With Docker Compose
 
